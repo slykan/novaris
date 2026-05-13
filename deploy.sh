@@ -23,7 +23,7 @@ fi
 
 # 2. Install dependencies
 echo "[2/4] npm install..."
-npm install --omit=dev
+npm install
 
 # 3. Build
 echo "[3/4] npm build..."
