@@ -6,6 +6,9 @@ REPO="https://github.com/slykan/novaris.git"
 APP_DIR="$HOME/novaris-app"
 PUBLIC_HTML="$HOME/public_html"
 
+# Postavi /~novaris za temp URL, ostavi prazno za pravu domenu
+BASE_PATH="${BASE_PATH:-/~novaris}"
+
 echo "=============================="
 echo " NOVARIS DEPLOY"
 echo "=============================="
@@ -26,8 +29,8 @@ echo "[2/4] npm install..."
 npm install
 
 # 3. Build
-echo "[3/4] npm build..."
-npm run build
+echo "[3/4] npm build... (BASE_PATH=$BASE_PATH)"
+BASE_PATH="$BASE_PATH" npm run build
 
 # 4. Deploy u public_html
 echo "[4/4] Kopiranje u public_html..."
