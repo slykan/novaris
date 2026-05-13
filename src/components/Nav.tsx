@@ -6,8 +6,7 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="hero" id="home">
-      <nav className="nav" aria-label="Primarna navigacija">
+    <nav className="nav" aria-label="Primarna navigacija">
         <a className="brand" href="#home" aria-label="Novaris Tech početna">
           <img src={p('/logo3.png')} alt="Novaris Tech" className="logo-full" />
         </a>
@@ -31,7 +30,6 @@ export default function Nav() {
         <a className="quote-button" href="#contact">
           Zatražite ponudu <span aria-hidden="true">-&gt;</span>
         </a>
-      </nav>
-    </header>
+    </nav>
   )
 }
