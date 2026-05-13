@@ -1,6 +1,6 @@
 'use client'
-import Image from 'next/image'
 import { useState } from 'react'
+import { p } from '@/lib/path'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
@@ -9,7 +9,7 @@ export default function Nav() {
     <header className="hero" id="home">
       <nav className="nav" aria-label="Primarna navigacija">
         <a className="brand" href="#home" aria-label="Novaris Tech početna">
-          <Image src="/logo3.png" alt="Novaris Tech" width={180} height={48} className="logo-full" priority />
+          <img src={p('/logo3.png')} alt="Novaris Tech" className="logo-full" />
         </a>
 
         <div className={`nav-links${open ? ' open' : ''}`}>

@@ -1,6 +1,6 @@
 'use client'
-import Image from 'next/image'
 import { useEffect, useRef } from 'react'
+import { p } from '@/lib/path'
 
 const checkItems = [
   'Iskusan i certificiran tim stručnjaka',
@@ -90,7 +90,7 @@ export default function About() {
         </div>
 
         <div className="orb-logo" ref={orbRef} aria-hidden="true">
-          <Image src="/logo3_small.png" alt="" width={135} height={135} className="logo-mark" />
+          <img src={p('/logo3_small.png')} alt="" className="logo-mark" />
         </div>
 
         <ul className="check-list" id="why">

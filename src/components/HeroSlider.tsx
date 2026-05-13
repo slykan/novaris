@@ -1,6 +1,6 @@
 'use client'
-import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
+import { p } from '@/lib/path'
 
 const slides = [
   { src: '/slide1.jpg', alt: 'Novaris Tech' },
@@ -26,7 +26,7 @@ export default function HeroSlider() {
         <div className="slides">
           {slides.map((slide, i) => (
             <div key={i} className={`slide${i === current ? ' active' : ''}`}>
-              <Image src={slide.src} alt={slide.alt} fill style={{ objectFit: 'cover' }} />
+              <img src={p(slide.src)} alt={slide.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
           ))}
         </div>

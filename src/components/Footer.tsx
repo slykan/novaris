@@ -1,11 +1,11 @@
-import Image from 'next/image'
+import { p } from '@/lib/path'
 
 export default function Footer() {
   return (
     <footer className="footer" id="contact">
       <div className="footer-grid">
         <a className="brand" href="#home" aria-label="Novaris Tech početna">
-          <Image src="/logo3_small.png" alt="Novaris Tech" width={83} height={83} className="logo-footer" />
+          <img src={p('/logo3_small.png')} alt="Novaris Tech" className="logo-footer" />
         </a>
         <div>
           <h4>Portfolio</h4>

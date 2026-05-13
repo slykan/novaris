@@ -8,7 +8,7 @@ PUBLIC_HTML="$HOME/public_html"
 
 # Postavi /~novaris za temp URL, ostavi prazno za pravu domenu
 # Promijeni u "" kada imas pravu domenu
-BASE_PATH="/~novaris"
+NEXT_PUBLIC_BASE_PATH="/~novaris"
 
 echo "=============================="
 echo " NOVARIS DEPLOY"
@@ -31,7 +31,7 @@ npm install
 
 # 3. Build
 echo "[3/4] npm build... (BASE_PATH=$BASE_PATH)"
-export BASE_PATH
+export NEXT_PUBLIC_BASE_PATH
 npm run build
 
 # 4. Deploy u public_html
