@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
-const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
+// Promijeni u '' kada bude prava domena
+const base = '/~novaris'
 
 const nextConfig: NextConfig = {
   output: 'export',

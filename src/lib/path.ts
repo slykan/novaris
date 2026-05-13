@@ -1,2 +1,3 @@
-const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
+// Promijeni u '' kada bude prava domena
+const base = '/~novaris'
 export const p = (src: string) => `${base}${src}`
