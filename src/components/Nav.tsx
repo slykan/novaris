@@ -1,22 +1,29 @@
 'use client'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { p } from '@/lib/path'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const isONama = pathname === '/o-nama'
+  const close = () => setOpen(false)
+  const home = (hash: string) => isHome ? hash : `/${hash}`
 
   return (
     <nav className="nav" aria-label="Primarna navigacija">
-        <a className="brand" href="#home" aria-label="Novaris Tech početna">
+        <Link className="brand" href="/" onClick={close} aria-label="Novaris Tech početna">
           <img src={p('/logo3.png')} alt="Novaris Tech" className="logo-full" />
-        </a>
+        </Link>
 
         <div className={`nav-links${open ? ' open' : ''}`}>
-          <a className="active" href="#home">Početna</a>
-          <a href="#services">Portfolio</a>
-          <a href="#about">O nama</a>
-          <a href="#why">Zašto mi</a>
-          <a href="#contact">Kontakt</a>
+          <Link className={isHome ? 'active' : ''} href="/" onClick={close}>Početna</Link>
+          <a href={home('#services')} onClick={close}>Portfolio</a>
+          <Link className={isONama ? 'active' : ''} href="/o-nama" onClick={close}>O nama</Link>
+          <a href={home('#why')} onClick={close}>Zašto mi</a>
+          <a href={home('#contact')} onClick={close}>Kontakt</a>
         </div>
 
         <button
@@ -27,7 +34,7 @@ export default function Nav() {
           <span />
         </button>
 
-        <a className="quote-button" href="#contact">
+        <a className="quote-button" href={home('#contact')}>
           Zatražite ponudu <span aria-hidden="true">-&gt;</span>
         </a>
     </nav>

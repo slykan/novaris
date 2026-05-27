@@ -18,7 +18,7 @@ export default function Footer() {
         </div>
         <div>
           <h4>Tvrtka</h4>
-          <a href="#about">O nama</a>
+          <a href="/o-nama">O nama</a>
           <a href="#why">Zašto mi</a>
           <a href="#industries">Industrije</a>
           <a href="#contact">Karijere</a>
