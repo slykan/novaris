@@ -21,7 +21,7 @@ export default function Nav() {
         <div className={`nav-links${open ? ' open' : ''}`}>
           <Link className={isHome ? 'active' : ''} href="/" onClick={close}>Početna</Link>
           <a href={home('#services')} onClick={close}>Portfolio</a>
-          <Link className={isONama ? 'active' : ''} href="/o-nama" onClick={close}>O nama</Link>
+          <a className={isONama ? 'active' : ''} href="/o-nama" onClick={close}>O nama</a>
           <a href={home('#why')} onClick={close}>Zašto mi</a>
           <a href={home('#contact')} onClick={close}>Kontakt</a>
         </div>
