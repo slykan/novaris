@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { p } from '@/lib/path'
 
 export default function Footer() {
@@ -18,7 +19,7 @@ export default function Footer() {
         </div>
         <div>
           <h4>Tvrtka</h4>
-          <a href="/o-nama">O nama</a>
+          <Link href="/o-nama">O nama</Link>
           <a href="#why">Zašto mi</a>
           <a href="#industries">Industrije</a>
           <a href="#contact">Karijere</a>
