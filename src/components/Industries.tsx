@@ -59,7 +59,6 @@ export default function Industries() {
             <svg viewBox="0 0 48 48" aria-hidden="true">{ind.icon}</svg>
             <h3>{ind.title}</h3>
             <p>{ind.desc}</p>
-            <a href="#contact">Saznajte više <span aria-hidden="true">-&gt;</span></a>
           </article>
         ))}
       </div>

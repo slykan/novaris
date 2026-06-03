@@ -74,7 +74,6 @@ export default function Services() {
             <svg viewBox="0 0 48 48" aria-hidden="true">{s.icon}</svg>
             <h3>{s.title}</h3>
             <p>{s.desc}</p>
-            <a href="#contact">Saznajte više <span aria-hidden="true">-&gt;</span></a>
           </article>
         ))}
       </div>
