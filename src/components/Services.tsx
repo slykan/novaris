@@ -77,6 +77,12 @@ export default function Services() {
           </article>
         ))}
       </div>
+
+      <div style={{ marginTop: 40, textAlign: 'center' }}>
+        <a className="button secondary" href="/usluge" style={{ display: 'inline-flex' }}>
+          Detaljnije o uslugama <span aria-hidden="true">→</span>
+        </a>
+      </div>
     </section>
   )
 }

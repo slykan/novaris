@@ -340,7 +340,7 @@ h1 em { color: var(--blue); font-style: normal; }
   display: grid;
   grid-template-columns: 1fr .8fr;
   gap: 70px;
-  align-items: end;
+  align-items: center;
 }
 
 h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
