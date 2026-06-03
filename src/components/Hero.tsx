@@ -14,7 +14,7 @@ export default function Hero() {
           <a className="button primary" href="#services">
             Naš portfolio <span aria-hidden="true">-&gt;</span>
           </a>
-          <a className="button secondary" href="#contact">Kontaktirajte nas</a>
+          <a className="button secondary" href="/kontakt">Kontaktirajte nas</a>
         </div>
 
         <div className="trust-row" aria-label="Prednosti tvrtke">

@@ -1,0 +1,8 @@
+option batch off
+option confirm off
+open sftp://novaris@vps.on-click.hr
+put "C:\Users\Korisnik\Desktop\Novaris\novaris-web\deploy.sh" "/home/novaris/deploy.sh"
+call chmod +x /home/novaris/deploy.sh
+call rm -rf /home/novaris/public_html/*
+synchronize remote "C:\Users\Korisnik\Desktop\Novaris\novaris-web\out" "/home/novaris/public_html"
+exit

@@ -20,7 +20,7 @@ define('SMTP_PASS',     'Noreply-01-!!');
 define('MAIL_TO',       'info@novaristech.hr');
 // Registriraj domenu na https://www.google.com/recaptcha/admin
 // i zamijeni donji ključ tajnim (Secret Key):
-define('RECAPTCHA_SECRET', 'OVDJE_STAVI_TAJNI_KLJUC');
+define('RECAPTCHA_SECRET', '6LcINwotAAAAAIh0Nk4pkmCt0p2Z8xm4o0DwJMuv');
 
 // ── reCAPTCHA provjera ─────────────────────────────────────────
 $captcha = trim($body['captcha'] ?? '');

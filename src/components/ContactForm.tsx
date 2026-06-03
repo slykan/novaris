@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 
 // Nakon što registriraš domenu na https://www.google.com/recaptcha/admin
 // zamijeni ovu vrijednost sa svojim Site Key-em (v2 checkbox):
-const RECAPTCHA_SITE_KEY = 'OVDJE_STAVI_SITE_KEY'
+const RECAPTCHA_SITE_KEY = '6LcINwotAAAAAATRbscYZ6Y3POgIMjcdNhhMOPDB'
 
 declare global {
   interface Window {
