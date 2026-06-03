@@ -5,25 +5,25 @@ export default function Footer() {
   return (
     <footer className="footer" id="contact">
       <div className="footer-grid">
-        <a className="brand" href="#home" aria-label="Novaris Tech početna">
+        <Link className="brand" href="/" aria-label="Novaris Tech početna">
           <img src={p('/logo3_small.png')} alt="Novaris Tech" className="logo-footer" />
-        </a>
+        </Link>
         <div>
           <h4>Portfolio</h4>
-          <a href="#services">Integracije</a>
-          <a href="#services">Automatizacija</a>
-          <a href="#services">Cloud transformacija</a>
-          <a href="#services">Analitika i AI</a>
-          <a href="#services">Upravljanje IT operacijama</a>
-          <a href="#services">Upravljanje IT uslugama</a>
+          <Link href="/#services">Integracije</Link>
+          <Link href="/#services">Automatizacija</Link>
+          <Link href="/#services">Cloud transformacija</Link>
+          <Link href="/#services">Analitika i AI</Link>
+          <Link href="/#services">Upravljanje IT operacijama</Link>
+          <Link href="/#services">Upravljanje IT uslugama</Link>
         </div>
         <div>
           <h4>Tvrtka</h4>
           <Link href="/">Početna</Link>
-          <a href="/#services">Portfolio</a>
+          <Link href="/#services">Portfolio</Link>
           <Link href="/usluge">Usluge</Link>
           <Link href="/o-nama">O nama</Link>
-          <a href="/#why">Zašto mi</a>
+          <Link href="/#why">Zašto mi</Link>
           <Link href="/kontakt">Kontakt</Link>
         </div>
         <div>
