@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 
 const services = [
   {
@@ -79,9 +80,9 @@ export default function Services() {
       </div>
 
       <div style={{ marginTop: 40, textAlign: 'center' }}>
-        <a className="button secondary" href="/usluge" style={{ display: 'inline-flex' }}>
+        <Link className="button secondary" href="/usluge" style={{ display: 'inline-flex' }}>
           Detaljnije o uslugama <span aria-hidden="true">→</span>
-        </a>
+        </Link>
       </div>
     </section>
   )
