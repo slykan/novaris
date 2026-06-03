@@ -19,12 +19,12 @@ export default function Footer() {
         </div>
         <div>
           <h4>Tvrtka</h4>
+          <Link href="/">Početna</Link>
+          <a href="/#services">Portfolio</a>
           <Link href="/usluge">Usluge</Link>
           <Link href="/o-nama">O nama</Link>
-          <a href="#why">Zašto mi</a>
-          <a href="#industries">Industrije</a>
-          <a href="#contact">Karijere</a>
-          <a href="#contact">Novosti</a>
+          <a href="/#why">Zašto mi</a>
+          <Link href="/kontakt">Kontakt</Link>
         </div>
         <div>
           <h4>Kontakt</h4>
