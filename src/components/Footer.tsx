@@ -19,6 +19,7 @@ export default function Footer() {
         </div>
         <div>
           <h4>Tvrtka</h4>
+          <Link href="/usluge">Usluge</Link>
           <Link href="/o-nama">O nama</Link>
           <a href="#why">Zašto mi</a>
           <a href="#industries">Industrije</a>
@@ -27,9 +28,11 @@ export default function Footer() {
         </div>
         <div>
           <h4>Kontakt</h4>
+          <p>NOVARIS TECH d.o.o.</p>
+          <p>Reisnerova ulica 91A</p>
+          <p>31000, Osijek, Hrvatska</p>
+          <p>OIB: 23096866887</p>
           <p>info@novaristech.hr</p>
-          <p>+385 99 123 4567</p>
-          <p>Zagreb, Hrvatska</p>
         </div>
         <div>
           <h4>Pratite nas</h4>
