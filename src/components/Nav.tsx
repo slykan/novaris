@@ -10,6 +10,7 @@ export default function Nav() {
   const isHome = pathname === '/'
   const isONama = pathname === '/o-nama'
   const isUsluge = pathname === '/usluge'
+  const isKontakt = pathname === '/kontakt'
   const close = () => setOpen(false)
   const home = (hash: string) => isHome ? hash : `/${hash}`
 
@@ -25,7 +26,7 @@ export default function Nav() {
           <Link className={isUsluge ? 'active' : ''} href="/usluge" onClick={close}>Usluge</Link>
           <Link className={isONama ? 'active' : ''} href="/o-nama" onClick={close}>O nama</Link>
           <a href={home('#why')} onClick={close}>Zašto mi</a>
-          <a href={home('#contact')} onClick={close}>Kontakt</a>
+          <Link className={isKontakt ? 'active' : ''} href="/kontakt" onClick={close}>Kontakt</Link>
         </div>
 
         <button
@@ -36,9 +37,9 @@ export default function Nav() {
           <span />
         </button>
 
-        <a className="quote-button" href={home('#contact')}>
+        <Link className="quote-button" href="/kontakt">
           Zatražite ponudu <span aria-hidden="true">-&gt;</span>
-        </a>
+        </Link>
     </nav>
   )
 }
