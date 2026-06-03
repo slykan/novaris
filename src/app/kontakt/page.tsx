@@ -5,8 +5,15 @@ import ContactForm from '@/components/ContactForm'
 import { p } from '@/lib/path'
 
 export const metadata: Metadata = {
-  title: 'Kontakt – Novaris Tech',
-  description: 'Kontaktirajte Novaris Tech – pošaljite upit i javit ćemo Vam se u roku od 1 sat.',
+  title: 'Kontakt',
+  description: 'Kontaktirajte Novaris Tech – pošaljite upit i javit ćemo Vam se u roku od 1 sat. Reisnerova ulica 91A, 31000 Osijek. OIB: 23096866887.',
+  keywords: ['kontakt', 'IT upit', 'Novaris Tech Osijek', 'info@novaristech.hr'],
+  openGraph: {
+    title: 'Kontakt – Novaris Tech',
+    description: 'Pošaljite upit Novaris Techu. Odgovaramo u roku od 1 sata.',
+    url: 'https://novaristech.hr/kontakt',
+  },
+  alternates: { canonical: 'https://novaristech.hr/kontakt' },
 }
 
 export default function Kontakt() {

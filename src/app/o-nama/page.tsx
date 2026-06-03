@@ -4,8 +4,15 @@ import Footer from '@/components/Footer'
 import { p } from '@/lib/path'
 
 export const metadata: Metadata = {
-  title: 'O nama – Novaris Tech',
-  description: 'Upoznajte Novaris Tech – našu misiju, viziju i vrijednosti koje nas vode u izgradnji modernih digitalnih rješenja.',
+  title: 'O nama',
+  description: 'Upoznajte Novaris Tech – modernu IT tvrtku iz Osijeka. Naša misija, vizija i vrijednosti koje nas vode u izgradnji sigurnih i skalabilnih digitalnih rješenja.',
+  keywords: ['Novaris Tech', 'IT tvrtka Osijek', 'digitalna transformacija', 'o nama', 'misija', 'vizija'],
+  openGraph: {
+    title: 'O nama – Novaris Tech',
+    description: 'Upoznajte Novaris Tech – modernu IT tvrtku iz Osijeka. Naša misija, vizija i vrijednosti.',
+    url: 'https://novaristech.hr/o-nama',
+  },
+  alternates: { canonical: 'https://novaristech.hr/o-nama' },
 }
 
 export default function ONama() {

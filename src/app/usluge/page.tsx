@@ -4,8 +4,15 @@ import Footer from '@/components/Footer'
 import { p } from '@/lib/path'
 
 export const metadata: Metadata = {
-  title: 'Usluge – Novaris Tech',
-  description: 'Kompletan pregled IT usluga Novaris Techa: web i software development, serverska infrastruktura, sigurnosna rješenja, grafički dizajn i remote podrška.',
+  title: 'Usluge',
+  description: 'Web i software development, mobilne aplikacije, VPS serveri, firewall, antivirus, backup, grafički dizajn, knjiga standarda i remote IT podrška – sve na jednom mjestu.',
+  keywords: ['web development', 'software development', 'VPS server', 'managed VPS', 'mail server', 'firewall', 'antivirus', 'backup', 'grafički dizajn', 'remote podrška', 'IT usluge Osijek'],
+  openGraph: {
+    title: 'Usluge – Novaris Tech',
+    description: 'Web development, serveri, IT zaštita, grafički dizajn i remote podrška. Kompletna IT rješenja za vaše poslovanje.',
+    url: 'https://novaristech.hr/usluge',
+  },
+  alternates: { canonical: 'https://novaristech.hr/usluge' },
 }
 
 function IconGlobe() {
