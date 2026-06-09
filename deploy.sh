@@ -1,20 +1,19 @@
 #!/bin/bash
-set -e
+REPO=~/novaris-web
+WEB=~/public_html
 
-PROJECT="$(dirname "$0")"
-PLINK="/c/Program Files/PuTTY/plink.exe"
+cd $REPO
+echo "→ git pull..."
+git pull origin main
 
-echo "=============================="
-echo " NOVARIS DEPLOY"
-echo "=============================="
+echo "→ npm install..."
+npm install --legacy-peer-deps
 
-cd "$PROJECT"
+echo "→ npm build..."
+export NEXT_PUBLIC_BASE_PATH="/~novaris"
+npm run build
 
-echo "[1/2] Git push..."
-git push origin main
+echo "→ deploy..."
+cp -rf $REPO/out/* $WEB/
 
-echo "[2/2] SSH deploy na VPS..."
-"$PLINK" novaris@vps.on-click.hr "bash ~/server.sh"
-
-echo ""
-echo "Deploy zavrsen!"
+echo "✓ Deployed!"
