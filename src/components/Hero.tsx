@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import HeroSlider from './HeroSlider'
 
 export default function Hero() {
@@ -14,7 +15,7 @@ export default function Hero() {
           <a className="button primary" href="#services">
             Naš portfolio <span aria-hidden="true">-&gt;</span>
           </a>
-          <a className="button secondary" href="/kontakt">Kontaktirajte nas</a>
+          <Link className="button secondary" href="/kontakt">Kontaktirajte nas</Link>
         </div>
 
         <div className="trust-row" aria-label="Prednosti tvrtke">
