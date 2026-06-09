@@ -1,33 +1,27 @@
 @echo off
 setlocal
 
-set NODE="C:\Program Files\nodejs\node.exe"
-set NEXT=C:\Users\Korisnik\Desktop\Novaris\novaris-web\node_modules\next\dist\bin\next
+set PLINK="C:\Program Files\PuTTY\plink.exe"
 set PROJECT=C:\Users\Korisnik\Desktop\Novaris\novaris-web
-set WINSCP="C:\Program Files (x86)\WinSCP\WinSCP.com"
-set WINSCP_SCRIPT=%PROJECT%\winscp-deploy.txt
 
 echo ==============================
-echo  NOVARIS LOCAL DEPLOY
+echo  NOVARIS DEPLOY
 echo ==============================
 
 cd /d %PROJECT%
 
-echo [1/3] Git pull...
-git pull
-
-echo [2/3] Building...
-%NODE% %NEXT% build
+echo [1/2] Git push...
+git push origin main
 if %errorlevel% neq 0 (
-    echo BUILD FAILED!
+    echo GIT PUSH FAILED!
     pause
     exit /b 1
 )
 
-echo [3/3] Upload na VPS (upisite lozinku)...
-%WINSCP% /script="%WINSCP_SCRIPT%"
+echo [2/2] SSH deploy na VPS...
+%PLINK% novaris@vps.on-click.hr "bash ~/deploy.sh"
 if %errorlevel% neq 0 (
-    echo UPLOAD FAILED!
+    echo DEPLOY FAILED!
     pause
     exit /b 1
 )
