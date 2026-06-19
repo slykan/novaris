@@ -265,12 +265,6 @@ export default function Usluge() {
               />
               <SvcCard
                 dark
-                icon={<IconLayers />}
-                title="VPS Serveri"
-                desc="Virtualni privatni serveri s garantiranim resursima, fleksibilnom konfiguracijom i visokim performansama – prilagođeni točno vašim projektnim zahtjevima."
-              />
-              <SvcCard
-                dark
                 icon={<IconShield />}
                 title="VPS Managed"
                 desc="Prepustite nam upravljanje vašim VPS-om. Brinemo se o ažuriranjima, sigurnosti i performansama dok se vi fokusirate na ono što je bitno za vaše poslovanje."
