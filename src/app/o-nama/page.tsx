@@ -5,11 +5,11 @@ import { p } from '@/lib/path'
 
 export const metadata: Metadata = {
   title: 'O nama',
-  description: 'Upoznajte Novaris Tech – modernu IT tvrtku iz Osijeka. Naša misija, vizija i vrijednosti koje nas vode u izgradnji sigurnih i skalabilnih digitalnih rješenja.',
-  keywords: ['Novaris Tech', 'IT tvrtka Osijek', 'digitalna transformacija', 'o nama', 'misija', 'vizija'],
+  description: 'Novaris Tech je moderna business-tech kompanija koja pomaže organizacijama u digitalizaciji poslovanja, optimizaciji IT infrastrukture i povećanju sigurnosti informacijskih sustava.',
+  keywords: ['Novaris Tech', 'IT tvrtka Osijek', 'digitalna transformacija', 'o nama', 'misija', 'vizija', 'cyber sigurnost', 'IT infrastruktura'],
   openGraph: {
     title: 'O nama – Novaris Tech',
-    description: 'Upoznajte Novaris Tech – modernu IT tvrtku iz Osijeka. Naša misija, vizija i vrijednosti.',
+    description: 'Moderna business-tech kompanija koja pomaže organizacijama u digitalizaciji poslovanja, optimizaciji IT infrastrukture i povećanju sigurnosti.',
     url: 'https://novaristech.hr/o-nama',
   },
   alternates: { canonical: 'https://novaristech.hr/o-nama' },
@@ -22,12 +22,21 @@ export default function ONama() {
         <Nav />
         <div className="hero-grid page-hero-grid">
           <div>
-            <p className="eyebrow"><span />O nama</p>
-            <h1>Tko smo <em>Novaris Tech</em></h1>
+            <p className="eyebrow"><span />01 – Tko smo mi</p>
+            <h1>Novaris <em>Tech</em></h1>
             <p className="hero-lead">
-              Moderna tehnološka kompanija koja spaja poslovanje i digitalne inovacije.
-              Gradimo partnerstva, isporučujemo rezultate i stvaramo dugoročnu vrijednost za naše klijente.
+              Moderna business-tech kompanija koja pomaže organizacijama u digitalizaciji
+              poslovanja, optimizaciji IT infrastrukture i povećanju sigurnosti informacijskih sustava.
             </p>
+            <p className="hero-lead" style={{ marginTop: 12, fontSize: 16 }}>
+              Naš cilj nije samo implementirati tehnologiju, već stvoriti stvarnu poslovnu
+              vrijednost kroz pouzdana, sigurna i skalabilna rješenja.
+            </p>
+            <div className="about-focus-tags">
+              {['Digitalna transformacija', 'IT infrastruktura', 'Cyber sigurnost', 'Automatizacija procesa', 'Poslovna podrška'].map((tag) => (
+                <span key={tag} className="svc-remote-tag">{tag}</span>
+              ))}
+            </div>
           </div>
           <div className="page-hero-orb" aria-hidden="true">
             <div className="orb-logo orb-static">
@@ -38,10 +47,11 @@ export default function ONama() {
       </header>
 
       <main>
-        {/* ── MISIJA ── */}
+
+        {/* ── 02 MISIJA ── */}
         <section className="light mv-section">
           <div className="section mv-inner">
-            <div className="mv-bg-number" aria-hidden="true">01</div>
+            <div className="mv-bg-number" aria-hidden="true">02</div>
             <div className="mv-grid">
               <div className="mv-visual">
                 <div className="mv-icon-wrap">
@@ -63,32 +73,25 @@ export default function ONama() {
                 <div className="mv-card-accent">
                   <span className="mv-card-tag">Misija</span>
                   <p className="mv-card-quote">
-                    "Pouzdan oslonac u procesu digitalne transformacije."
+                    &ldquo;Tehnologiju pretvaramo u poslovne rezultate.&rdquo;
                   </p>
                 </div>
               </div>
 
               <div className="mv-content">
                 <div className="mv-badge">
-                  <span className="mv-num">01</span>
-                  <span className="mv-label-text">Misija</span>
+                  <span className="mv-num">02</span>
+                  <span className="mv-label-text">Naša misija</span>
                 </div>
-                <h2>Naša misija</h2>
-                <p className="mv-text">
-                  Naša misija je povezati poslovanje i tehnologiju kroz moderna, sigurna i skalabilna
-                  digitalna rješenja koja unapređuju način rada tvrtki i stvaraju dugoročnu poslovnu
-                  vrijednost.
-                </p>
-                <p className="mv-text">
-                  Kroz stručnu podršku, kvalitetnu implementaciju i partnerski odnos s klijentima
-                  želimo biti pouzdan oslonac u procesu digitalne transformacije i razvoja poslovanja.
-                </p>
+                <h2>Tehnologiju pretvaramo u poslovne rezultate</h2>
+                <p className="mv-text">Pomažemo tvrtkama da:</p>
                 <div className="mv-pillars">
                   {[
-                    'Moderna i skalabilna rješenja',
-                    'Sigurnost i pouzdanost',
-                    'Partnerski pristup klijentima',
-                    'Dugoročna poslovna vrijednost',
+                    'Rade učinkovitije',
+                    'Smanje operativne troškove',
+                    'Povećaju sigurnost podataka',
+                    'Automatiziraju procese',
+                    'Ubrzaju rast poslovanja',
                   ].map((item) => (
                     <div key={item} className="mv-pillar">
                       <span className="mv-check" aria-hidden="true">✓</span>
@@ -96,37 +99,38 @@ export default function ONama() {
                     </div>
                   ))}
                 </div>
+                <p className="mv-text" style={{ marginTop: 28 }}>
+                  Ne prodajemo tehnologiju.<br />
+                  Implementiramo rješenja koja stvaraju konkretan učinak na poslovanje.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── VIZIJA ── */}
+        {/* ── 03 VIZIJA ── */}
         <section className="dark mv-section">
           <div className="section mv-inner">
-            <div className="mv-bg-number mv-bg-number-right" aria-hidden="true">02</div>
+            <div className="mv-bg-number mv-bg-number-right" aria-hidden="true">03</div>
             <div className="mv-grid mv-grid-reverse">
               <div className="mv-content">
                 <div className="mv-badge mv-badge-dark">
-                  <span className="mv-num">02</span>
+                  <span className="mv-num">03</span>
                   <span className="mv-label-text">Vizija</span>
                 </div>
                 <h2>Naša vizija</h2>
                 <p className="mv-text mv-text-dark">
-                  Vizija Novaris Techa je izgraditi modernu tehnološku kompaniju koja će biti
-                  prepoznata po kvaliteti usluge, profesionalnom pristupu i stvaranju konkretnih
-                  poslovnih rezultata za svoje klijente.
+                  Postati vodeći regionalni business-tech partner za digitalnu transformaciju
+                  organizacija u javnom i privatnom sektoru.
                 </p>
-                <p className="mv-text mv-text-dark">
-                  Dugoročno želimo razvijati snažnu mrežu partnerstava, širiti prisutnost na
-                  regionalnom tržištu i postati sinonim za pouzdana i moderna business-tech rješenja.
-                </p>
+                <p className="mv-text mv-text-dark">Gradimo dugoročna partnerstva temeljena na:</p>
                 <div className="mv-pillars mv-pillars-dark">
                   {[
-                    'Regionalna prisutnost i rast',
-                    'Mreža strateških partnerstava',
-                    'Prepoznatljivost po kvaliteti',
-                    'Business-tech sinonim',
+                    'Stručnosti',
+                    'Povjerenju',
+                    'Inovacijama',
+                    'Odgovornosti',
+                    'Mjerljivim rezultatima',
                   ].map((item) => (
                     <div key={item} className="mv-pillar mv-pillar-dark">
                       <span className="mv-check" aria-hidden="true">✓</span>
@@ -152,7 +156,7 @@ export default function ONama() {
                 <div className="mv-card-accent mv-card-accent-dark">
                   <span className="mv-card-tag">Vizija</span>
                   <p className="mv-card-quote">
-                    "Sinonim za pouzdana i moderna business-tech rješenja."
+                    &ldquo;Vodeći regionalni business-tech partner.&rdquo;
                   </p>
                 </div>
               </div>
@@ -160,21 +164,225 @@ export default function ONama() {
           </div>
         </section>
 
-        {/* ── CTA ── */}
+        {/* ── 04 ŠTO RADIMO ── */}
+        <section className="light">
+          <div className="section">
+            <div className="svc-cat-header" style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto' }}>
+              <p className="label">04 – Ključna područja</p>
+              <h2>Što radimo</h2>
+            </div>
+            <div className="about-areas-grid">
+              <div className="about-area-card">
+                <div className="about-area-icon">
+                  <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                </div>
+                <h3>Digitalizacija poslovanja</h3>
+                <ul className="about-area-list">
+                  <li>Integracije sustava</li>
+                  <li>Automatizacija procesa</li>
+                  <li>AI rješenja</li>
+                  <li>Digitalni workflow</li>
+                </ul>
+              </div>
+              <div className="about-area-card">
+                <div className="about-area-icon">
+                  <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                  </svg>
+                </div>
+                <h3>IT infrastruktura i cloud</h3>
+                <ul className="about-area-list">
+                  <li>Cloud migracije</li>
+                  <li>Server infrastruktura</li>
+                  <li>Microsoft 365</li>
+                  <li>Upravljanje sustavima</li>
+                </ul>
+              </div>
+              <div className="about-area-card">
+                <div className="about-area-icon">
+                  <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                </div>
+                <h3>Cyber sigurnost</h3>
+                <ul className="about-area-list">
+                  <li>Firewall sustavi</li>
+                  <li>Antivirus zaštita</li>
+                  <li>Backup i Disaster Recovery</li>
+                  <li>Sigurnosni auditi</li>
+                </ul>
+              </div>
+              <div className="about-area-card">
+                <div className="about-area-icon">
+                  <svg viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" fill="none">
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
+                    <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                  </svg>
+                </div>
+                <h3>Managed IT Services</h3>
+                <ul className="about-area-list">
+                  <li>Help Desk</li>
+                  <li>Remote Support</li>
+                  <li>Monitoring sustava</li>
+                  <li>Upravljanje IT uslugama</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 05 KAKO RADIMO ── */}
+        <section className="dark">
+          <div className="section">
+            <div className="svc-cat-header" style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto' }}>
+              <p className="label">05 – Jednostavan proces</p>
+              <h2>Kako radimo</h2>
+            </div>
+            <div className="about-process-grid">
+              {[
+                { num: '01', title: 'Analiza', desc: 'Pregled postojećeg stanja i poslovnih potreba.' },
+                { num: '02', title: 'Audit', desc: 'Identifikacija rizika i prilika za unapređenje.' },
+                { num: '03', title: 'Implementacija', desc: 'Uvođenje rješenja uz minimalan utjecaj na poslovanje.' },
+                { num: '04', title: 'Podrška', desc: 'Kontinuirano praćenje, razvoj i optimizacija.' },
+              ].map((step) => (
+                <div key={step.num} className="about-process-step">
+                  <div className="about-process-num">{step.num}</div>
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 06 BESPLATNI IT AUDIT ── */}
+        <section className="light">
+          <div className="section">
+            <div className="svc-remote">
+              <div className="svc-remote-body">
+                <p className="label" style={{ marginBottom: 18 }}>06 – Besplatni IT Audit</p>
+                <h2>Početak svake suradnje</h2>
+                <p className="svc-remote-desc">Pregledavamo:</p>
+                <div className="mv-pillars" style={{ marginTop: 20 }}>
+                  {[
+                    'IT infrastrukturu',
+                    'Sigurnost sustava',
+                    'Backup i oporavak',
+                    'Cloud spremnost',
+                    'Poslovne procese',
+                  ].map((item) => (
+                    <div key={item} className="mv-pillar">
+                      <span className="mv-check" aria-hidden="true">✓</span>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+                <p className="svc-remote-desc" style={{ marginTop: 24 }}>
+                  Nakon analize klijent dobiva jasan izvještaj s preporukama za poboljšanje.
+                </p>
+              </div>
+              <div className="svc-remote-orb" aria-hidden="true">
+                <svg viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" fill="none">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 07 ZAŠTO NOVARIS TECH ── */}
+        <section className="dark">
+          <div className="section">
+            <div className="svc-cat-header" style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto' }}>
+              <p className="label">07 – Zašto mi</p>
+              <h2>Zašto Novaris Tech</h2>
+            </div>
+            <div className="about-why-grid">
+              {[
+                { title: 'Pouzdan partner', desc: 'Dugoročna suradnja umjesto jednokratnih projekata.' },
+                { title: 'Brza reakcija', desc: 'Odgovor i podrška kada su najpotrebniji.' },
+                { title: 'Sigurnost', desc: 'Zaštita poslovnih podataka i sustava.' },
+                { title: 'Poslovni pristup', desc: 'Razumijemo procese, ne samo tehnologiju.' },
+              ].map((item) => (
+                <div key={item.title} className="about-why-card">
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 08 INDUSTRIJE ── */}
+        <section className="light">
+          <div className="section">
+            <div className="svc-cat-header" style={{ textAlign: 'center', maxWidth: 600, marginInline: 'auto' }}>
+              <p className="label">08 – Industrije</p>
+              <h2>Radimo s organizacijama iz sektora</h2>
+            </div>
+            <div className="about-industries-grid">
+              {[
+                { emoji: '🏭', label: 'Industrija' },
+                { emoji: '⚡', label: 'Energetika' },
+                { emoji: '🏢', label: 'Javna uprava' },
+                { emoji: '🚛', label: 'Logistika i promet' },
+                { emoji: '🏥', label: 'Zdravstvo' },
+                { emoji: '💼', label: 'Mala i srednja poduzeća' },
+              ].map((ind) => (
+                <div key={ind.label} className="about-industry-item">
+                  <span className="about-industry-emoji">{ind.emoji}</span>
+                  <span className="about-industry-label">{ind.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 09 PARTNERSTVA ── */}
+        <section className="dark">
+          <div className="section">
+            <div className="svc-cat-header" style={{ textAlign: 'center', maxWidth: 660, marginInline: 'auto' }}>
+              <p className="label">09 – Snaga suradnje</p>
+              <h2>Partnerstva</h2>
+              <p className="svc-cat-lead svc-cat-lead-dark" style={{ marginInline: 'auto' }}>
+                Novaris Tech razvija mrežu strateških partnerstava kako bi klijentima
+                pružio cjelovita i kvalitetna rješenja.
+              </p>
+            </div>
+            <div className="about-focus-tags" style={{ justifyContent: 'center', marginTop: 8 }}>
+              {['ERP i poslovni sustavi', 'Digitalizacija procesa', 'Cloud rješenja', 'IT infrastruktura', 'Cyber sigurnost'].map((tag) => (
+                <span key={tag} className="svc-remote-tag">{tag}</span>
+              ))}
+            </div>
+            <p className="about-partners-note">Partnerski logotipi uskoro.</p>
+          </div>
+        </section>
+
+        {/* ── 10 CTA ── */}
         <section className="light">
           <div className="section mv-cta-section">
             <div className="mv-cta-inner">
-              <p className="label" style={{ marginBottom: 16 }}>Surađujmo</p>
-              <h2 className="mv-cta-heading">Postanite naš partner u digitalnoj transformaciji</h2>
-              <p className="mv-cta-sub">
-                Kontaktirajte nas i saznajte kako Novaris Tech može unaprijediti vaše poslovanje.
-              </p>
+              <p className="label" style={{ marginBottom: 16 }}>Smart Solutions. Real Impact.</p>
+              <h2 className="mv-cta-heading">Vaš partner u digitalnoj transformaciji poslovanja</h2>
+              <div className="about-cta-info">
+                <span>📍 Osijek, Hrvatska</span>
+                <span>🌐 novaristech.hr</span>
+                <span>✉️ info@novaristech.hr</span>
+              </div>
               <div className="hero-actions" style={{ justifyContent: 'center', marginTop: 36 }}>
-                <a className="button primary" href="/#contact">
-                  Zatražite ponudu <span aria-hidden="true">→</span>
+                <a className="button primary" href="/kontakt">
+                  Kontaktirajte nas <span aria-hidden="true">→</span>
                 </a>
-                <a className="button secondary" href="/#services">
-                  Pogledajte portfolio <span aria-hidden="true">→</span>
+                <a className="button secondary" href="/usluge">
+                  Pogledajte usluge <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>

@@ -13,11 +13,27 @@ const industries = [
   },
 ]
 
-const results = [
-  { value: '30+', label: 'godina iskustva', icon: <path d="M12 34 34 12M20 12h14v14" /> },
-  { value: '50+', label: 'zadovoljnih klijenata', icon: <path d="M24 8a16 16 0 1 1 0 32 16 16 0 0 1 0-32ZM24 16v9l6 4" /> },
-  { value: '110+', label: 'stručnjaka u timu', icon: <path d="M24 6 10 12v11c0 9 5.8 15.4 14 19 8.2-3.6 14-10 14-19V12L24 6Z M18 24l4 4 8-9" /> },
-  { value: '200+', label: 'certifikata', icon: <path d="M10 38V26M20 38V16M30 38V22M40 38V10" /> },
+const whyUs = [
+  {
+    title: 'Pouzdan partner',
+    desc: 'Dugoročna suradnja umjesto jednokratnih projekata.',
+    icon: <path d="M24 6 10 12v11c0 9 5.8 15.4 14 19 8.2-3.6 14-10 14-19V12L24 6Z" />,
+  },
+  {
+    title: 'Brza reakcija',
+    desc: 'Odgovor i podrška kada su najpotrebniji.',
+    icon: <path d="M24 8a16 16 0 1 1 0 32 16 16 0 0 1 0-32ZM24 16v9l6 4" />,
+  },
+  {
+    title: 'Sigurnost',
+    desc: 'Zaštita poslovnih podataka i sustava.',
+    icon: <><path d="M20 24l4 4 8-9" /><rect x="8" y="12" width="32" height="28" rx="3" /><path d="M16 12V9a8 8 0 0 1 16 0v3" /></>,
+  },
+  {
+    title: 'Poslovni pristup',
+    desc: 'Razumijemo procese, ne samo tehnologiju.',
+    icon: <path d="M12 34 34 12M20 12h14v14" />,
+  },
 ]
 
 export default function Industries() {
@@ -41,14 +57,16 @@ export default function Industries() {
         </div>
 
         <aside className="results-card">
-          <p className="label">Rezultati koje donosimo</p>
-          <h2>Mjerljivi rezultati. Stvarna vrijednost.</h2>
-          <div className="results-grid">
-            {results.map((item) => (
-              <article key={item.label}>
+          <p className="label">Zašto Novaris Tech</p>
+          <h2>Pouzdan. Brz. Siguran.</h2>
+          <div className="why-grid">
+            {whyUs.map((item) => (
+              <article key={item.title} className="why-item">
                 <svg viewBox="0 0 48 48" aria-hidden="true">{item.icon}</svg>
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <span>{item.desc}</span>
+                </div>
               </article>
             ))}
           </div>
