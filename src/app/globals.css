@@ -1494,6 +1494,78 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .footer-legal { flex-wrap: wrap; gap: 14px; }
 }
 
+/* ── COOKIE CONSENT ── */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid rgba(0,105,232,.14);
+  box-shadow: 0 -8px 32px rgba(0,28,80,.10);
+  backdrop-filter: blur(12px);
+  animation: cookie-slide-up .4s ease;
+}
+
+@keyframes cookie-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.cookie-inner {
+  width: min(1160px, calc(100% - 48px));
+  margin-inline: auto;
+  padding: 22px 0;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.cookie-text {
+  flex: 1;
+}
+
+.cookie-text strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.cookie-text p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.cookie-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cookie-btn {
+  height: 42px;
+  padding-inline: 22px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .cookie-inner {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 0;
+  }
+  .cookie-actions { width: 100%; }
+  .cookie-btn { flex: 1; }
+}
+
 /* ── O NAMA – NEW SECTIONS ── */
 .about-focus-tags {
   display: flex;
