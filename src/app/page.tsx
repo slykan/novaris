@@ -14,8 +14,8 @@ export default function Home() {
       </header>
       <main>
         <Services />
-        <About />
         <Industries />
+        <About />
       </main>
       <Footer />
     </>

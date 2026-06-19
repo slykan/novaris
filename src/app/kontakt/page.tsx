@@ -32,7 +32,7 @@ export default function Kontakt() {
           </div>
           <div className="page-hero-orb" aria-hidden="true">
             <div className="orb-logo orb-static">
-              <img src={p('/logo3_small.png')} alt="" className="logo-mark" />
+              <img src={p('/logo_small1.png')} alt="" className="logo-mark" />
             </div>
           </div>
         </div>

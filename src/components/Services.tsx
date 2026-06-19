@@ -4,32 +4,44 @@ import Link from 'next/link'
 
 const services = [
   {
-    icon: <path d="M6 24h8M34 24h8M24 6v8M24 34v8M13 13l6 6M29 29l6 6M13 35l6-6M29 17l6-6M24 20a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/>,
+    icon: (
+      <>
+        <rect x="8" y="8" width="11" height="11" rx="2" />
+        <rect x="29" y="8" width="11" height="11" rx="2" />
+        <rect x="8" y="29" width="11" height="11" rx="2" />
+        <rect x="29" y="29" width="11" height="11" rx="2" />
+      </>
+    ),
     title: 'Integracije',
     desc: 'Omogućujemo integraciju aplikacija, sustava i podataka brzo, jednostavno i na siguran način – uz upravljanje API životnim ciklusom i event streaming.',
   },
   {
-    icon: <path d="M8 36V20l8-6 8 6v16H8Zm16 0V12l8-8 8 8v24H24ZM8 36h32"/>,
+    icon: <path d="M16 34h19a9 9 0 0 0 0-18 13 13 0 0 0-25 4 7 7 0 0 0 1 14h5Z" />,
     title: 'Automatizacija',
     desc: 'Pružamo sveobuhvatan skup mogućnosti za digitalizaciju i automatizaciju poslovnih procesa primjenom AI i low-code/no-code tehnologija.',
   },
   {
-    icon: <path d="M18 38h20a10 10 0 0 0 0-20 15 15 0 0 0-29 4 8 8 0 0 0 1 16h8Zm0-4h-8a4 4 0 0 1 0-8h3v-2a11 11 0 0 1 22-2h3a6 6 0 0 1 0 12H18Z"/>,
+    icon: <path d="M24 6 10 12v11c0 9 5.8 15.4 14 19 8.2-3.6 14-10 14-19V12L24 6Z M18 24l4 4 8-9" />,
     title: 'Cloud transformacija',
     desc: 'Implementiramo cloud-by-design strategiju koja vašoj organizaciji donosi fleksibilnost infrastrukture i ubrzava digitalnu transformaciju.',
   },
   {
-    icon: <path d="M8 27h7v15H8V27Zm12-10h7v25h-7V17ZM32 6h7v36h-7V6Z"/>,
+    icon: <path d="M15 30h18M15 21h18M18 12l-8 12 8 12M30 12l8 12-8 12" />,
     title: 'Analitika podataka i AI',
     desc: 'Omogućujemo tvrtkama da u potpunosti iskoriste potencijal svojih podataka – pretvaramo složene informacije u konkretne poslovne uvide.',
   },
   {
-    icon: <path d="M6 10h36v4H6zM6 20h36v4H6zM6 30h36v4H6zM10 12v22M24 12v22M38 12v22"/>,
+    icon: <path d="M12 27v-5a12 12 0 0 1 24 0v5M12 27H8v9h5a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4h-1ZM36 27h4v9h-5a4 4 0 0 1-4-4v-1a4 4 0 0 1 4-4h1Z" />,
     title: 'Upravljanje IT operacijama',
     desc: 'Pružamo sveobuhvatan uvid u zdravlje infrastrukture, poslovnih servisa i aplikacija uz naprednu analitiku i proaktivno sprječavanje incidenata.',
   },
   {
-    icon: <path d="M24 4 8 10v12c0 10 6.8 18 16 22 9.2-4 16-12 16-22V10L24 4Zm7.8 17-9.4 9.4-5.2-5.2 2.8-2.8 2.4 2.4 6.6-6.6 2.8 2.8Z"/>,
+    icon: (
+      <>
+        <ellipse cx="24" cy="12" rx="14" ry="5" />
+        <path d="M10 12v24c0 2.8 6.3 5 14 5s14-2.2 14-5V12M10 24c0 2.8 6.3 5 14 5s14-2.2 14-5" />
+      </>
+    ),
     title: 'Upravljanje IT uslugama',
     desc: 'Implementiramo i automatiziramo IT procese u skladu s ITIL najboljim praksama – od service deska do upravljanja IT imovinom i promjenama.',
   },

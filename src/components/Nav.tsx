@@ -17,7 +17,7 @@ export default function Nav() {
   return (
     <nav className="nav" aria-label="Primarna navigacija">
         <Link className="brand" href="/" onClick={close} aria-label="Novaris Tech početna">
-          <img src={p('/logo3.png')} alt="Novaris Tech" className="logo-full" />
+          <img src={p('/logo-light.png')} alt="Novaris Tech" className="logo-full" />
         </Link>
 
         <div className={`nav-links${open ? ' open' : ''}`}>
@@ -38,7 +38,7 @@ export default function Nav() {
         </button>
 
         <Link className="quote-button" href="/kontakt">
-          Zatražite ponudu <span aria-hidden="true">-&gt;</span>
+          Dogovori sastanak <span aria-hidden="true">&rarr;</span>
         </Link>
     </nav>
   )
