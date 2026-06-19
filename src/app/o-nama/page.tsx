@@ -28,7 +28,7 @@ export default function ONama() {
               Moderna business-tech kompanija koja pomaže organizacijama u digitalizaciji
               poslovanja, optimizaciji IT infrastrukture i povećanju sigurnosti informacijskih sustava.
             </p>
-            <p className="hero-lead" style={{ marginTop: 12, fontSize: 16 }}>
+            <p className="hero-lead" style={{ marginTop: 12 }}>
               Naš cilj nije samo implementirati tehnologiju, već stvoriti stvarnu poslovnu
               vrijednost kroz pouzdana, sigurna i skalabilna rješenja.
             </p>

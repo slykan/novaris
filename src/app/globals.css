@@ -997,7 +997,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .mv-text {
   color: var(--muted);
   line-height: 1.8;
-  font-size: 17px;
+  font-size: 18px;
   margin-bottom: 16px;
 }
 
@@ -1013,7 +1013,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--ink);
 }
@@ -1053,7 +1053,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .mv-cta-sub {
   color: var(--muted);
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.75;
   margin: 0;
 }
@@ -1256,7 +1256,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .svc-cat-lead {
   color: var(--muted);
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.8;
   max-width: 580px;
   margin: 0;
@@ -1350,7 +1350,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .svc-remote-desc {
   margin: 0;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.82;
   max-width: 560px;
 }
@@ -1628,7 +1628,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .about-area-list li {
-  font-size: 14px;
+  font-size: 18px;
   color: var(--muted);
   line-height: 1.6;
   padding-left: 16px;
@@ -1687,7 +1687,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .about-process-step p {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.7;
 }
 
@@ -1718,7 +1718,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .about-why-card p {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.7;
 }
 
@@ -1759,7 +1759,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .about-partners-note {
   text-align: center;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 18px;
   margin-top: 32px;
   font-style: italic;
 }
@@ -1774,7 +1774,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .about-cta-info span {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--muted);
 }
 
