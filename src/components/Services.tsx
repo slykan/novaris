@@ -13,7 +13,7 @@ const services = [
       </>
     ),
     title: 'Integracije',
-    desc: 'Omogućujemo integraciju aplikacija, sustava i podataka brzo, jednostavno i na siguran način – uz upravljanje API životnim ciklusom i event streaming.',
+    desc: 'Omogućujemo integraciju aplikacija, sustava i podataka brzo, jednostavno i na siguran način uz upravljanje API životnim ciklusom i event streaming.',
   },
   {
     icon: <path d="M16 34h19a9 9 0 0 0 0-18 13 13 0 0 0-25 4 7 7 0 0 0 1 14h5Z" />,
@@ -28,7 +28,7 @@ const services = [
   {
     icon: <path d="M15 30h18M15 21h18M18 12l-8 12 8 12M30 12l8 12-8 12" />,
     title: 'Analitika podataka i AI',
-    desc: 'Omogućujemo tvrtkama da u potpunosti iskoriste potencijal svojih podataka – pretvaramo složene informacije u konkretne poslovne uvide.',
+    desc: 'Omogućujemo tvrtkama da u potpunosti iskoriste potencijal svojih podataka pretvaramo složene informacije u konkretne poslovne uvide.',
   },
   {
     icon: <path d="M12 27v-5a12 12 0 0 1 24 0v5M12 27H8v9h5a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4h-1ZM36 27h4v9h-5a4 4 0 0 1-4-4v-1a4 4 0 0 1 4-4h1Z" />,
@@ -74,7 +74,7 @@ export default function Services() {
           <p className="label">Što radimo</p>
           <h2>Portfolio rješenja koja pokreću vaše poslovanje</h2>
         </div>
-        <p>Od integracije sustava do napredne analitike i AI – pretvaramo tehnologiju u stvarnu poslovnu vrijednost.</p>
+        <p>Od integracije sustava do napredne analitike i AI pretvaramo tehnologiju u stvarnu poslovnu vrijednost.</p>
       </div>
 
       <div className="service-grid">

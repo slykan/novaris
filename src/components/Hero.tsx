@@ -8,7 +8,7 @@ export default function Hero() {
         <p className="eyebrow"><span></span> Novaris Tech</p>
         <h1>Vaš pouzdan partner u <em>digitalnoj transformaciji</em></h1>
         <p className="hero-lead">
-          Povezujemo vodeće globalne tehnologije s internom stručnošću kako bismo vašoj
+          Povezujemo vodeće globalne tehnologije s internom stručnošću kako bismo Vašoj
           organizaciji omogućili stabilnu, učinkovitu i sigurnu digitalnu transformaciju.
         </p>
         <div className="hero-actions">
