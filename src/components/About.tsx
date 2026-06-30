@@ -4,7 +4,7 @@ import { p } from '@/lib/path'
 
 const checkItems = [
   'Iskusan i certificiran tim stručnjaka',
-  'Rješenja prilagođena vašoj industriji i poslovanju',
+  'Rješenja prilagođena Vašoj industriji i poslovanju',
   'Proaktivna podrška i kontinuirano održavanje',
   'Fokus na sigurnost, pouzdanost i skalabilnost',
 ]
@@ -48,8 +48,8 @@ export default function About() {
           <h2>Vaš tehnološki partner za održivi rast</h2>
           <p>
             Spajamo stručnost, inovacije i osobni pristup kako bismo isporučili IT rješenja
-            koja vaše poslovanje vode naprijed. Naša snaga leži u kombinaciji vodećih globalnih
-            tehnologija i duboke poznate vaše industrije.
+            koja Vaše poslovanje vode naprijed. Naša snaga leži u kombinaciji vodećih globalnih
+            tehnologija i dobrog poznavanja Vaše industrije.
           </p>
           <a className="button secondary" href="#contact">
             Više o nama <span aria-hidden="true">-&gt;</span>

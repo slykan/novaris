@@ -18,17 +18,17 @@ const services = [
   {
     icon: <path d="M16 34h19a9 9 0 0 0 0-18 13 13 0 0 0-25 4 7 7 0 0 0 1 14h5Z" />,
     title: 'Automatizacija',
-    desc: 'Pružamo sveobuhvatan skup mogućnosti za digitalizaciju i automatizaciju poslovnih procesa primjenom AI i low-code/no-code tehnologija.',
+    desc: 'Pružamo sveobuhvatan skup mogućnosti za digitalizaciju i automatizaciju poslovnih procesa primjenom AI tehnologija.',
   },
   {
     icon: <path d="M24 6 10 12v11c0 9 5.8 15.4 14 19 8.2-3.6 14-10 14-19V12L24 6Z M18 24l4 4 8-9" />,
     title: 'Cloud transformacija',
-    desc: 'Implementiramo cloud-by-design strategiju koja vašoj organizaciji donosi fleksibilnost infrastrukture i ubrzava digitalnu transformaciju.',
+    desc: 'Implementiramo cloud strategiju koja vašoj organizaciji donosi fleksibilnost infrastrukture i ubrzava digitalnu transformaciju.',
   },
   {
     icon: <path d="M15 30h18M15 21h18M18 12l-8 12 8 12M30 12l8 12-8 12" />,
     title: 'Analitika podataka i AI',
-    desc: 'Omogućujemo tvrtkama da u potpunosti iskoriste potencijal svojih podataka pretvaramo složene informacije u konkretne poslovne uvide.',
+    desc: 'Omogućujemo tvrtkama da u potpunosti iskoriste potencijal svojih podataka. Pretvaramo složene informacije u konkretne poslovne uvide.',
   },
   {
     icon: <path d="M12 27v-5a12 12 0 0 1 24 0v5M12 27H8v9h5a4 4 0 0 0 4-4v-1a4 4 0 0 0-4-4h-1ZM36 27h4v9h-5a4 4 0 0 1-4-4v-1a4 4 0 0 1 4-4h1Z" />,
@@ -43,7 +43,7 @@ const services = [
       </>
     ),
     title: 'Upravljanje IT uslugama',
-    desc: 'Implementiramo i automatiziramo IT procese u skladu s ITIL najboljim praksama – od service deska do upravljanja IT imovinom i promjenama.',
+    desc: 'Implementiramo i automatiziramo IT procese u skladu s najboljim ITIL praksama – od service deska do upravljanja IT imovinom i promjenama.',
   },
 ]
 
@@ -74,7 +74,7 @@ export default function Services() {
           <p className="label">Što radimo</p>
           <h2>Portfolio rješenja koja pokreću vaše poslovanje</h2>
         </div>
-        <p>Od integracije sustava do napredne analitike i AI pretvaramo tehnologiju u stvarnu poslovnu vrijednost.</p>
+        <p>Od integracije sustava do napredne analitike i AI rješenja. Pretvaramo tehnologiju u stvarnu poslovnu vrijednost.</p>
       </div>
 
       <div className="service-grid">

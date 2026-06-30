@@ -16,12 +16,12 @@ const industries = [
 const whyUs = [
   {
     title: 'Pouzdan partner',
-    desc: 'Dugoročna suradnja umjesto jednokratnih projekata.',
+    desc: 'Dugoročna suradnja umjesto jednokratnih rješenja.',
     icon: <path d="M24 6 10 12v11c0 9 5.8 15.4 14 19 8.2-3.6 14-10 14-19V12L24 6Z" />,
   },
   {
     title: 'Brza reakcija',
-    desc: 'Odgovor i podrška kada su najpotrebniji.',
+    desc: 'Odgovor i podrška kada smo najpotrebniji.',
     icon: <path d="M24 8a16 16 0 1 1 0 32 16 16 0 0 1 0-32ZM24 16v9l6 4" />,
   },
   {

@@ -2,11 +2,11 @@ import Link from 'next/link'
 import { p } from '@/lib/path'
 
 const ctaItems = [
-  'Razumijemo vaše potrebe',
+  'Razumijemo Vaše potrebe',
   'Predlažemo najbolja rješenja',
   'Isporučujemo gotova rješenja',
-  'Pružamo kontinuirano održavanje',
-  'Gradimo partnerstvo dugoročno',
+  'Pružamo kontinuiranu podršku',
+  'Gradimo dugoročno partnerstvo',
 ]
 
 export default function Footer() {
@@ -40,7 +40,7 @@ export default function Footer() {
                 </svg>
               </div>
               <h3>Dogovorite sastanak</h3>
-              <p>Razgovaramo o vašim potrebama i ciljevima.</p>
+              <p>Razgovarajmo o Vašim potrebama i ciljevima.</p>
             </Link>
             <Link href="/kontakt" className="cta-card">
               <div className="cta-card-icon">
@@ -50,7 +50,7 @@ export default function Footer() {
                 </svg>
               </div>
               <h3>Besplatni IT audit</h3>
-              <p>Pregledaj sigurnost i učinkovitost vaše IT infrastrukture.</p>
+              <p>Pregledavamo sigurnost i učinkovitost Vaše IT infrastrukture.</p>
             </Link>
           </div>
         </div>
