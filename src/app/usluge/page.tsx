@@ -195,7 +195,7 @@ export default function Usluge() {
             <h1>Što sve <em>Novaris Tech</em> nudi</h1>
             <p className="hero-lead">
               Od razvoja softvera i serverske infrastrukture do zaštite podataka, grafičkog dizajna
-              i brze remote podrške – pokrivamo sve što vaše poslovanje treba u digitalnom svijetu.
+              i brze remote podrške – pokrivamo sve što Vaše poslovanje treba u digitalnom svijetu.
             </p>
           </div>
           <div className="page-hero-orb" aria-hidden="true">
@@ -216,7 +216,7 @@ export default function Usluge() {
               <h2>Development</h2>
               <p className="svc-cat-lead">
                 Gradimo moderne digitalne proizvode – od ideje do finalnog rješenja prilagođenog
-                vašem poslovanju. Koristimo provjerene tehnologije i agilne procese kako bismo
+                Vašem poslovanju. Koristimo provjerene tehnologije i agilne procese kako bismo
                 isporučili kvalitetan softver u dogovorenom roku.
               </p>
             </div>
@@ -224,22 +224,22 @@ export default function Usluge() {
               <SvcCard
                 icon={<IconGlobe />}
                 title="Web Development"
-                desc="Dizajniramo i razvijamo brze, skalabilne i vizualno dojmljive web aplikacije i stranice. Svaki projekt gradi se s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
+                desc="Dizajniramo i razvijamo brze i vizualno dojmljive web stranice i aplikacije. Svaki projekt gradimo s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
               />
               <SvcCard
                 icon={<IconCode />}
                 title="Software Development"
-                desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju vaše organizacije – od arhitekture do produkcijske isporuke."
+                desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju Vaše organizacije – od arhitekture do produkcijske isporuke."
               />
               <SvcCard
                 icon={<IconSmartphone />}
                 title="Mobile Development"
-                desc="Native i cross-platform mobilne aplikacije za iOS i Android. Intuitivno korisničko sučelje, visoke performanse i pouzdana sinkronizacija s vašim backend sustavima."
+                desc="Native mobilne aplikacije za iOS i Android korisnike. Intuitivno korisničko sučelje, visoke performanse i pouzdana sinkronizacija s Vašim backend sustavima."
               />
               <SvcCard
                 icon={<IconSettings />}
                 title="Custom Made"
-                desc="Svaki projekt tretiramo kao jedinstven izazov. Gradimo rješenja točno po vašim zahtjevima – bez kompromisa, bez generičkih predložaka i bez tehničkih ograničenja."
+                desc="Svaki projekt tretiramo kao jedinstven izazov. Gradimo rješenja točno po Vašim zahtjevima, bez kompromisa, bez generičkih predložaka i bez tehničkih ograničenja."
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ export default function Usluge() {
               <h2>Server</h2>
               <p className="svc-cat-lead svc-cat-lead-dark">
                 Pouzdana, sigurna i skalabilna serverska infrastruktura prilagođena potrebama
-                vašeg poslovanja – od postavljanja do dugoročnog upravljanja i optimizacije.
+                Vašeg poslovanja. Od postavljanja do dugoročnog upravljanja i optimizacije.
               </p>
             </div>
             <div className="svc-grid">
@@ -261,25 +261,25 @@ export default function Usluge() {
                 dark
                 icon={<IconServer />}
                 title="Web Server"
-                desc="Postavljanje, konfiguracija i optimizacija web servera visoke dostupnosti za vaše web aplikacije i stranice. Brzo, sigurno i stabilno u svakom trenutku."
+                desc="Postavljanje, konfiguracija i optimizacija web servera visoke dostupnosti za Vaše web stranice i aplikacije. Brzo, sigurno i stabilno u svakom trenutku."
               />
               <SvcCard
                 dark
                 icon={<IconShield />}
                 title="VPS Managed"
-                desc="Prepustite nam upravljanje vašim VPS-om. Brinemo se o ažuriranjima, sigurnosti i performansama dok se vi fokusirate na ono što je bitno za vaše poslovanje."
+                desc="Prepustite nam upravljanje Vašim VPS-om. Brinemo se o ažuriranjima, sigurnosti i performansama dok ste Vi fokusirani na ono što je bitno za Vaše poslovanje."
               />
               <SvcCard
                 dark
                 icon={<IconSliders />}
                 title="VPS Fully Custom Managed"
-                desc="Potpuno prilagođeno i upravljano VPS okruženje – od inicijalne arhitekture do svakodnevnog nadzora, optimizacije i intervencija u skladu s vašim specifičnim zahtjevima."
+                desc="Potpuno prilagođeno i upravljano VPS okruženje. Od inicijalne arhitekture do svakodnevnog nadzora, optimizacije i intervencija u skladu s Vašim specifičnim zahtjevima."
               />
               <SvcCard
                 dark
                 icon={<IconMail />}
                 title="Mail Server"
-                desc="Sigurni, pouzdani i anti-spam zaštićeni mail serveri za vaše poslovanje. Vlastiti domain, potpuna kontrola nad podacima, bez ovisnosti o trećim stranama."
+                desc="Sigurni, pouzdani i anti-spam zaštićeni mail serveri za Vaše poslovanje. Vlastiti domain sa potpunom kontrolom nad podacima, bez ovisnosti o trećim stranama."
               />
             </div>
           </div>
@@ -292,20 +292,20 @@ export default function Usluge() {
               <p className="label">03 – Sigurnost</p>
               <h2>Zaštita</h2>
               <p className="svc-cat-lead">
-                Višeslojna sigurnosna rješenja koja štite vaše podatke, sustave i poslovne procese
-                od modernih prijetnji. Jer prevencija uvijek košta manje od oporavka.
+                Višeslojna sigurnosna rješenja koja štite Vaše podatke, sustave i poslovne procese
+                od modernih prijetnji. Prevencija uvijek košta manje od oporavka.
               </p>
             </div>
             <div className="svc-grid svc-grid-3">
               <SvcCard
                 icon={<IconFirewall />}
                 title="Firewall – interni i eksterni"
-                desc="Implementacija i upravljanje vatrozidima na više razina – zaštita perimetra od vanjskih prijetnji i segmentacija interne mreže. Nadzor i kontrola prometa u realnom vremenu, 24/7."
+                desc="Implementacija i upravljanje firewall rješenjima na više razina. Zaštita perimetra od vanjskih prijetnji i segmentacija interne mreže. Nadzor i kontrola prometa u realnom vremenu, 24/7."
               />
               <SvcCard
                 icon={<IconBug />}
                 title="Antivirus rješenja"
-                desc="Sveobuhvatna antivirusna zaštita za poslovne sustave, endpointove i servere. Automatsko ažuriranje definicija, centralno upravljanje politikama i detaljni sigurnosni izvještaji."
+                desc="Sveobuhvatna antivirusna zaštita za poslovne sustave i servere. Automatsko ažuriranje, centralno upravljanje politikama i detaljni sigurnosni izvještaji."
               />
               <SvcCard
                 icon={<IconDatabase />}
@@ -323,8 +323,8 @@ export default function Usluge() {
               <p className="label">04 – Vizualni identitet</p>
               <h2>Dizajn i brand</h2>
               <p className="svc-cat-lead svc-cat-lead-dark">
-                Vizualni identitet koji komunicira vrijednosti vaše tvrtke i ostavlja trajan dojam
-                na svakom touchpointu – od digitala do tiska.
+                Vizualni identitet koji komunicira vrijednosti Vaše tvrtke i ostavlja trajan dojam
+                na svakom koraku – od digital do tiska.
               </p>
             </div>
             <div className="svc-grid svc-grid-2">
@@ -332,13 +332,13 @@ export default function Usluge() {
                 dark
                 icon={<IconPenTool />}
                 title="Grafički dizajn"
-                desc="Dizajn logotipa, UI/UX rješenja, marketinških materijala, prezentacija, bannera i svega što vaš brand treba da bi izgledao profesionalno i prepoznatljivo na svakom mediju i kanalu komunikacije."
+                desc="Dizajn logotipa, UI/UX rješenja, marketinških materijala, prezentacija, bannera i svega što Vaš brand treba da bi izgledao profesionalno i prepoznatljivo na svakom kanalu komunikacije."
               />
               <SvcCard
                 dark
                 icon={<IconBook />}
                 title="Knjiga standarda"
-                desc="Kompletan brand manual koji precizno definira vaš vizualni identitet – boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s vama."
+                desc="Kompletan brand katalog koji precizno definira Vaš vizualni identitet – boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s Vama."
               />
             </div>
           </div>
@@ -357,13 +357,13 @@ export default function Usluge() {
                   optimizacije radnih okruženja i hitnih intervencija.
                 </p>
                 <p className="svc-remote-desc" style={{ marginTop: 12 }}>
-                  Bez čekanja, bez dolaska na teren, bez gubitka radnog vremena.
+                  Bez čekanja, bez nepotrebnih dolaska na teren, bez gubitka radnog vremena.
                   Naš tim reagira brzo, komunikacija je jasna, a svaki problem rješavamo temeljito
-                  kako bi vaši sustavi i timovi funkcionirali besprijekorno.
+                  kako bi Vaši sustavi i timovi funkcionirali besprijekorno.
                 </p>
                 <div className="svc-remote-tags">
                   {[
-                    'Brzi response time',
+                    'Brza reakcija',
                     'Sve platforme',
                     'Sigurna veza',
                     'Praćenje ticketa',
@@ -387,8 +387,8 @@ export default function Usluge() {
               <p className="label" style={{ marginBottom: 16 }}>Surađujmo</p>
               <h2 className="mv-cta-heading">Trebate više informacija o nekoj usluzi?</h2>
               <p className="mv-cta-sub">
-                Kontaktirajte nas i zajedno ćemo pronaći pravo rješenje za vaše poslovne potrebe.
-                Bez obveze, bez složenih procedura – samo konkretan razgovor.
+                Kontaktirajte nas i zajedno ćemo pronaći pravo rješenje za Vaše poslovne potrebe.
+                Bez obveze, bez složenih procedura, samo konkretan razgovor!
               </p>
               <div className="hero-actions" style={{ justifyContent: 'center', marginTop: 36 }}>
                 <a className="button primary" href="/#contact">
