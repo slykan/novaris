@@ -26,7 +26,7 @@ export default function Kontakt() {
             <p className="eyebrow"><span />Kontakt</p>
             <h1>Pišite <em>nam</em></h1>
             <p className="hero-lead">
-              Imate projekt, pitanje ili ideja? Ispunite formu i naš tim
+              Imate projekt, pitanje ili ideju? Ispunite formu i naš tim
               će Vam se javiti u roku od sat vremena.
             </p>
           </div>

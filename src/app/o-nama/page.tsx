@@ -308,7 +308,7 @@ export default function ONama() {
             <div className="about-why-grid">
               {[
                 { title: 'Pouzdan partner', desc: 'Dugoročna suradnja umjesto jednokratnih projekata.' },
-                { title: 'Brza reakcija', desc: 'Odgovor i podrška kada su najpotrebniji.' },
+                { title: 'Brza reakcija', desc: 'Odgovor i podrška kada smo najpotrebniji.' },
                 { title: 'Sigurnost', desc: 'Zaštita poslovnih podataka i sustava.' },
                 { title: 'Poslovni pristup', desc: 'Razumijemo procese, ne samo tehnologiju.' },
               ].map((item) => (
