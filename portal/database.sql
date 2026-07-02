@@ -54,6 +54,25 @@ CREATE TABLE IF NOT EXISTS meetings (
     INDEX meetings_schedule_index (meeting_date, meeting_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS audits (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    client_id BIGINT UNSIGNED NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'in_progress',
+    checklist JSON NULL,
+    notes TEXT NULL,
+    completed_at DATETIME NULL,
+    created_by BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT audits_client_foreign
+        FOREIGN KEY (client_id) REFERENCES clients(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT audits_created_by_foreign
+        FOREIGN KEY (created_by) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX audits_client_index (client_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 UPDATE IGNORE users
 SET email = 'info@novaristech.hr'
 WHERE email = 'admin@novaris.hr';

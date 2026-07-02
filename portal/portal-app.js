@@ -16,6 +16,69 @@
   const DURATION_LABELS = { "30m": "30 min", "1h": "1 h", "2h": "2 h", "as_needed": "Po potrebi" };
   const REMINDER_OFFSET_LABELS = { "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" };
 
+  const AUDIT_CHECKLIST = [
+    {
+      key: "it",
+      label: "IT / Infrastruktura",
+      items: [
+        { key: "inventory", label: "Popis opreme i mrežnog plana" },
+        { key: "patching", label: "Status zakrpa (patch) sustava" },
+        { key: "backup", label: "Backup strategija i testiranje restore-a" },
+        { key: "access", label: "Kontrola pristupa (lozinke, 2FA, dijeljeni accounti)" },
+        { key: "licenses", label: "Licence softvera" },
+        { key: "network_security", label: "Sigurnost mreže (firewall, VPN, Wi-Fi)" },
+        { key: "documentation", label: "Dokumentacija (mrežni dijagrami, popis imovine)" }
+      ]
+    },
+    {
+      key: "web",
+      label: "Web / Digitalna prisutnost",
+      items: [
+        { key: "performance", label: "Performanse web stranice" },
+        { key: "ssl", label: "SSL/TLS konfiguracija" },
+        { key: "headers", label: "Sigurnosni headeri" },
+        { key: "seo", label: "SEO osnove" },
+        { key: "gdpr", label: "GDPR / cookie usklađenost" },
+        { key: "dns_mail", label: "DNS i mail health (SPF/DKIM/DMARC)" },
+        { key: "hosting", label: "Pouzdanost hostinga (uptime)" }
+      ]
+    },
+    {
+      key: "cyber",
+      label: "Kibernetička sigurnost",
+      items: [
+        { key: "vuln_scan", label: "Vanjski scan ranjivosti" },
+        { key: "breach_check", label: "Provjera curenja lozinki (HIBP)" },
+        { key: "endpoint", label: "Status endpoint zaštite (antivirus/EDR)" },
+        { key: "phishing", label: "Phishing test / svijest zaposlenika" },
+        { key: "policies", label: "Sigurnosne politike i procedure" }
+      ]
+    }
+  ];
+  const AUDIT_ITEM_TOTAL = AUDIT_CHECKLIST.reduce((sum, category) => sum + category.items.length, 0);
+  const AUDIT_STATUS_CHOICES = [
+    ["ok", "OK", "ok"],
+    ["problem", "Problem", "problem"],
+    ["na", "N/P", "na"]
+  ];
+
+  function emptyAuditChecklist() {
+    const checklist = {};
+    AUDIT_CHECKLIST.forEach((category) => {
+      category.items.forEach((item) => {
+        checklist[item.key] = { status: "pending", note: "" };
+      });
+    });
+    return checklist;
+  }
+
+  function countAnsweredAuditItems(checklist) {
+    if (!checklist) {
+      return 0;
+    }
+    return Object.values(checklist).filter((item) => item && item.status && item.status !== "pending").length;
+  }
+
   async function api(path, options) {
     const response = await fetch("api/" + path, {
       credentials: "same-origin",
@@ -81,6 +144,14 @@
         },
           e("span", { "aria-hidden": "true" }, "✓"),
           "Završeni sastanci"
+        ),
+        e("button", {
+          type: "button",
+          className: activeSection === "audits" ? "active" : "",
+          onClick: () => onNavigate("audits")
+        },
+          e("span", { "aria-hidden": "true" }, "◈"),
+          "Audit"
         )
       ),
       e("div", { className: "sidebar-bottom" },
@@ -780,6 +851,186 @@
     );
   }
 
+  function AuditForm({ clients, audit, onClose, onSave }) {
+    const isEditing = Boolean(audit);
+    const [clientId, setClientId] = React.useState(audit ? String(audit.client_id) : "");
+    const [checklist, setChecklist] = React.useState(() => {
+      const base = emptyAuditChecklist();
+      if (audit && audit.checklist) {
+        Object.keys(audit.checklist).forEach((key) => {
+          if (base[key]) {
+            base[key] = { ...base[key], ...audit.checklist[key] };
+          }
+        });
+      }
+      return base;
+    });
+    const [notes, setNotes] = React.useState(audit ? (audit.notes || "") : "");
+    const [error, setError] = React.useState("");
+    const [saving, setSaving] = React.useState(false);
+
+    const selectedClient = clients.find((client) => String(client.id) === clientId);
+    const answeredItems = countAnsweredAuditItems(checklist);
+
+    function updateItem(key, patch) {
+      setChecklist((current) => ({ ...current, [key]: { ...current[key], ...patch } }));
+    }
+
+    async function submit(status) {
+      if (!clientId) {
+        setError("Odaberite tvrtku za audit.");
+        return;
+      }
+      setError("");
+      setSaving(true);
+      try {
+        await onSave({
+          id: audit ? audit.id : undefined,
+          clientId: Number(clientId),
+          status,
+          checklist,
+          notes
+        });
+      } catch (saveError) {
+        setError(saveError.message);
+      } finally {
+        setSaving(false);
+      }
+    }
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, isEditing ? "Izmjena audita" : "Novi audit"),
+          e("h1", null, selectedClient ? selectedClient.company_name : "Novi audit"),
+          e("p", null, answeredItems + " / " + AUDIT_ITEM_TOTAL + " stavki popunjeno")
+        ),
+        e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Natrag na popis")
+      ),
+      e("section", { className: "audit-form-panel" },
+        e("div", { className: "form-field full" },
+          e("label", { htmlFor: "auditClient" }, "Tvrtka"),
+          e("select", {
+            id: "auditClient",
+            value: clientId,
+            disabled: isEditing,
+            onChange: (event) => setClientId(event.target.value)
+          },
+            e("option", { value: "" }, clients.length ? "Odaberite tvrtku" : "Prvo dodajte klijenta"),
+            clients.map((client) => e("option", { key: client.id, value: client.id }, client.company_name))
+          )
+        ),
+        AUDIT_CHECKLIST.map((category) =>
+          e("div", { key: category.key, className: "audit-category" },
+            e("h2", null, category.label),
+            category.items.map((item) =>
+              e("div", { key: item.key, className: "audit-item" },
+                e("div", { className: "audit-item-label" }, item.label),
+                e("div", { className: "audit-item-controls" },
+                  e("div", { className: "audit-status-options" },
+                    AUDIT_STATUS_CHOICES.map(([value, label, className]) =>
+                      e("button", {
+                        key: value,
+                        type: "button",
+                        className: "audit-status-btn " + className + (checklist[item.key].status === value ? " selected" : ""),
+                        onClick: () => updateItem(item.key, { status: value })
+                      }, label)
+                    )
+                  ),
+                  e("input", {
+                    type: "text",
+                    className: "audit-item-note",
+                    placeholder: "Napomena...",
+                    value: checklist[item.key].note,
+                    onChange: (event) => updateItem(item.key, { note: event.target.value })
+                  })
+                )
+              )
+            )
+          )
+        ),
+        e("div", { className: "form-field full" },
+          e("label", { htmlFor: "auditNotes" }, "Opći komentar"),
+          e("textarea", {
+            id: "auditNotes",
+            value: notes,
+            onChange: (event) => setNotes(event.target.value),
+            placeholder: "Sažetak nalaza, preporuke..."
+          })
+        ),
+        error && e("p", { className: "form-error full", role: "alert" }, error),
+        e("div", { className: "modal-actions full" },
+          e("button", { type: "button", className: "portal-secondary", onClick: () => submit("in_progress"), disabled: saving },
+            saving ? "Spremanje..." : "Spremi kao nedovršeno"
+          ),
+          e("button", { type: "button", className: "portal-primary", onClick: () => submit("completed"), disabled: saving },
+            saving ? "Spremanje..." : "Završi audit"
+          )
+        )
+      )
+    );
+  }
+
+  function AuditsSection({ clients, audits, onSaveAudit }) {
+    const [activeAudit, setActiveAudit] = React.useState(null);
+
+    if (activeAudit) {
+      return e(AuditForm, {
+        clients,
+        audit: activeAudit === "new" ? null : activeAudit,
+        onClose: () => setActiveAudit(null),
+        onSave: async (payload) => {
+          await onSaveAudit(payload);
+          setActiveAudit(null);
+        }
+      });
+    }
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Audit"),
+          e("p", null, "Provedite i pregledajte IT, web i sigurnosne audite klijenata.")
+        ),
+        e("button", { type: "button", className: "portal-primary add-client", onClick: () => setActiveAudit("new") },
+          e("span", { "aria-hidden": "true" }, "+"),
+          "Novi audit"
+        )
+      ),
+      e("section", { className: "meetings-panel" },
+        e("div", { className: "panel-title" },
+          e("div", null,
+            e("h2", null, "Provedeni auditi"),
+            e("p", null, audits.length + (audits.length === 1 ? " audit" : " audita"))
+          )
+        ),
+        audits.length === 0
+          ? e("div", { className: "meetings-empty" },
+              e("span", null, "◈"),
+              e("h3", null, "Još nema audita"),
+              e("p", null, "Novi audit pojavit će se ovdje.")
+            )
+          : e("div", { className: "audit-list" },
+              audits.map((audit) =>
+                e("div", { key: audit.id, className: "audit-row" },
+                  e("div", { className: "audit-row-main" },
+                    e("strong", null, audit.company_name),
+                    e("small", null, audit.contact_name)
+                  ),
+                  e("span", { className: "audit-progress" }, countAnsweredAuditItems(audit.checklist) + "/" + AUDIT_ITEM_TOTAL + " stavki"),
+                  e("span", { className: "status-badge " + (audit.status === "completed" ? "status-agreed" : "status-follow-up") },
+                    audit.status === "completed" ? "Završeno" : "U tijeku"
+                  ),
+                  e("small", null, new Date(audit.created_at).toLocaleDateString("hr-HR")),
+                  e("button", { type: "button", className: "meeting-delay", onClick: () => setActiveAudit(audit) }, "Pregledaj / Uredi")
+                )
+              )
+            )
+      )
+    );
+  }
+
   function PortalApp() {
     const [clients, setClients] = React.useState([]);
     const [user, setUser] = React.useState(null);
@@ -790,6 +1041,7 @@
     const [meetings, setMeetings] = React.useState([]);
     const [meetingModal, setMeetingModal] = React.useState(null);
     const [prefillClientId, setPrefillClientId] = React.useState(null);
+    const [audits, setAudits] = React.useState([]);
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
@@ -798,11 +1050,12 @@
     );
 
     React.useEffect(() => {
-      Promise.all([api("session.php"), api("clients.php"), api("clients.php?resource=meetings")])
-        .then(([sessionData, clientsData, meetingsData]) => {
+      Promise.all([api("session.php"), api("clients.php"), api("clients.php?resource=meetings"), api("audits.php")])
+        .then(([sessionData, clientsData, meetingsData, auditsData]) => {
           setUser(sessionData.user);
           setClients(clientsData.clients || []);
           setMeetings(meetingsData.meetings || []);
+          setAudits(auditsData.audits || []);
         })
         .catch((error) => setLoadError(error.message));
     }, []);
@@ -863,6 +1116,17 @@
       setMeetings((current) => current.map((meeting) => (meeting.id === data.meeting.id ? data.meeting : meeting)));
     }
 
+    async function saveAudit(payload) {
+      const data = await api("audits.php", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      setAudits((current) => {
+        const withoutAudit = current.filter((audit) => audit.id !== data.audit.id);
+        return [data.audit, ...withoutAudit];
+      });
+    }
+
     async function logout() {
       await api("logout.php", { method: "POST", body: "{}" }).catch(() => {});
       window.location.replace("login.html");
@@ -881,6 +1145,8 @@
             })
           : activeSection === "completed"
           ? e(CompletedMeetingsSection, { meetings, onCreateFollowUp: (meeting) => openMeetingFormForClient(meeting.client_id) })
+          : activeSection === "audits"
+          ? e(AuditsSection, { clients, audits, onSaveAudit: saveAudit })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,
