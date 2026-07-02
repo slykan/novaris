@@ -65,7 +65,7 @@
           e("span", { className: "avatar" }, "A"),
           e("span", null,
             e("strong", null, user ? user.name : "Administrator"),
-            e("small", null, user ? user.email : "")
+            e("small", null, user ? user.email : "info@novaristech.hr")
           )
         ),
         e("button", { type: "button", className: "logout-button", onClick: onLogout }, "Odjava")
@@ -190,7 +190,13 @@
 
   function PlanningSection({ clients, meetings, onCreateMeeting }) {
     const today = new Date().toISOString().slice(0, 10);
-    const [form, setForm] = React.useState({ date: today, time: "", clientId: "" });
+    const [form, setForm] = React.useState({
+      date: today,
+      time: "",
+      clientId: "",
+      reminderEnabled: false,
+      reminderOffset: "1h"
+    });
     const [error, setError] = React.useState("");
     const [saving, setSaving] = React.useState(false);
     const selectedClient = clients.find((client) => String(client.id) === form.clientId);
@@ -205,7 +211,7 @@
       setSaving(true);
       try {
         await onCreateMeeting(form);
-        setForm({ date: today, time: "", clientId: "" });
+        setForm({ date: today, time: "", clientId: "", reminderEnabled: false, reminderOffset: "1h" });
       } catch (saveError) {
         setError(saveError.message);
       } finally {
@@ -277,6 +283,38 @@
               e("div", { className: "full" }, e("dt", null, "Bilješke"), e("dd", null, selectedClient.notes || "—"))
             )
           ),
+          e("div", { className: "reminder-control" },
+            e("label", { className: "toggle-row" },
+              e("input", {
+                type: "checkbox",
+                checked: form.reminderEnabled,
+                onChange: (event) => setForm((current) => ({ ...current, reminderEnabled: event.target.checked }))
+              }),
+              e("span", { className: "toggle-switch", "aria-hidden": "true" }),
+              e("span", { className: "toggle-copy" },
+                e("strong", null, "Obavijesti me ranije"),
+                e("small", null, "Email za podsjetnik: info@novaristech.hr")
+              )
+            ),
+            form.reminderEnabled && e("div", { className: "reminder-options", role: "group", "aria-label": "Vrijeme podsjetnika" },
+              [
+                ["1h", "1 h"],
+                ["5h", "5 h"],
+                ["1d", "1 dan"]
+              ].map(([value, label]) =>
+                e("label", { key: value, className: form.reminderOffset === value ? "selected" : "" },
+                  e("input", {
+                    type: "radio",
+                    name: "reminderOffset",
+                    value,
+                    checked: form.reminderOffset === value,
+                    onChange: () => setForm((current) => ({ ...current, reminderOffset: value }))
+                  }),
+                  label
+                )
+              )
+            )
+          ),
           error && e("p", { className: "form-error", role: "alert" }, error),
           e("button", { type: "submit", className: "portal-primary", disabled: saving || !clients.length },
             saving ? "Spremanje..." : "Spremi sastanak"
@@ -305,7 +343,10 @@
                     e("div", { className: "meeting-client" },
                       e("h3", null, meeting.company_name),
                       e("p", null, meeting.contact_name + " · " + meeting.email),
-                      meeting.phone && e("small", null, meeting.phone)
+                      meeting.phone && e("small", null, meeting.phone),
+                      Number(meeting.reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
+                        "Podsjetnik: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.reminder_offset] || meeting.reminder_offset)
+                      )
                     ),
                     e("div", { className: "meeting-actions" },
                       e("button", { type: "button", className: "meeting-complete", disabled: true }, "Završen sastanak"),
@@ -360,7 +401,9 @@
           resource: "meeting",
           clientId: Number(meeting.clientId),
           date: meeting.date,
-          time: meeting.time
+          time: meeting.time,
+          reminderEnabled: meeting.reminderEnabled,
+          reminderOffset: meeting.reminderOffset
         })
       });
       setMeetings((current) =>

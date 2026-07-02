@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (($_GET['resource'] ?? '') === 'meetings') {
         $statement = database()->query(
             'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time,
+                    meetings.reminder_enabled, meetings.reminder_offset,
                     clients.id AS client_id, clients.company_name, clients.oib,
                     clients.contact_name, clients.phone, clients.email, clients.notes
              FROM meetings
@@ -37,12 +38,17 @@ if (($data['resource'] ?? '') === 'meeting') {
     $clientId = filter_var($data['clientId'] ?? null, FILTER_VALIDATE_INT);
     $meetingDate = trim((string) ($data['date'] ?? ''));
     $meetingTime = trim((string) ($data['time'] ?? ''));
+    $reminderEnabled = !empty($data['reminderEnabled']);
+    $reminderOffset = $reminderEnabled ? (string) ($data['reminderOffset'] ?? '') : null;
 
     $dateIsValid = DateTimeImmutable::createFromFormat('!Y-m-d', $meetingDate);
     $timeIsValid = DateTimeImmutable::createFromFormat('!H:i', $meetingTime);
     if (!$clientId || !$dateIsValid || $dateIsValid->format('Y-m-d') !== $meetingDate
         || !$timeIsValid || $timeIsValid->format('H:i') !== $meetingTime) {
         respond(['message' => 'Odaberite klijenta, datum i vrijeme sastanka.'], 422);
+    }
+    if ($reminderEnabled && !in_array($reminderOffset, ['1h', '5h', '1d'], true)) {
+        respond(['message' => 'Odaberite kada želite primiti obavijest.'], 422);
     }
 
     $clientStatement = database()->prepare('SELECT id FROM clients WHERE id = :id LIMIT 1');
@@ -52,19 +58,25 @@ if (($data['resource'] ?? '') === 'meeting') {
     }
 
     $statement = database()->prepare(
-        'INSERT INTO meetings (client_id, meeting_date, meeting_time, created_by)
-         VALUES (:client_id, :meeting_date, :meeting_time, :created_by)'
+        'INSERT INTO meetings (
+            client_id, meeting_date, meeting_time, reminder_enabled, reminder_offset, created_by
+         ) VALUES (
+            :client_id, :meeting_date, :meeting_time, :reminder_enabled, :reminder_offset, :created_by
+         )'
     );
     $statement->execute([
         'client_id' => $clientId,
         'meeting_date' => $meetingDate,
         'meeting_time' => $meetingTime . ':00',
+        'reminder_enabled' => $reminderEnabled ? 1 : 0,
+        'reminder_offset' => $reminderOffset,
         'created_by' => $user['id'],
     ]);
 
     $id = (int) database()->lastInsertId();
     $statement = database()->prepare(
         'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time,
+                meetings.reminder_enabled, meetings.reminder_offset,
                 clients.id AS client_id, clients.company_name, clients.oib,
                 clients.contact_name, clients.phone, clients.email, clients.notes
          FROM meetings

@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS meetings (
     client_id BIGINT UNSIGNED NOT NULL,
     meeting_date DATE NOT NULL,
     meeting_time TIME NOT NULL,
+    reminder_enabled TINYINT(1) NOT NULL DEFAULT 0,
+    reminder_offset VARCHAR(10) NULL,
     created_by BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT meetings_client_foreign
@@ -41,10 +43,18 @@ CREATE TABLE IF NOT EXISTS meetings (
     INDEX meetings_schedule_index (meeting_date, meeting_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE meetings
+    ADD COLUMN IF NOT EXISTS reminder_enabled TINYINT(1) NOT NULL DEFAULT 0 AFTER meeting_time,
+    ADD COLUMN IF NOT EXISTS reminder_offset VARCHAR(10) NULL AFTER reminder_enabled;
+
+UPDATE IGNORE users
+SET email = 'info@novaristech.hr'
+WHERE email = 'admin@novaris.hr';
+
 INSERT INTO users (name, email, password_hash)
 VALUES (
     'Administrator',
-    'admin@novaris.hr',
+    'info@novaristech.hr',
     '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6'
 )
 ON DUPLICATE KEY UPDATE email = VALUES(email);
