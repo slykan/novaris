@@ -35,6 +35,35 @@ function notify_meeting_created(array $meeting): void
     }
 }
 
+function notify_meeting_rescheduled(array $meeting): void
+{
+    try {
+        $contactPath = getenv('NOVARIS_CONTACT') ?: __DIR__ . '/contact.php';
+        $smtp = smtp_credentials($contactPath);
+        $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
+        $time = substr((string) $meeting['meeting_time'], 0, 5);
+
+        send_smtp(
+            $smtp,
+            'info@novaristech.hr',
+            sprintf('Izmjene termina sastanka: %s, %s u %s', $meeting['company_name'], $date, $time),
+            meeting_admin_rescheduled_email($meeting)
+        );
+
+        if (filter_var($meeting['email'], FILTER_VALIDATE_EMAIL)) {
+            send_smtp(
+                $smtp,
+                $meeting['email'],
+                sprintf('Izmjene termina sastanka: %s u %s', $date, $time),
+                meeting_client_rescheduled_email($meeting),
+                $meeting['contact_name']
+            );
+        }
+    } catch (Throwable $error) {
+        error_log('Slanje obavijesti o izmjeni termina nije uspjelo: ' . $error->getMessage());
+    }
+}
+
 function notify_meeting_outcome(array $meeting): void
 {
     try {
@@ -198,7 +227,11 @@ if (($data['resource'] ?? '') === 'meeting') {
             'id' => $meetingId,
         ]);
 
-        respond(['meeting' => meeting_row($meetingId)]);
+        $updatedMeeting = meeting_row($meetingId);
+        if ($timeChanged) {
+            notify_meeting_rescheduled($updatedMeeting);
+        }
+        respond(['meeting' => $updatedMeeting]);
     }
 
     $statement = database()->prepare(

@@ -115,6 +115,16 @@ function meeting_client_reminder_email(array $meeting): string
     return meeting_client_email($meeting, 'Podsjetnik za sastanak', 'podsjećamo vas na sastanak s Novaris Tech zakazan za');
 }
 
+function meeting_admin_rescheduled_email(array $meeting): string
+{
+    return meeting_admin_email($meeting, 'Novaris Tech', 'Izmjena termina sastanka', 'Termin sastanka je promijenjen na');
+}
+
+function meeting_client_rescheduled_email(array $meeting): string
+{
+    return meeting_client_email($meeting, 'Izmjena termina sastanka', 'vaš sastanak s Novaris Tech je pomaknut na');
+}
+
 function meeting_status_label(string $status): string
 {
     return [
