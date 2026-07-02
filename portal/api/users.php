@@ -98,14 +98,30 @@ if ($resource === 'update') {
     $id = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT);
     $name = trim((string) ($data['name'] ?? ''));
     $email = strtolower(trim((string) ($data['email'] ?? '')));
+    $password = trim((string) ($data['password'] ?? ''));
 
     if (!$id || $name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         respond(['message' => 'Provjerite ime i email adresu.'], 422);
     }
+    if ($password !== '' && strlen($password) < 8) {
+        respond(['message' => 'Nova lozinka mora imati najmanje 8 znakova.'], 422);
+    }
 
     try {
-        $statement = database()->prepare('UPDATE users SET name = :name, email = :email WHERE id = :id');
-        $statement->execute(['name' => $name, 'email' => $email, 'id' => $id]);
+        if ($password !== '') {
+            $statement = database()->prepare(
+                'UPDATE users SET name = :name, email = :email, password_hash = :password_hash WHERE id = :id'
+            );
+            $statement->execute([
+                'name' => $name,
+                'email' => $email,
+                'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+                'id' => $id,
+            ]);
+        } else {
+            $statement = database()->prepare('UPDATE users SET name = :name, email = :email WHERE id = :id');
+            $statement->execute(['name' => $name, 'email' => $email, 'id' => $id]);
+        }
     } catch (PDOException $error) {
         if ((int) $error->getCode() === 23000) {
             respond(['message' => 'Korisnik s tom email adresom već postoji.'], 409);

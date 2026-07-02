@@ -1072,12 +1072,13 @@
     );
   }
 
-  function UserForm({ user, onClose, onSave }) {
+  function UserForm({ user, clients, onClose, onSave }) {
     const isEditing = Boolean(user);
     const [form, setForm] = React.useState(user
       ? { id: user.id, name: user.name, email: user.email, password: "" }
       : { name: "", email: "", password: "" }
     );
+    const [clientId, setClientId] = React.useState("");
     const [error, setError] = React.useState("");
     const [saving, setSaving] = React.useState(false);
     const [showPassword, setShowPassword] = React.useState(false);
@@ -1086,6 +1087,15 @@
     function update(event) {
       const { name, value } = event.target;
       setForm((current) => ({ ...current, [name]: value }));
+    }
+
+    function applyClient(event) {
+      const id = event.target.value;
+      setClientId(id);
+      const client = (clients || []).find((candidate) => String(candidate.id) === id);
+      if (client) {
+        setForm((current) => ({ ...current, name: client.contact_name, email: client.email }));
+      }
     }
 
     function fillGeneratedPassword() {
@@ -1116,6 +1126,10 @@
         setError("Lozinka mora imati najmanje 8 znakova.");
         return;
       }
+      if (isEditing && form.password && form.password.trim().length < 8) {
+        setError("Nova lozinka mora imati najmanje 8 znakova.");
+        return;
+      }
       setError("");
       setSaving(true);
       try {
@@ -1133,11 +1147,22 @@
           e("div", null,
             e("span", { className: "eyebrow" }, isEditing ? "Izmjena zapisa" : "Novi zapis"),
             e("h2", { id: "user-form-title" }, isEditing ? "Uredi korisnika" : "Dodaj korisnika"),
-            e("p", null, isEditing ? "Promijenite ime ili email korisnika." : "Unesite podatke za novi korisnički račun.")
+            e("p", null, isEditing ? "Promijenite ime, email ili lozinku korisnika." : "Unesite podatke za novi korisnički račun.")
           ),
           e("button", { type: "button", className: "modal-close", onClick: onClose, "aria-label": "Zatvori" }, "×")
         ),
         e("form", { className: "client-form", onSubmit: submit },
+          !isEditing && clients && clients.length > 0 && e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userFromClient" }, "Popuni iz postojećeg klijenta"),
+            e("select", {
+              id: "userFromClient",
+              value: clientId,
+              onChange: applyClient
+            },
+              e("option", { value: "" }, "— odaberi klijenta (opcionalno) —"),
+              clients.map((client) => e("option", { key: client.id, value: client.id }, client.company_name + " — " + client.contact_name))
+            )
+          ),
           e("div", { className: "form-field full" },
             e("label", { htmlFor: "userName" }, "Ime i prezime *"),
             e("input", { id: "userName", name: "name", value: form.name, onChange: update, placeholder: "Ime Prezime", autoFocus: true })
@@ -1146,8 +1171,8 @@
             e("label", { htmlFor: "userEmail" }, "Email *"),
             e("input", { id: "userEmail", name: "email", type: "email", value: form.email, onChange: update, placeholder: "ime@novaristech.hr" })
           ),
-          !isEditing && e("div", { className: "form-field full" },
-            e("label", { htmlFor: "userPassword" }, "Lozinka *"),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userPassword" }, isEditing ? "Nova lozinka" : "Lozinka *"),
             e("div", { className: "password-field" },
               e("input", {
                 id: "userPassword",
@@ -1155,7 +1180,7 @@
                 type: showPassword ? "text" : "password",
                 value: form.password,
                 onChange: update,
-                placeholder: "Najmanje 8 znakova",
+                placeholder: isEditing ? "Ostavite prazno za bez promjene" : "Najmanje 8 znakova",
                 autoComplete: "new-password"
               }),
               e("button", {
@@ -1181,7 +1206,7 @@
     );
   }
 
-  function UsersSection({ users, currentUser, loadError, onSaveUser, onToggleActive, onToggleRole, onDeleteUser }) {
+  function UsersSection({ users, clients, currentUser, loadError, onSaveUser, onToggleActive, onToggleRole, onDeleteUser }) {
     const [formUser, setFormUser] = React.useState(null);
     const [actionError, setActionError] = React.useState("");
 
@@ -1310,6 +1335,7 @@
       ),
       formUser && e(UserForm, {
         user: formUser !== true ? formUser : null,
+        clients,
         onClose: () => setFormUser(null),
         onSave: async (form) => {
           await onSaveUser(form);
@@ -1416,7 +1442,7 @@
 
     async function saveUser(form) {
       const payload = form.id
-        ? { resource: "update", id: form.id, name: form.name, email: form.email }
+        ? { resource: "update", id: form.id, name: form.name, email: form.email, password: form.password || undefined }
         : { name: form.name, email: form.email, password: form.password };
       const data = await api("users.php", {
         method: "POST",
@@ -1475,6 +1501,7 @@
           : activeSection === "users"
           ? e(UsersSection, {
               users,
+              clients,
               currentUser: user,
               loadError: usersError,
               onSaveUser: saveUser,
