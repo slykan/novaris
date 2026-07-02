@@ -3,7 +3,37 @@
 declare(strict_types=1);
 
 require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/meeting-mail.php';
 $user = require_user();
+
+function notify_meeting_created(array $meeting): void
+{
+    try {
+        $contactPath = getenv('NOVARIS_CONTACT') ?: __DIR__ . '/contact.php';
+        $smtp = smtp_credentials($contactPath);
+        $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
+        $time = substr((string) $meeting['meeting_time'], 0, 5);
+
+        send_smtp(
+            $smtp,
+            'info@novaristech.hr',
+            sprintf('Novi sastanak: %s, %s u %s', $meeting['company_name'], $date, $time),
+            meeting_admin_created_email($meeting)
+        );
+
+        if (filter_var($meeting['email'], FILTER_VALIDATE_EMAIL)) {
+            send_smtp(
+                $smtp,
+                $meeting['email'],
+                sprintf('Potvrda sastanka: %s u %s', $date, $time),
+                meeting_client_created_email($meeting),
+                $meeting['contact_name']
+            );
+        }
+    } catch (Throwable $error) {
+        error_log('Slanje obavijesti o sastanku nije uspjelo: ' . $error->getMessage());
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (($_GET['resource'] ?? '') === 'meetings') {
@@ -104,7 +134,9 @@ if (($data['resource'] ?? '') === 'meeting') {
          WHERE meetings.id = :id'
     );
     $statement->execute(['id' => $id]);
-    respond(['meeting' => $statement->fetch()], 201);
+    $createdMeeting = $statement->fetch();
+    notify_meeting_created($createdMeeting);
+    respond(['meeting' => $createdMeeting], 201);
 }
 
 $client = [
