@@ -450,6 +450,10 @@ a { color: inherit; text-decoration: none; }
 .completed-meeting-list small { color: var(--muted); }
 .completed-meeting-list p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .completed-meeting-list .status-badge { margin-top: 0; }
+.completed-meeting-list .completed-actions { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 4px; }
+.completed-meeting-list .completed-actions button { border: 0; border-radius: 8px; padding: 9px 14px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.completed-meeting-list .completed-actions button:disabled { opacity: .55; cursor: not-allowed; }
+.completed-meeting-list .action-neutral { color: #586679; background: #eef2f6; }
 
 .dashboard-header { align-items: center; }
 .dashboard-date { border: 1px solid var(--line); border-radius: 9px; padding: 11px 14px; color: var(--muted); background: #fff; font-size: 12px; font-weight: 700; text-transform: capitalize; }

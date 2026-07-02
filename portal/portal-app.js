@@ -211,7 +211,7 @@
     );
   }
 
-  function MeetingForm({ clients, meeting, onClose, onSave }) {
+  function MeetingForm({ clients, meeting, prefillClientId, onClose, onSave }) {
     const today = new Date().toISOString().slice(0, 10);
     const isEditing = Boolean(meeting);
     const [form, setForm] = React.useState(() => meeting ? {
@@ -229,7 +229,7 @@
       date: today,
       time: "",
       duration: "30m",
-      clientId: "",
+      clientId: prefillClientId ? String(prefillClientId) : "",
       reminderEnabled: false,
       reminderOffset: "1h",
       clientReminderEnabled: false,
@@ -493,7 +493,7 @@
     );
   }
 
-  function PlanningSection({ clients, meetings, formOpen, editingMeeting, onOpenForm, onCloseForm, onSaveMeeting, onCompleteMeeting }) {
+  function PlanningSection({ meetings, onOpenForm, onCompleteMeeting }) {
     return e(React.Fragment, null,
       e("header", { className: "portal-header" },
         e("div", null,
@@ -531,13 +531,7 @@
                 )
               )
         )
-      ),
-      formOpen && e(MeetingForm, {
-        clients,
-        meeting: editingMeeting,
-        onClose: onCloseForm,
-        onSave: onSaveMeeting
-      })
+      )
     );
   }
 
@@ -726,7 +720,7 @@
     );
   }
 
-  function CompletedMeetingsSection({ meetings }) {
+  function CompletedMeetingsSection({ meetings, onCreateFollowUp }) {
     const completedMeetings = meetings
       .filter((meeting) => MEETING_STATUS[meeting.status])
       .slice()
@@ -765,7 +759,20 @@
                     e("strong", null, meeting.company_name),
                     e("p", null, meeting.contact_name + " — " + (meeting.outcome_notes || meeting.meeting_notes || "—"))
                   ),
-                  statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)
+                  statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label),
+                  e("div", { className: "completed-actions" },
+                    e("button", {
+                      type: "button",
+                      className: "action-neutral",
+                      disabled: true,
+                      title: "Uskoro dostupno"
+                    }, "Pošalji ponudu"),
+                    e("button", {
+                      type: "button",
+                      className: "meeting-complete",
+                      onClick: () => onCreateFollowUp(meeting)
+                    }, "Kreiraj novi sastanak")
+                  )
                 );
               })
             )
@@ -782,6 +789,7 @@
     const [activeSection, setActiveSection] = React.useState("dashboard");
     const [meetings, setMeetings] = React.useState([]);
     const [meetingModal, setMeetingModal] = React.useState(null);
+    const [prefillClientId, setPrefillClientId] = React.useState(null);
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
@@ -809,7 +817,13 @@
     }
 
     function openMeetingForm(meeting) {
+      setPrefillClientId(null);
       setMeetingModal(meeting || true);
+    }
+
+    function openMeetingFormForClient(clientId) {
+      setPrefillClientId(clientId);
+      setMeetingModal(true);
     }
 
     async function saveMeeting(form) {
@@ -861,17 +875,12 @@
           ? e(DashboardSection, { clients, meetings })
           : activeSection === "planning"
           ? e(PlanningSection, {
-              clients,
               meetings,
-              formOpen: Boolean(meetingModal),
-              editingMeeting: meetingModal && meetingModal !== true ? meetingModal : null,
               onOpenForm: openMeetingForm,
-              onCloseForm: () => setMeetingModal(null),
-              onSaveMeeting: saveMeeting,
               onCompleteMeeting: updateMeetingStatus
             })
           : activeSection === "completed"
-          ? e(CompletedMeetingsSection, { meetings })
+          ? e(CompletedMeetingsSection, { meetings, onCreateFollowUp: (meeting) => openMeetingFormForClient(meeting.client_id) })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,
@@ -910,7 +919,14 @@
             : e(ClientsTable, { clients: visibleClients })
         ))
       ),
-      formOpen && e(ClientForm, { onClose: () => setFormOpen(false), onSave: addClient })
+      formOpen && e(ClientForm, { onClose: () => setFormOpen(false), onSave: addClient }),
+      meetingModal && e(MeetingForm, {
+        clients,
+        meeting: meetingModal !== true ? meetingModal : null,
+        prefillClientId: meetingModal === true ? prefillClientId : null,
+        onClose: () => { setMeetingModal(null); setPrefillClientId(null); },
+        onSave: saveMeeting
+      })
     );
   }
 
