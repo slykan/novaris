@@ -195,7 +195,8 @@
       time: "",
       clientId: "",
       reminderEnabled: false,
-      reminderOffset: "1h"
+      reminderOffset: "1h",
+      notes: ""
     });
     const [error, setError] = React.useState("");
     const [saving, setSaving] = React.useState(false);
@@ -211,7 +212,7 @@
       setSaving(true);
       try {
         await onCreateMeeting(form);
-        setForm({ date: today, time: "", clientId: "", reminderEnabled: false, reminderOffset: "1h" });
+        setForm({ date: today, time: "", clientId: "", reminderEnabled: false, reminderOffset: "1h", notes: "" });
       } catch (saveError) {
         setError(saveError.message);
       } finally {
@@ -283,6 +284,15 @@
               e("div", { className: "full" }, e("dt", null, "Bilješke"), e("dd", null, selectedClient.notes || "—"))
             )
           ),
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "meetingNotes" }, "Bilješke"),
+            e("textarea", {
+              id: "meetingNotes",
+              value: form.notes,
+              onChange: (event) => setForm((current) => ({ ...current, notes: event.target.value })),
+              placeholder: "Tema sastanka, dogovorene točke ili dodatne informacije..."
+            })
+          ),
           e("div", { className: "reminder-control" },
             e("label", { className: "toggle-row" },
               e("input", {
@@ -344,6 +354,7 @@
                       e("h3", null, meeting.company_name),
                       e("p", null, meeting.contact_name + " · " + meeting.email),
                       meeting.phone && e("small", null, meeting.phone),
+                      meeting.meeting_notes && e("p", { className: "meeting-notes" }, meeting.meeting_notes),
                       Number(meeting.reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
                         "Podsjetnik: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.reminder_offset] || meeting.reminder_offset)
                       )
@@ -403,7 +414,8 @@
           date: meeting.date,
           time: meeting.time,
           reminderEnabled: meeting.reminderEnabled,
-          reminderOffset: meeting.reminderOffset
+          reminderOffset: meeting.reminderOffset,
+          notes: meeting.notes
         })
       });
       setMeetings((current) =>

@@ -43,6 +43,7 @@ try {
     $meetingColumns = [
         'reminder_enabled' => 'TINYINT(1) NOT NULL DEFAULT 0 AFTER meeting_time',
         'reminder_offset' => 'VARCHAR(10) NULL AFTER reminder_enabled',
+        'notes' => 'TEXT NULL AFTER reminder_offset',
     ];
 
     foreach ($meetingColumns as $column => $definition) {

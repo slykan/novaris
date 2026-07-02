@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (($_GET['resource'] ?? '') === 'meetings') {
         $statement = database()->query(
             'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time,
-                    meetings.reminder_enabled, meetings.reminder_offset,
+                    meetings.reminder_enabled, meetings.reminder_offset, meetings.notes AS meeting_notes,
                     clients.id AS client_id, clients.company_name, clients.oib,
                     clients.contact_name, clients.phone, clients.email, clients.notes
              FROM meetings
@@ -40,6 +40,7 @@ if (($data['resource'] ?? '') === 'meeting') {
     $meetingTime = trim((string) ($data['time'] ?? ''));
     $reminderEnabled = !empty($data['reminderEnabled']);
     $reminderOffset = $reminderEnabled ? (string) ($data['reminderOffset'] ?? '') : null;
+    $meetingNotes = trim((string) ($data['notes'] ?? ''));
 
     $dateIsValid = DateTimeImmutable::createFromFormat('!Y-m-d', $meetingDate);
     $timeIsValid = DateTimeImmutable::createFromFormat('!H:i', $meetingTime);
@@ -59,9 +60,9 @@ if (($data['resource'] ?? '') === 'meeting') {
 
     $statement = database()->prepare(
         'INSERT INTO meetings (
-            client_id, meeting_date, meeting_time, reminder_enabled, reminder_offset, created_by
+            client_id, meeting_date, meeting_time, reminder_enabled, reminder_offset, notes, created_by
          ) VALUES (
-            :client_id, :meeting_date, :meeting_time, :reminder_enabled, :reminder_offset, :created_by
+            :client_id, :meeting_date, :meeting_time, :reminder_enabled, :reminder_offset, :notes, :created_by
          )'
     );
     $statement->execute([
@@ -70,13 +71,14 @@ if (($data['resource'] ?? '') === 'meeting') {
         'meeting_time' => $meetingTime . ':00',
         'reminder_enabled' => $reminderEnabled ? 1 : 0,
         'reminder_offset' => $reminderOffset,
+        'notes' => $meetingNotes,
         'created_by' => $user['id'],
     ]);
 
     $id = (int) database()->lastInsertId();
     $statement = database()->prepare(
         'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time,
-                meetings.reminder_enabled, meetings.reminder_offset,
+                meetings.reminder_enabled, meetings.reminder_offset, meetings.notes AS meeting_notes,
                 clients.id AS client_id, clients.company_name, clients.oib,
                 clients.contact_name, clients.phone, clients.email, clients.notes
          FROM meetings
