@@ -319,12 +319,12 @@
             )
           ),
           e("div", { className: "form-field full" },
-            e("label", { htmlFor: "meetingNotes" }, "Bilješke"),
+            e("label", { htmlFor: "meetingNotes" }, "Bilješke (informacija za klijenta i administratora)"),
             e("textarea", {
               id: "meetingNotes",
               value: form.notes,
               onChange: (event) => setForm((current) => ({ ...current, notes: event.target.value })),
-              placeholder: "Tema sastanka, dogovorene točke ili dodatne informacije..."
+              placeholder: "Tema sastanka, link za Teams sastanak ili dodatne informacije..."
             })
           ),
           e("div", { className: "reminder-control full" },
