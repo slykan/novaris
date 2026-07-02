@@ -205,6 +205,8 @@
       clientId: "",
       reminderEnabled: false,
       reminderOffset: "1h",
+      clientReminderEnabled: false,
+      clientReminderOffset: "1h",
       notes: ""
     });
     const [error, setError] = React.useState("");
@@ -221,7 +223,17 @@
       setSaving(true);
       try {
         await onCreateMeeting(form);
-        setForm({ date: today, time: "", duration: "30m", clientId: "", reminderEnabled: false, reminderOffset: "1h", notes: "" });
+        setForm({
+          date: today,
+          time: "",
+          duration: "30m",
+          clientId: "",
+          reminderEnabled: false,
+          reminderOffset: "1h",
+          clientReminderEnabled: false,
+          clientReminderOffset: "1h",
+          notes: ""
+        });
       } catch (saveError) {
         setError(saveError.message);
       } finally {
@@ -347,6 +359,38 @@
               )
             )
           ),
+          e("div", { className: "reminder-control" },
+            e("label", { className: "toggle-row" },
+              e("input", {
+                type: "checkbox",
+                checked: form.clientReminderEnabled,
+                onChange: (event) => setForm((current) => ({ ...current, clientReminderEnabled: event.target.checked }))
+              }),
+              e("span", { className: "toggle-switch", "aria-hidden": "true" }),
+              e("span", { className: "toggle-copy" },
+                e("strong", null, "Obavijesti klijenta ranije"),
+                e("small", null, selectedClient ? "Email za podsjetnik: " + selectedClient.email : "Odaberite tvrtku za email klijenta")
+              )
+            ),
+            form.clientReminderEnabled && e("div", { className: "reminder-options", role: "group", "aria-label": "Vrijeme podsjetnika klijentu" },
+              [
+                ["1h", "1 h"],
+                ["5h", "5 h"],
+                ["1d", "1 dan"]
+              ].map(([value, label]) =>
+                e("label", { key: value, className: form.clientReminderOffset === value ? "selected" : "" },
+                  e("input", {
+                    type: "radio",
+                    name: "clientReminderOffset",
+                    value,
+                    checked: form.clientReminderOffset === value,
+                    onChange: () => setForm((current) => ({ ...current, clientReminderOffset: value }))
+                  }),
+                  label
+                )
+              )
+            )
+          ),
           error && e("p", { className: "form-error", role: "alert" }, error),
           e("button", { type: "submit", className: "portal-primary", disabled: saving || !clients.length },
             saving ? "Spremanje..." : "Spremi sastanak"
@@ -380,6 +424,9 @@
                       meeting.meeting_notes && e("p", { className: "meeting-notes" }, meeting.meeting_notes),
                       Number(meeting.reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
                         "Podsjetnik: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.reminder_offset] || meeting.reminder_offset)
+                      ),
+                      Number(meeting.client_reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
+                        "Klijent: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.client_reminder_offset] || meeting.client_reminder_offset)
                       )
                     ),
                     e("div", { className: "meeting-actions" },
@@ -579,6 +626,8 @@
           duration: meeting.duration,
           reminderEnabled: meeting.reminderEnabled,
           reminderOffset: meeting.reminderOffset,
+          clientReminderEnabled: meeting.clientReminderEnabled,
+          clientReminderOffset: meeting.clientReminderOffset,
           notes: meeting.notes
         })
       });

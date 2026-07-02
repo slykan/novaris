@@ -44,8 +44,11 @@ try {
         'duration' => "VARCHAR(20) NOT NULL DEFAULT '30m' AFTER meeting_time",
         'reminder_enabled' => 'TINYINT(1) NOT NULL DEFAULT 0 AFTER meeting_time',
         'reminder_offset' => 'VARCHAR(10) NULL AFTER reminder_enabled',
-        'notes' => 'TEXT NULL AFTER reminder_offset',
+        'client_reminder_enabled' => 'TINYINT(1) NOT NULL DEFAULT 0 AFTER reminder_offset',
+        'client_reminder_offset' => 'VARCHAR(10) NULL AFTER client_reminder_enabled',
+        'notes' => 'TEXT NULL AFTER client_reminder_offset',
         'reminder_sent_at' => 'DATETIME NULL AFTER notes',
+        'client_reminder_sent_at' => 'DATETIME NULL AFTER reminder_sent_at',
     ];
 
     foreach ($meetingColumns as $column => $definition) {
