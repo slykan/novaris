@@ -43,10 +43,6 @@ CREATE TABLE IF NOT EXISTS meetings (
     INDEX meetings_schedule_index (meeting_date, meeting_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-ALTER TABLE meetings
-    ADD COLUMN IF NOT EXISTS reminder_enabled TINYINT(1) NOT NULL DEFAULT 0 AFTER meeting_time,
-    ADD COLUMN IF NOT EXISTS reminder_offset VARCHAR(10) NULL AFTER reminder_enabled;
-
 UPDATE IGNORE users
 SET email = 'info@novaristech.hr'
 WHERE email = 'admin@novaris.hr';
