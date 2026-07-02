@@ -90,6 +90,7 @@ function meeting_row(int $id): array|false
                 meetings.reminder_enabled, meetings.reminder_offset,
                 meetings.client_reminder_enabled, meetings.client_reminder_offset,
                 meetings.status, meetings.outcome_notes, meetings.completed_at,
+                meetings.accept_token, meetings.client_accepted_at,
                 meetings.notes AS meeting_notes,
                 clients.id AS client_id, clients.company_name, clients.oib,
                 clients.contact_name, clients.phone, clients.email, clients.notes
@@ -211,7 +212,7 @@ if (($data['resource'] ?? '') === 'meeting') {
                 client_reminder_enabled = :client_reminder_enabled,
                 client_reminder_offset = :client_reminder_offset,
                 notes = :notes'
-            . ($timeChanged ? ', reminder_sent_at = NULL, client_reminder_sent_at = NULL' : '') . '
+            . ($timeChanged ? ', reminder_sent_at = NULL, client_reminder_sent_at = NULL, client_accepted_at = NULL' : '') . '
              WHERE id = :id'
         );
         $statement->execute([
@@ -237,10 +238,10 @@ if (($data['resource'] ?? '') === 'meeting') {
     $statement = database()->prepare(
         'INSERT INTO meetings (
             client_id, meeting_date, meeting_time, duration, reminder_enabled, reminder_offset,
-            client_reminder_enabled, client_reminder_offset, notes, created_by
+            client_reminder_enabled, client_reminder_offset, notes, accept_token, created_by
          ) VALUES (
             :client_id, :meeting_date, :meeting_time, :duration, :reminder_enabled, :reminder_offset,
-            :client_reminder_enabled, :client_reminder_offset, :notes, :created_by
+            :client_reminder_enabled, :client_reminder_offset, :notes, :accept_token, :created_by
          )'
     );
     $statement->execute([
@@ -253,6 +254,7 @@ if (($data['resource'] ?? '') === 'meeting') {
         'client_reminder_enabled' => $clientReminderEnabled ? 1 : 0,
         'client_reminder_offset' => $clientReminderOffset,
         'notes' => $meetingNotes,
+        'accept_token' => bin2hex(random_bytes(20)),
         'created_by' => $user['id'],
     ]);
 

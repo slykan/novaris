@@ -443,11 +443,12 @@ a { color: inherit; text-decoration: none; }
 .status-choice.status-follow-up { color: #9a6214; background: #fff7e9; }
 
 .completed-meeting-list { display: grid; }
-.completed-meeting-list > div { display: grid; grid-template-columns: 100px 1fr auto; align-items: center; gap: 18px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
+.completed-meeting-list > div { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 18px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
 .completed-meeting-list > div:last-child { border-bottom: 0; }
 .completed-meeting-list .completed-date { color: var(--blue-dark); font-size: 12px; font-weight: 900; text-transform: uppercase; }
 .completed-meeting-list strong { display: block; font-size: 14px; }
 .completed-meeting-list small { color: var(--muted); }
+.completed-meeting-list p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .completed-meeting-list .status-badge { margin-top: 0; }
 
 .dashboard-header { align-items: center; }

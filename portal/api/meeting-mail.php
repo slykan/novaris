@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/mailer.php';
 
 const MEETING_MAIL_LOGO_URL = 'https://novaristech.hr/logo3_small.png';
+const MEETING_MAIL_BASE_URL = 'https://novaristech.hr';
 
 function meeting_duration_label(string $duration): string
 {
@@ -45,10 +46,13 @@ HTML;
 
 function meeting_mail_footer(): string
 {
+    $logoUrl = MEETING_MAIL_LOGO_URL;
+
     return <<<HTML
-        <tr><td style="background:#020913;padding:22px 34px">
-          <p style="margin:0 0 4px;color:#1596ff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">NOVARIS TECH d.o.o.</p>
-          <p style="margin:0;color:rgba(255,255,255,.55);font-size:12px">Reisnerova ulica 91A, 31000 Osijek &bull; info@novaristech.hr</p>
+        <tr><td style="background:#020913;border-top:1px solid rgba(255,255,255,.08);padding:22px 34px;text-align:center">
+          <img src="{$logoUrl}" alt="" width="22" height="22" style="display:inline-block;vertical-align:middle;border-radius:5px;margin-right:8px">
+          <span style="display:inline-block;vertical-align:middle;color:#1596ff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">NOVARIS TECH d.o.o.</span>
+          <p style="margin:8px 0 0;color:rgba(255,255,255,.55);font-size:12px">Reisnerova ulica 91A, 31000 Osijek, Hrvatska &bull; info@novaristech.hr</p>
         </td></tr>
 HTML;
 }
@@ -95,7 +99,7 @@ function meeting_admin_email(array $meeting, string $eyebrow, string $heading, s
 HTML;
 }
 
-function meeting_client_email(array $meeting, string $heading, string $intro): string
+function meeting_client_email(array $meeting, string $heading, string $intro, string $extraHtml = ''): string
 {
     $contact = meeting_mail_escape($meeting['contact_name']);
     $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
@@ -122,6 +126,7 @@ function meeting_client_email(array $meeting, string $heading, string $intro): s
         <tr><td style="padding:30px 34px">
           <p style="margin:0;color:#657386">Poštovani/a {$contact}, {$intro} <strong style="color:#132238">{$date} u {$time}</strong> (trajanje: {$duration}).</p>
           {$notesBlock}
+          {$extraHtml}
         </td></tr>
 {$footer}
       </table>
@@ -129,6 +134,19 @@ function meeting_client_email(array $meeting, string $heading, string $intro): s
   </table>
 </body>
 </html>
+HTML;
+}
+
+function meeting_accept_button(array $meeting): string
+{
+    $acceptUrl = MEETING_MAIL_BASE_URL . '/api/accept-meeting.php?id=' . urlencode((string) $meeting['id'])
+        . '&token=' . urlencode((string) $meeting['accept_token']);
+    $safeUrl = meeting_mail_escape($acceptUrl);
+
+    return <<<HTML
+          <div style="margin:28px 0 4px;text-align:center">
+            <a href="{$safeUrl}" style="display:inline-block;background:#0b8af4;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 30px;border-radius:8px">Prihvati poziv sastanka</a>
+          </div>
 HTML;
 }
 
@@ -144,7 +162,12 @@ function meeting_admin_reminder_email(array $meeting): string
 
 function meeting_client_created_email(array $meeting): string
 {
-    return meeting_client_email($meeting, 'Sastanak potvrđen', 'vaš sastanak s Novaris Tech je zakazan za');
+    return meeting_client_email(
+        $meeting,
+        'Sastanak potvrđen',
+        'vaš sastanak s Novaris Tech je zakazan za',
+        meeting_accept_button($meeting)
+    );
 }
 
 function meeting_client_reminder_email(array $meeting): string
@@ -169,6 +192,35 @@ function meeting_status_label(string $status): string
         'cancelled' => 'Odustajemo',
         'follow_up' => 'Nastavak',
     ][$status] ?? $status;
+}
+
+function meeting_admin_accepted_email(array $meeting): string
+{
+    $company = meeting_mail_escape($meeting['company_name']);
+    $contact = meeting_mail_escape($meeting['contact_name']);
+    $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
+    $time = substr((string) $meeting['meeting_time'], 0, 5);
+    $header = meeting_mail_header('Novaris Tech', 'Klijent potvrdio dolazak');
+    $footer = meeting_mail_footer();
+
+    return <<<HTML
+<!doctype html>
+<html lang="hr">
+<body style="margin:0;background:#eef3f8;font-family:Arial,sans-serif;color:#132238">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:36px 16px">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:12px;overflow:hidden">
+{$header}
+        <tr><td style="padding:30px 34px">
+          <p style="margin:0;color:#657386"><strong style="color:#132238">{$contact}</strong> ({$company}) potvrdio/la je dolazak na sastanak zakazan za <strong style="color:#132238">{$date} u {$time}</strong>.</p>
+        </td></tr>
+{$footer}
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+HTML;
 }
 
 function meeting_admin_outcome_email(array $meeting): string

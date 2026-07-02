@@ -73,6 +73,14 @@
         },
           e("span", { "aria-hidden": "true" }, "◷"),
           "Planiranje"
+        ),
+        e("button", {
+          type: "button",
+          className: activeSection === "completed" ? "active" : "",
+          onClick: () => onNavigate("completed")
+        },
+          e("span", { "aria-hidden": "true" }, "✓"),
+          "Završeni sastanci"
         )
       ),
       e("div", { className: "sidebar-bottom" },
@@ -440,6 +448,7 @@
         Number(meeting.client_reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
           "Klijent: " + (REMINDER_OFFSET_LABELS[meeting.client_reminder_offset] || meeting.client_reminder_offset)
         ),
+        meeting.client_accepted_at && e("span", { className: "status-badge status-agreed" }, "✓ Klijent potvrdio"),
         statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label),
         statusMeta && meeting.outcome_notes && e("p", { className: "meeting-notes" }, meeting.outcome_notes)
       ),
@@ -680,7 +689,10 @@
               plannedMeetingsList.slice(0, 3).map((meeting) =>
                 e("div", { key: meeting.id },
                   e("span", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
-                  e("strong", null, meeting.company_name),
+                  e("div", null,
+                    e("strong", null, meeting.company_name),
+                    meeting.client_accepted_at && e("span", { className: "status-badge status-agreed" }, "✓ Potvrđeno")
+                  ),
                   e("small", null, String(meeting.meeting_time).slice(0, 5) + " · " + meeting.contact_name)
                 )
               )
@@ -705,6 +717,53 @@
                   e("div", null,
                     e("strong", null, meeting.company_name),
                     e("small", null, meeting.outcome_notes || meeting.meeting_notes || "—")
+                  ),
+                  statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)
+                );
+              })
+            )
+      )
+    );
+  }
+
+  function CompletedMeetingsSection({ meetings }) {
+    const completedMeetings = meetings
+      .filter((meeting) => MEETING_STATUS[meeting.status])
+      .slice()
+      .sort((first, second) => String(second.completed_at || "").localeCompare(String(first.completed_at || "")));
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Završeni sastanci"),
+          e("p", null, "Pregled svih sastanaka s evidentiranim ishodom.")
+        )
+      ),
+      e("section", { className: "meetings-panel" },
+        e("div", { className: "panel-title" },
+          e("div", null,
+            e("h2", null, "Ishodi sastanaka"),
+            e("p", null, completedMeetings.length + (completedMeetings.length === 1 ? " sastanak" : " sastanaka"))
+          )
+        ),
+        completedMeetings.length === 0
+          ? e("div", { className: "meetings-empty" },
+              e("span", null, "✓"),
+              e("h3", null, "Nema završenih sastanaka"),
+              e("p", null, "Sastanci s evidentiranim ishodom pojavit će se ovdje.")
+            )
+          : e("div", { className: "completed-meeting-list" },
+              completedMeetings.map((meeting) => {
+                const statusMeta = MEETING_STATUS[meeting.status];
+                return e("div", { key: meeting.id },
+                  e("span", { className: "completed-date" },
+                    new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })
+                    + " · " + String(meeting.meeting_time).slice(0, 5)
+                  ),
+                  e("div", null,
+                    e("strong", null, meeting.company_name),
+                    e("p", null, meeting.contact_name + " — " + (meeting.outcome_notes || meeting.meeting_notes || "—"))
                   ),
                   statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)
                 );
@@ -811,6 +870,8 @@
               onSaveMeeting: saveMeeting,
               onCompleteMeeting: updateMeetingStatus
             })
+          : activeSection === "completed"
+          ? e(CompletedMeetingsSection, { meetings })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,

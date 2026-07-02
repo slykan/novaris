@@ -52,6 +52,8 @@ try {
         'status' => "VARCHAR(20) NOT NULL DEFAULT 'planned' AFTER client_reminder_sent_at",
         'outcome_notes' => 'TEXT NULL AFTER status',
         'completed_at' => 'DATETIME NULL AFTER outcome_notes',
+        'accept_token' => 'VARCHAR(64) NULL AFTER completed_at',
+        'client_accepted_at' => 'DATETIME NULL AFTER accept_token',
     ];
 
     foreach ($meetingColumns as $column => $definition) {
