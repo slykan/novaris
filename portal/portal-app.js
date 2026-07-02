@@ -8,6 +8,13 @@
     email: "",
     notes: ""
   };
+  const MEETING_STATUS = {
+    agreed: { label: "Dogovoreno", className: "status-agreed" },
+    cancelled: { label: "Odustajemo", className: "status-cancelled" },
+    follow_up: { label: "Nastavak", className: "status-follow-up" }
+  };
+  const DURATION_LABELS = { "30m": "30 min", "1h": "1 h", "2h": "2 h", "as_needed": "Po potrebi" };
+  const REMINDER_OFFSET_LABELS = { "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" };
 
   async function api(path, options) {
     const response = await fetch("api/" + path, {
@@ -196,9 +203,21 @@
     );
   }
 
-  function PlanningSection({ clients, meetings, onCreateMeeting }) {
+  function MeetingForm({ clients, meeting, onClose, onSave }) {
     const today = new Date().toISOString().slice(0, 10);
-    const [form, setForm] = React.useState({
+    const isEditing = Boolean(meeting);
+    const [form, setForm] = React.useState(() => meeting ? {
+      id: meeting.id,
+      date: meeting.meeting_date,
+      time: String(meeting.meeting_time).slice(0, 5),
+      duration: meeting.duration,
+      clientId: String(meeting.client_id),
+      reminderEnabled: Number(meeting.reminder_enabled) === 1,
+      reminderOffset: meeting.reminder_offset || "1h",
+      clientReminderEnabled: Number(meeting.client_reminder_enabled) === 1,
+      clientReminderOffset: meeting.client_reminder_offset || "1h",
+      notes: meeting.meeting_notes || ""
+    } : {
       date: today,
       time: "",
       duration: "30m",
@@ -222,18 +241,7 @@
       setError("");
       setSaving(true);
       try {
-        await onCreateMeeting(form);
-        setForm({
-          date: today,
-          time: "",
-          duration: "30m",
-          clientId: "",
-          reminderEnabled: false,
-          reminderOffset: "1h",
-          clientReminderEnabled: false,
-          clientReminderOffset: "1h",
-          notes: ""
-        });
+        await onSave(form);
       } catch (saveError) {
         setError(saveError.message);
       } finally {
@@ -241,69 +249,61 @@
       }
     }
 
-    return e(React.Fragment, null,
-      e("header", { className: "portal-header" },
-        e("div", null,
-          e("span", { className: "eyebrow" }, "Poslovni portal"),
-          e("h1", null, "Planiranje"),
-          e("p", null, "Planirajte sastanke s postojećim klijentima.")
-        )
-      ),
-      e("section", { className: "planning-layout" },
-        e("form", { className: "meeting-form-panel", onSubmit: submit },
-          e("div", { className: "panel-title" },
-            e("span", { className: "stat-icon" }, "◷"),
-            e("div", null,
-              e("h2", null, "Novi sastanak"),
-              e("p", null, "Odaberite termin i klijenta.")
+    return e("div", { className: "modal-backdrop", onMouseDown: (event) => event.target === event.currentTarget && onClose() },
+      e("section", { className: "client-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "meeting-form-title" },
+        e("div", { className: "modal-heading" },
+          e("div", null,
+            e("span", { className: "eyebrow" }, isEditing ? "Izmjena zapisa" : "Novi zapis"),
+            e("h2", { id: "meeting-form-title" }, isEditing ? "Uredi sastanak" : "Novi sastanak"),
+            e("p", null, isEditing ? "Promijenite termin ili podatke sastanka." : "Odaberite termin i klijenta.")
+          ),
+          e("button", { type: "button", className: "modal-close", onClick: onClose, "aria-label": "Zatvori" }, "×")
+        ),
+        e("form", { className: "client-form", onSubmit: submit },
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "meetingDate" }, "Datum"),
+            e("input", {
+              id: "meetingDate",
+              type: "date",
+              min: today,
+              value: form.date,
+              onChange: (event) => setForm((current) => ({ ...current, date: event.target.value }))
+            })
+          ),
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "meetingTime" }, "Početak sastanka"),
+            e("input", {
+              id: "meetingTime",
+              type: "time",
+              value: form.time,
+              onChange: (event) => setForm((current) => ({ ...current, time: event.target.value }))
+            })
+          ),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "meetingDuration" }, "Trajanje"),
+            e("select", {
+              id: "meetingDuration",
+              value: form.duration,
+              onChange: (event) => setForm((current) => ({ ...current, duration: event.target.value }))
+            },
+              e("option", { value: "30m" }, "30 min"),
+              e("option", { value: "1h" }, "1 h"),
+              e("option", { value: "2h" }, "2 h"),
+              e("option", { value: "as_needed" }, "Po potrebi")
             )
           ),
-          e("div", { className: "meeting-form-grid" },
-            e("div", { className: "form-field" },
-              e("label", { htmlFor: "meetingDate" }, "Datum"),
-              e("input", {
-                id: "meetingDate",
-                type: "date",
-                min: today,
-                value: form.date,
-                onChange: (event) => setForm((current) => ({ ...current, date: event.target.value }))
-              })
-            ),
-            e("div", { className: "form-field" },
-              e("label", { htmlFor: "meetingTime" }, "Početak sastanka"),
-              e("input", {
-                id: "meetingTime",
-                type: "time",
-                value: form.time,
-                onChange: (event) => setForm((current) => ({ ...current, time: event.target.value }))
-              })
-            ),
-            e("div", { className: "form-field full" },
-              e("label", { htmlFor: "meetingDuration" }, "Trajanje"),
-              e("select", {
-                id: "meetingDuration",
-                value: form.duration,
-                onChange: (event) => setForm((current) => ({ ...current, duration: event.target.value }))
-              },
-                e("option", { value: "30m" }, "30 min"),
-                e("option", { value: "1h" }, "1 h"),
-                e("option", { value: "2h" }, "2 h"),
-                e("option", { value: "as_needed" }, "Po potrebi")
-              )
-            ),
-            e("div", { className: "form-field full" },
-              e("label", { htmlFor: "meetingClient" }, "Tvrtka"),
-              e("select", {
-                id: "meetingClient",
-                value: form.clientId,
-                onChange: (event) => setForm((current) => ({ ...current, clientId: event.target.value }))
-              },
-                e("option", { value: "" }, clients.length ? "Odaberite tvrtku" : "Prvo dodajte klijenta"),
-                clients.map((client) => e("option", { key: client.id, value: client.id }, client.company_name))
-              )
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "meetingClient" }, "Tvrtka"),
+            e("select", {
+              id: "meetingClient",
+              value: form.clientId,
+              onChange: (event) => setForm((current) => ({ ...current, clientId: event.target.value }))
+            },
+              e("option", { value: "" }, clients.length ? "Odaberite tvrtku" : "Prvo dodajte klijenta"),
+              clients.map((client) => e("option", { key: client.id, value: client.id }, client.company_name))
             )
           ),
-          selectedClient && e("div", { className: "selected-client-card" },
+          selectedClient && e("div", { className: "selected-client-card full" },
             e("div", { className: "selected-client-heading" },
               e("span", null, selectedClient.company_name.charAt(0).toUpperCase()),
               e("div", null,
@@ -318,7 +318,7 @@
               e("div", { className: "full" }, e("dt", null, "Bilješke"), e("dd", null, selectedClient.notes || "—"))
             )
           ),
-          e("div", { className: "form-field" },
+          e("div", { className: "form-field full" },
             e("label", { htmlFor: "meetingNotes" }, "Bilješke"),
             e("textarea", {
               id: "meetingNotes",
@@ -327,7 +327,7 @@
               placeholder: "Tema sastanka, dogovorene točke ili dodatne informacije..."
             })
           ),
-          e("div", { className: "reminder-control" },
+          e("div", { className: "reminder-control full" },
             e("label", { className: "toggle-row" },
               e("input", {
                 type: "checkbox",
@@ -359,7 +359,7 @@
               )
             )
           ),
-          e("div", { className: "reminder-control" },
+          e("div", { className: "reminder-control full" },
             e("label", { className: "toggle-row" },
               e("input", {
                 type: "checkbox",
@@ -391,11 +391,113 @@
               )
             )
           ),
-          error && e("p", { className: "form-error", role: "alert" }, error),
-          e("button", { type: "submit", className: "portal-primary", disabled: saving || !clients.length },
-            saving ? "Spremanje..." : "Spremi sastanak"
+          error && e("p", { className: "form-error full", role: "alert" }, error),
+          e("div", { className: "modal-actions full" },
+            e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Odustani"),
+            e("button", { type: "submit", className: "portal-primary", disabled: saving || !clients.length },
+              saving ? "Spremanje..." : (isEditing ? "Spremi promjene" : "Spremi sastanak")
+            )
           )
+        )
+      )
+    );
+  }
+
+  function MeetingCard({ meeting, onEdit, onComplete }) {
+    const [completing, setCompleting] = React.useState(false);
+    const [outcomeNotes, setOutcomeNotes] = React.useState(meeting.outcome_notes || "");
+    const [savingStatus, setSavingStatus] = React.useState(false);
+    const [statusError, setStatusError] = React.useState("");
+    const statusMeta = MEETING_STATUS[meeting.status];
+
+    async function chooseStatus(status) {
+      setStatusError("");
+      setSavingStatus(true);
+      try {
+        await onComplete(meeting.id, status, outcomeNotes);
+        setCompleting(false);
+      } catch (error) {
+        setStatusError(error.message);
+      } finally {
+        setSavingStatus(false);
+      }
+    }
+
+    return e("article", { className: "meeting-card", key: meeting.id },
+      e("div", { className: "meeting-date" },
+        e("strong", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
+        e("span", null, String(meeting.meeting_time).slice(0, 5)),
+        e("small", null, DURATION_LABELS[meeting.duration] || meeting.duration)
+      ),
+      e("div", { className: "meeting-client" },
+        e("h3", null, meeting.company_name),
+        e("p", null, meeting.contact_name + " · " + meeting.email),
+        meeting.phone && e("small", null, meeting.phone),
+        meeting.meeting_notes && e("p", { className: "meeting-notes" }, meeting.meeting_notes),
+        Number(meeting.reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
+          "Podsjetnik: " + (REMINDER_OFFSET_LABELS[meeting.reminder_offset] || meeting.reminder_offset)
         ),
+        Number(meeting.client_reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
+          "Klijent: " + (REMINDER_OFFSET_LABELS[meeting.client_reminder_offset] || meeting.client_reminder_offset)
+        ),
+        statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label),
+        statusMeta && meeting.outcome_notes && e("p", { className: "meeting-notes" }, meeting.outcome_notes)
+      ),
+      e("div", { className: "meeting-actions" },
+        e("button", {
+          type: "button",
+          className: "meeting-complete",
+          onClick: () => setCompleting((current) => !current)
+        }, statusMeta ? "Promijeni ishod" : "Završen sastanak"),
+        e("button", { type: "button", className: "meeting-delay", onClick: () => onEdit(meeting) }, "Odgodi sastanak")
+      ),
+      completing && e("div", { className: "meeting-complete-panel" },
+        e("label", { htmlFor: "outcome-" + meeting.id }, "Bilješka o ishodu"),
+        e("textarea", {
+          id: "outcome-" + meeting.id,
+          value: outcomeNotes,
+          onChange: (event) => setOutcomeNotes(event.target.value),
+          placeholder: "Upišite nešto o ishodu sastanka..."
+        }),
+        statusError && e("p", { className: "form-error", role: "alert" }, statusError),
+        e("div", { className: "status-options" },
+          e("button", {
+            type: "button",
+            className: "status-choice status-agreed",
+            disabled: savingStatus,
+            onClick: () => chooseStatus("agreed")
+          }, "Dogovoreno"),
+          e("button", {
+            type: "button",
+            className: "status-choice status-cancelled",
+            disabled: savingStatus,
+            onClick: () => chooseStatus("cancelled")
+          }, "Odustajemo"),
+          e("button", {
+            type: "button",
+            className: "status-choice status-follow-up",
+            disabled: savingStatus,
+            onClick: () => chooseStatus("follow_up")
+          }, "Nastavak")
+        )
+      )
+    );
+  }
+
+  function PlanningSection({ clients, meetings, formOpen, editingMeeting, onOpenForm, onCloseForm, onSaveMeeting, onCompleteMeeting }) {
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Planiranje"),
+          e("p", null, "Planirajte sastanke s postojećim klijentima.")
+        ),
+        e("button", { type: "button", className: "portal-primary add-client", onClick: () => onOpenForm() },
+          e("span", { "aria-hidden": "true" }, "+"),
+          "Novi sastanak"
+        )
+      ),
+      e("section", { className: "planning-layout" },
         e("section", { className: "meetings-panel" },
           e("div", { className: "panel-title" },
             e("div", null,
@@ -411,43 +513,47 @@
               )
             : e("div", { className: "meeting-list" },
                 meetings.map((meeting) =>
-                  e("article", { className: "meeting-card", key: meeting.id },
-                    e("div", { className: "meeting-date" },
-                      e("strong", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
-                      e("span", null, String(meeting.meeting_time).slice(0, 5)),
-                      e("small", null, ({ "30m": "30 min", "1h": "1 h", "2h": "2 h", "as_needed": "Po potrebi" }[meeting.duration] || meeting.duration))
-                    ),
-                    e("div", { className: "meeting-client" },
-                      e("h3", null, meeting.company_name),
-                      e("p", null, meeting.contact_name + " · " + meeting.email),
-                      meeting.phone && e("small", null, meeting.phone),
-                      meeting.meeting_notes && e("p", { className: "meeting-notes" }, meeting.meeting_notes),
-                      Number(meeting.reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
-                        "Podsjetnik: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.reminder_offset] || meeting.reminder_offset)
-                      ),
-                      Number(meeting.client_reminder_enabled) === 1 && e("span", { className: "reminder-badge" },
-                        "Klijent: " + ({ "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" }[meeting.client_reminder_offset] || meeting.client_reminder_offset)
-                      )
-                    ),
-                    e("div", { className: "meeting-actions" },
-                      e("button", { type: "button", className: "meeting-complete", disabled: true }, "Završen sastanak"),
-                      e("button", { type: "button", className: "meeting-delay", disabled: true }, "Odgodi sastanak")
-                    )
-                  )
+                  e(MeetingCard, {
+                    key: meeting.id,
+                    meeting,
+                    onEdit: onOpenForm,
+                    onComplete: onCompleteMeeting
+                  })
                 )
               )
         )
-      )
+      ),
+      formOpen && e(MeetingForm, {
+        clients,
+        meeting: editingMeeting,
+        onClose: onCloseForm,
+        onSave: onSaveMeeting
+      })
     );
   }
 
   function DashboardSection({ clients, meetings }) {
-    const completedMeetings = 0;
-    const plannedMeetings = meetings.length;
-    const totalMeetings = plannedMeetings + completedMeetings;
-    const plannedPercentage = totalMeetings ? Math.round((plannedMeetings / totalMeetings) * 100) : 0;
+    const plannedMeetingsList = meetings.filter((meeting) => !MEETING_STATUS[meeting.status]);
+    const completedMeetingsList = meetings.filter((meeting) => MEETING_STATUS[meeting.status]);
+    const plannedMeetings = plannedMeetingsList.length;
+    const completedMeetings = completedMeetingsList.length;
+    const totalMeetings = meetings.length;
     const circleLength = 264;
-    const plannedStroke = circleLength * plannedPercentage / 100;
+
+    const statusSegments = [
+      { key: "planned", label: "Planirano", color: "var(--blue)", count: plannedMeetings },
+      { key: "agreed", label: "Dogovoreno", color: "#2fae6b", count: meetings.filter((m) => m.status === "agreed").length },
+      { key: "follow_up", label: "Nastavak", color: "#e0a530", count: meetings.filter((m) => m.status === "follow_up").length },
+      { key: "cancelled", label: "Odustajemo", color: "#e0524a", count: meetings.filter((m) => m.status === "cancelled").length }
+    ].filter((segment) => segment.count > 0);
+
+    let cumulativeOffset = 0;
+    const donutSegments = statusSegments.map((segment) => {
+      const length = totalMeetings ? (segment.count / totalMeetings) * circleLength : 0;
+      const rendered = { ...segment, length, offset: cumulativeOffset };
+      cumulativeOffset += length;
+      return rendered;
+    });
 
     const monthLabels = [];
     const monthlyCounts = [];
@@ -512,15 +618,19 @@
           ),
           e("div", { className: "donut-layout" },
             e("div", { className: "donut-chart" },
-              e("svg", { viewBox: "0 0 100 100", role: "img", "aria-label": plannedPercentage + "% sastanaka je planirano" },
+              e("svg", { viewBox: "0 0 100 100", role: "img", "aria-label": "Status sastanaka po kategorijama" },
                 e("circle", { cx: 50, cy: 50, r: 42, className: "donut-track" }),
-                e("circle", {
-                  cx: 50,
-                  cy: 50,
-                  r: 42,
-                  className: "donut-value",
-                  strokeDasharray: plannedStroke + " " + (circleLength - plannedStroke)
-                })
+                donutSegments.map((segment) =>
+                  e("circle", {
+                    key: segment.key,
+                    cx: 50,
+                    cy: 50,
+                    r: 42,
+                    style: { stroke: segment.color },
+                    strokeDasharray: segment.length + " " + (circleLength - segment.length),
+                    strokeDashoffset: -segment.offset
+                  })
+                )
               ),
               e("div", null,
                 e("strong", null, totalMeetings),
@@ -528,13 +638,11 @@
               )
             ),
             e("div", { className: "chart-legend" },
-              e("div", null,
-                e("span", { className: "legend-dot planned" }),
-                e("p", null, e("strong", null, plannedMeetings), e("small", null, "Planirano"))
-              ),
-              e("div", null,
-                e("span", { className: "legend-dot completed" }),
-                e("p", null, e("strong", null, completedMeetings), e("small", null, "Završeno"))
+              statusSegments.map((segment) =>
+                e("div", { key: segment.key },
+                  e("span", { className: "legend-dot", style: { background: segment.color } }),
+                  e("p", null, e("strong", null, segment.count), e("small", null, segment.label))
+                )
               )
             )
           )
@@ -566,16 +674,41 @@
             e("p", null, "Najbliži termini u rasporedu")
           )
         ),
-        meetings.length === 0
+        plannedMeetingsList.length === 0
           ? e("div", { className: "dashboard-empty" }, "Još nema planiranih sastanaka.")
           : e("div", { className: "dashboard-meeting-list" },
-              meetings.slice(0, 3).map((meeting) =>
+              plannedMeetingsList.slice(0, 3).map((meeting) =>
                 e("div", { key: meeting.id },
                   e("span", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
                   e("strong", null, meeting.company_name),
                   e("small", null, String(meeting.meeting_time).slice(0, 5) + " · " + meeting.contact_name)
                 )
               )
+            )
+      ),
+      e("section", { className: "dashboard-panel next-meetings" },
+        e("div", { className: "dashboard-panel-heading" },
+          e("div", null,
+            e("h2", null, "Završeni sastanci"),
+            e("p", null, "Ishodi posljednjih sastanaka")
+          )
+        ),
+        completedMeetingsList.length === 0
+          ? e("div", { className: "dashboard-empty" }, "Još nema završenih sastanaka.")
+          : e("div", { className: "completed-meeting-list" },
+              completedMeetingsList.slice(0, 5).map((meeting) => {
+                const statusMeta = MEETING_STATUS[meeting.status];
+                return e("div", { key: meeting.id },
+                  e("span", { className: "completed-date" },
+                    new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })
+                  ),
+                  e("div", null,
+                    e("strong", null, meeting.company_name),
+                    e("small", null, meeting.outcome_notes || meeting.meeting_notes || "—")
+                  ),
+                  statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)
+                );
+              })
             )
       )
     );
@@ -589,6 +722,7 @@
     const [formOpen, setFormOpen] = React.useState(false);
     const [activeSection, setActiveSection] = React.useState("dashboard");
     const [meetings, setMeetings] = React.useState([]);
+    const [meetingModal, setMeetingModal] = React.useState(null);
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
@@ -615,27 +749,45 @@
       setFormOpen(false);
     }
 
-    async function createMeeting(meeting) {
+    function openMeetingForm(meeting) {
+      setMeetingModal(meeting || true);
+    }
+
+    async function saveMeeting(form) {
+      const payload = {
+        resource: "meeting",
+        clientId: Number(form.clientId),
+        date: form.date,
+        time: form.time,
+        duration: form.duration,
+        reminderEnabled: form.reminderEnabled,
+        reminderOffset: form.reminderOffset,
+        clientReminderEnabled: form.clientReminderEnabled,
+        clientReminderOffset: form.clientReminderOffset,
+        notes: form.notes
+      };
+      if (form.id) {
+        payload.id = form.id;
+      }
       const data = await api("clients.php", {
         method: "POST",
-        body: JSON.stringify({
-          resource: "meeting",
-          clientId: Number(meeting.clientId),
-          date: meeting.date,
-          time: meeting.time,
-          duration: meeting.duration,
-          reminderEnabled: meeting.reminderEnabled,
-          reminderOffset: meeting.reminderOffset,
-          clientReminderEnabled: meeting.clientReminderEnabled,
-          clientReminderOffset: meeting.clientReminderOffset,
-          notes: meeting.notes
-        })
+        body: JSON.stringify(payload)
       });
-      setMeetings((current) =>
-        [...current, data.meeting].sort((first, second) =>
+      setMeetings((current) => {
+        const withoutMeeting = current.filter((meeting) => meeting.id !== data.meeting.id);
+        return [...withoutMeeting, data.meeting].sort((first, second) =>
           (first.meeting_date + first.meeting_time).localeCompare(second.meeting_date + second.meeting_time)
-        )
-      );
+        );
+      });
+      setMeetingModal(null);
+    }
+
+    async function updateMeetingStatus(id, status, notes) {
+      const data = await api("clients.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "meeting-status", id, status, notes })
+      });
+      setMeetings((current) => current.map((meeting) => (meeting.id === data.meeting.id ? data.meeting : meeting)));
     }
 
     async function logout() {
@@ -649,7 +801,16 @@
         activeSection === "dashboard"
           ? e(DashboardSection, { clients, meetings })
           : activeSection === "planning"
-          ? e(PlanningSection, { clients, meetings, onCreateMeeting: createMeeting })
+          ? e(PlanningSection, {
+              clients,
+              meetings,
+              formOpen: Boolean(meetingModal),
+              editingMeeting: meetingModal && meetingModal !== true ? meetingModal : null,
+              onOpenForm: openMeetingForm,
+              onCloseForm: () => setMeetingModal(null),
+              onSaveMeeting: saveMeeting,
+              onCompleteMeeting: updateMeetingStatus
+            })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,

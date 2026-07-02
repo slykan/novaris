@@ -35,12 +35,31 @@ function notify_meeting_created(array $meeting): void
     }
 }
 
+function meeting_row(int $id): array|false
+{
+    $statement = database()->prepare(
+        'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time, meetings.duration,
+                meetings.reminder_enabled, meetings.reminder_offset,
+                meetings.client_reminder_enabled, meetings.client_reminder_offset,
+                meetings.status, meetings.outcome_notes, meetings.completed_at,
+                meetings.notes AS meeting_notes,
+                clients.id AS client_id, clients.company_name, clients.oib,
+                clients.contact_name, clients.phone, clients.email, clients.notes
+         FROM meetings
+         INNER JOIN clients ON clients.id = meetings.client_id
+         WHERE meetings.id = :id'
+    );
+    $statement->execute(['id' => $id]);
+    return $statement->fetch();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (($_GET['resource'] ?? '') === 'meetings') {
         $statement = database()->query(
             'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time, meetings.duration,
                     meetings.reminder_enabled, meetings.reminder_offset,
                     meetings.client_reminder_enabled, meetings.client_reminder_offset,
+                    meetings.status, meetings.outcome_notes, meetings.completed_at,
                     meetings.notes AS meeting_notes,
                     clients.id AS client_id, clients.company_name, clients.oib,
                     clients.contact_name, clients.phone, clients.email, clients.notes
@@ -66,7 +85,30 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $data = request_data();
 
+if (($data['resource'] ?? '') === 'meeting-status') {
+    $meetingId = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT);
+    $status = (string) ($data['status'] ?? '');
+    $outcomeNotes = trim((string) ($data['notes'] ?? ''));
+
+    if (!$meetingId || !in_array($status, ['agreed', 'cancelled', 'follow_up'], true)) {
+        respond(['message' => 'Odaberite ishod sastanka.'], 422);
+    }
+
+    $statement = database()->prepare(
+        'UPDATE meetings SET status = :status, outcome_notes = :notes, completed_at = NOW() WHERE id = :id'
+    );
+    $statement->execute(['status' => $status, 'notes' => $outcomeNotes, 'id' => $meetingId]);
+
+    $meeting = meeting_row($meetingId);
+    if (!$meeting) {
+        respond(['message' => 'Sastanak ne postoji.'], 404);
+    }
+
+    respond(['meeting' => $meeting]);
+}
+
 if (($data['resource'] ?? '') === 'meeting') {
+    $meetingId = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT) ?: null;
     $clientId = filter_var($data['clientId'] ?? null, FILTER_VALIDATE_INT);
     $meetingDate = trim((string) ($data['date'] ?? ''));
     $meetingTime = trim((string) ($data['time'] ?? ''));
@@ -99,6 +141,46 @@ if (($data['resource'] ?? '') === 'meeting') {
         respond(['message' => 'Odabrani klijent ne postoji.'], 422);
     }
 
+    if ($meetingId) {
+        $existingStatement = database()->prepare('SELECT meeting_date, meeting_time FROM meetings WHERE id = :id LIMIT 1');
+        $existingStatement->execute(['id' => $meetingId]);
+        $existing = $existingStatement->fetch();
+        if (!$existing) {
+            respond(['message' => 'Sastanak ne postoji.'], 404);
+        }
+        $timeChanged = $existing['meeting_date'] !== $meetingDate
+            || substr((string) $existing['meeting_time'], 0, 5) !== $meetingTime;
+
+        $statement = database()->prepare(
+            'UPDATE meetings SET
+                client_id = :client_id,
+                meeting_date = :meeting_date,
+                meeting_time = :meeting_time,
+                duration = :duration,
+                reminder_enabled = :reminder_enabled,
+                reminder_offset = :reminder_offset,
+                client_reminder_enabled = :client_reminder_enabled,
+                client_reminder_offset = :client_reminder_offset,
+                notes = :notes'
+            . ($timeChanged ? ', reminder_sent_at = NULL, client_reminder_sent_at = NULL' : '') . '
+             WHERE id = :id'
+        );
+        $statement->execute([
+            'client_id' => $clientId,
+            'meeting_date' => $meetingDate,
+            'meeting_time' => $meetingTime . ':00',
+            'duration' => $duration,
+            'reminder_enabled' => $reminderEnabled ? 1 : 0,
+            'reminder_offset' => $reminderOffset,
+            'client_reminder_enabled' => $clientReminderEnabled ? 1 : 0,
+            'client_reminder_offset' => $clientReminderOffset,
+            'notes' => $meetingNotes,
+            'id' => $meetingId,
+        ]);
+
+        respond(['meeting' => meeting_row($meetingId)]);
+    }
+
     $statement = database()->prepare(
         'INSERT INTO meetings (
             client_id, meeting_date, meeting_time, duration, reminder_enabled, reminder_offset,
@@ -122,19 +204,7 @@ if (($data['resource'] ?? '') === 'meeting') {
     ]);
 
     $id = (int) database()->lastInsertId();
-    $statement = database()->prepare(
-        'SELECT meetings.id, meetings.meeting_date, meetings.meeting_time, meetings.duration,
-                meetings.reminder_enabled, meetings.reminder_offset,
-                meetings.client_reminder_enabled, meetings.client_reminder_offset,
-                meetings.notes AS meeting_notes,
-                clients.id AS client_id, clients.company_name, clients.oib,
-                clients.contact_name, clients.phone, clients.email, clients.notes
-         FROM meetings
-         INNER JOIN clients ON clients.id = meetings.client_id
-         WHERE meetings.id = :id'
-    );
-    $statement->execute(['id' => $id]);
-    $createdMeeting = $statement->fetch();
+    $createdMeeting = meeting_row($id);
     notify_meeting_created($createdMeeting);
     respond(['meeting' => $createdMeeting], 201);
 }

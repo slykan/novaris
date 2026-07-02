@@ -38,6 +38,9 @@ CREATE TABLE IF NOT EXISTS meetings (
     notes TEXT NULL,
     reminder_sent_at DATETIME NULL,
     client_reminder_sent_at DATETIME NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'planned',
+    outcome_notes TEXT NULL,
+    completed_at DATETIME NULL,
     created_by BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT meetings_client_foreign

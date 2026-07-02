@@ -49,6 +49,9 @@ try {
         'notes' => 'TEXT NULL AFTER client_reminder_offset',
         'reminder_sent_at' => 'DATETIME NULL AFTER notes',
         'client_reminder_sent_at' => 'DATETIME NULL AFTER reminder_sent_at',
+        'status' => "VARCHAR(20) NOT NULL DEFAULT 'planned' AFTER client_reminder_sent_at",
+        'outcome_notes' => 'TEXT NULL AFTER status',
+        'completed_at' => 'DATETIME NULL AFTER outcome_notes',
     ];
 
     foreach ($meetingColumns as $column => $definition) {
