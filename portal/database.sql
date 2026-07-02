@@ -78,11 +78,10 @@ UPDATE IGNORE users
 SET email = 'info@novaristech.hr'
 WHERE email = 'admin@novaris.hr';
 
-INSERT INTO users (name, email, password_hash, role)
+INSERT INTO users (name, email, password_hash)
 VALUES (
     'Administrator',
     'info@novaristech.hr',
-    '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6',
-    'standard'
+    '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6'
 )
 ON DUPLICATE KEY UPDATE email = VALUES(email);
