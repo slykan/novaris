@@ -25,16 +25,23 @@ function audit_row(int $id): array|false
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $statement = database()->query(
-        'SELECT audits.id, audits.status, audits.checklist, audits.notes,
-                audits.completed_at, audits.created_at, audits.updated_at,
-                clients.id AS client_id, clients.company_name, clients.oib,
-                clients.contact_name, clients.phone, clients.email
-         FROM audits
-         INNER JOIN clients ON clients.id = audits.client_id
-         ORDER BY audits.created_at DESC, audits.id DESC'
-    );
-    $audits = $statement->fetchAll();
+    try {
+        $statement = database()->query(
+            'SELECT audits.id, audits.status, audits.checklist, audits.notes,
+                    audits.completed_at, audits.created_at, audits.updated_at,
+                    clients.id AS client_id, clients.company_name, clients.oib,
+                    clients.contact_name, clients.phone, clients.email
+             FROM audits
+             INNER JOIN clients ON clients.id = audits.client_id
+             ORDER BY audits.created_at DESC, audits.id DESC'
+        );
+        $audits = $statement->fetchAll();
+    } catch (PDOException $error) {
+        if ($error->getCode() === '42S02') {
+            respond(['audits' => []]);
+        }
+        throw $error;
+    }
     foreach ($audits as &$audit) {
         $audit['checklist'] = $audit['checklist'] !== null ? json_decode((string) $audit['checklist'], true) : null;
     }

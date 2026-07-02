@@ -1050,14 +1050,10 @@
     );
 
     React.useEffect(() => {
-      Promise.all([api("session.php"), api("clients.php"), api("clients.php?resource=meetings"), api("audits.php")])
-        .then(([sessionData, clientsData, meetingsData, auditsData]) => {
-          setUser(sessionData.user);
-          setClients(clientsData.clients || []);
-          setMeetings(meetingsData.meetings || []);
-          setAudits(auditsData.audits || []);
-        })
-        .catch((error) => setLoadError(error.message));
+      api("session.php").then((data) => setUser(data.user)).catch((error) => setLoadError(error.message));
+      api("clients.php").then((data) => setClients(data.clients || [])).catch((error) => setLoadError(error.message));
+      api("clients.php?resource=meetings").then((data) => setMeetings(data.meetings || [])).catch((error) => setLoadError(error.message));
+      api("audits.php").then((data) => setAudits(data.audits || [])).catch((error) => console.error("Auditi se nisu učitali:", error.message));
     }, []);
 
     async function addClient(client) {
