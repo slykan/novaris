@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS meetings (
     reminder_enabled TINYINT(1) NOT NULL DEFAULT 0,
     reminder_offset VARCHAR(10) NULL,
     notes TEXT NULL,
+    reminder_sent_at DATETIME NULL,
     created_by BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT meetings_client_foreign
