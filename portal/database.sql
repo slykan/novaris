@@ -1,0 +1,34 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS clients (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(190) NOT NULL,
+    oib CHAR(11) NOT NULL UNIQUE,
+    contact_name VARCHAR(190) NOT NULL,
+    phone VARCHAR(60) NULL,
+    email VARCHAR(190) NOT NULL,
+    notes TEXT NULL,
+    created_by BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT clients_created_by_foreign
+        FOREIGN KEY (created_by) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX clients_company_name_index (company_name),
+    INDEX clients_contact_name_index (contact_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO users (name, email, password_hash)
+VALUES (
+    'Administrator',
+    'admin@novaris.hr',
+    '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6'
+)
+ON DUPLICATE KEY UPDATE email = VALUES(email);
