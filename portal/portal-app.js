@@ -208,8 +208,17 @@
     );
   }
 
-  function ClientForm({ onClose, onSave }) {
-    const [form, setForm] = React.useState(emptyForm);
+  function ClientForm({ client, onClose, onSave }) {
+    const isEditing = Boolean(client);
+    const [form, setForm] = React.useState(client ? {
+      id: client.id,
+      companyName: client.company_name,
+      oib: client.oib,
+      contactName: client.contact_name,
+      phone: client.phone || "",
+      email: client.email,
+      notes: client.notes || ""
+    } : emptyForm);
     const [error, setError] = React.useState("");
 
     function update(event) {
@@ -239,9 +248,9 @@
       e("section", { className: "client-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "client-form-title" },
         e("div", { className: "modal-heading" },
           e("div", null,
-            e("span", { className: "eyebrow" }, "Novi zapis"),
-            e("h2", { id: "client-form-title" }, "Dodaj klijenta"),
-            e("p", null, "Unesite osnovne podatke i kontakt osobe tvrtke.")
+            e("span", { className: "eyebrow" }, isEditing ? "Izmjena zapisa" : "Novi zapis"),
+            e("h2", { id: "client-form-title" }, isEditing ? "Uredi klijenta" : "Dodaj klijenta"),
+            e("p", null, isEditing ? "Promijenite podatke tvrtke ili kontakt osobe." : "Unesite osnovne podatke i kontakt osobe tvrtke.")
           ),
           e("button", { type: "button", className: "modal-close", onClick: onClose, "aria-label": "Zatvori" }, "×")
         ),
@@ -273,14 +282,14 @@
           error && e("p", { className: "form-error full", role: "alert" }, error),
           e("div", { className: "modal-actions full" },
             e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Odustani"),
-            e("button", { type: "submit", className: "portal-primary" }, "Spremi klijenta")
+            e("button", { type: "submit", className: "portal-primary" }, isEditing ? "Spremi promjene" : "Spremi klijenta")
           )
         )
       )
     );
   }
 
-  function ClientsTable({ clients }) {
+  function ClientsTable({ clients, onEdit }) {
     if (!clients.length) {
       return e("div", { className: "clients-empty" },
         e("span", { "aria-hidden": "true" }, "＋"),
@@ -297,7 +306,8 @@
             e("th", null, "OIB"),
             e("th", null, "Kontakt osoba"),
             e("th", null, "Kontakt"),
-            e("th", null, "Bilješke")
+            e("th", null, "Bilješke"),
+            e("th", null, "Akcije")
           )
         ),
         e("tbody", null,
@@ -315,7 +325,10 @@
                 e("a", { href: "mailto:" + client.email }, client.email),
                 client.phone && e("small", null, client.phone)
               ),
-              e("td", { className: "notes-cell" }, client.notes || "—")
+              e("td", { className: "notes-cell" }, client.notes || "—"),
+              e("td", null,
+                e("button", { type: "button", className: "meeting-delay", onClick: () => onEdit(client) }, "Uredi")
+              )
             )
           )
         )
@@ -1350,7 +1363,7 @@
     const [user, setUser] = React.useState(null);
     const [loadError, setLoadError] = React.useState("");
     const [query, setQuery] = React.useState("");
-    const [formOpen, setFormOpen] = React.useState(false);
+    const [clientModal, setClientModal] = React.useState(null);
     const [activeSection, setActiveSection] = React.useState("dashboard");
     const [meetings, setMeetings] = React.useState([]);
     const [meetingModal, setMeetingModal] = React.useState(null);
@@ -1373,13 +1386,16 @@
       api("users.php").then((data) => setUsers(data.users || [])).catch((error) => setUsersError(error.message));
     }, []);
 
-    async function addClient(client) {
+    async function saveClient(client) {
       const data = await api("clients.php", {
         method: "POST",
         body: JSON.stringify(client)
       });
-      setClients((current) => [data.client, ...current]);
-      setFormOpen(false);
+      setClients((current) => {
+        const withoutClient = current.filter((existing) => existing.id !== data.client.id);
+        return [data.client, ...withoutClient];
+      });
+      setClientModal(null);
     }
 
     function openMeetingForm(meeting) {
@@ -1516,7 +1532,7 @@
             e("h1", null, "Klijenti"),
             e("p", null, "Pregled i upravljanje podacima vaših klijenata.")
           ),
-          e("button", { type: "button", className: "portal-primary add-client", onClick: () => setFormOpen(true) },
+          e("button", { type: "button", className: "portal-primary add-client", onClick: () => setClientModal(true) },
             e("span", { "aria-hidden": "true" }, "+"),
             "Dodaj klijenta"
           )
@@ -1544,10 +1560,14 @@
           ),
           loadError
             ? e("div", { className: "clients-empty" }, e("h3", null, "Nije moguće učitati klijente"), e("p", null, loadError))
-            : e(ClientsTable, { clients: visibleClients })
+            : e(ClientsTable, { clients: visibleClients, onEdit: setClientModal })
         ))
       ),
-      formOpen && e(ClientForm, { onClose: () => setFormOpen(false), onSave: addClient }),
+      clientModal && e(ClientForm, {
+        client: clientModal !== true ? clientModal : null,
+        onClose: () => setClientModal(null),
+        onSave: saveClient
+      }),
       meetingModal && e(MeetingForm, {
         clients,
         meeting: meetingModal !== true ? meetingModal : null,

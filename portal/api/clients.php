@@ -264,6 +264,8 @@ if (($data['resource'] ?? '') === 'meeting') {
     respond(['meeting' => $createdMeeting], 201);
 }
 
+$clientId = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT) ?: null;
+
 $client = [
     'company_name' => trim((string) ($data['companyName'] ?? '')),
     'oib' => trim((string) ($data['oib'] ?? '')),
@@ -278,6 +280,33 @@ if ($client['company_name'] === '' || $client['contact_name'] === '' || !preg_ma
 }
 if (!filter_var($client['email'], FILTER_VALIDATE_EMAIL)) {
     respond(['message' => 'Email adresa nije ispravna.'], 422);
+}
+
+if ($clientId) {
+    try {
+        $statement = database()->prepare(
+            'UPDATE clients SET company_name = :company_name, oib = :oib, contact_name = :contact_name,
+                    phone = :phone, email = :email, notes = :notes
+             WHERE id = :id'
+        );
+        $statement->execute($client + ['id' => $clientId]);
+    } catch (PDOException $error) {
+        if ((int) $error->getCode() === 23000) {
+            respond(['message' => 'Klijent s tim OIB-om već postoji.'], 409);
+        }
+        respond(['message' => 'Klijenta trenutačno nije moguće spremiti.'], 500);
+    }
+
+    $statement = database()->prepare(
+        'SELECT id, company_name, oib, contact_name, phone, email, notes, created_at
+         FROM clients WHERE id = :id'
+    );
+    $statement->execute(['id' => $clientId]);
+    $updated = $statement->fetch();
+    if (!$updated) {
+        respond(['message' => 'Klijent ne postoji.'], 404);
+    }
+    respond(['client' => $updated]);
 }
 
 try {
