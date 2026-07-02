@@ -110,13 +110,33 @@
   }
 
   function Sidebar({ onLogout, user, activeSection, onNavigate }) {
+    const [navOpen, setNavOpen] = React.useState(false);
+
+    function navigate(section) {
+      onNavigate(section);
+      setNavOpen(false);
+    }
+
     return e("aside", { className: "portal-sidebar" },
       e(Brand),
-      e("nav", { className: "portal-nav", "aria-label": "Glavna navigacija" },
+      e("button", {
+        type: "button",
+        className: "nav-toggle" + (navOpen ? " is-open" : ""),
+        "aria-label": navOpen ? "Zatvori izbornik" : "Otvori izbornik",
+        "aria-expanded": navOpen,
+        "aria-controls": "portal-nav",
+        onClick: () => setNavOpen((current) => !current)
+      },
+        e("span", { className: "nav-toggle-bars", "aria-hidden": "true" },
+          e("span"), e("span"), e("span")
+        )
+      ),
+      e("div", { className: "nav-backdrop" + (navOpen ? " show" : ""), onClick: () => setNavOpen(false) }),
+      e("nav", { id: "portal-nav", className: "portal-nav" + (navOpen ? " nav-open" : ""), "aria-label": "Glavna navigacija" },
         e("button", {
           type: "button",
           className: activeSection === "dashboard" ? "active" : "",
-          onClick: () => onNavigate("dashboard")
+          onClick: () => navigate("dashboard")
         },
           e("span", { "aria-hidden": "true" }, "⌂"),
           "Početna"
@@ -124,7 +144,7 @@
         e("button", {
           type: "button",
           className: activeSection === "clients" ? "active" : "",
-          onClick: () => onNavigate("clients")
+          onClick: () => navigate("clients")
         },
           e("span", { "aria-hidden": "true" }, "◫"),
           "Klijenti"
@@ -132,7 +152,7 @@
         e("button", {
           type: "button",
           className: activeSection === "planning" ? "active" : "",
-          onClick: () => onNavigate("planning")
+          onClick: () => navigate("planning")
         },
           e("span", { "aria-hidden": "true" }, "◷"),
           "Planiranje"
@@ -140,7 +160,7 @@
         e("button", {
           type: "button",
           className: activeSection === "completed" ? "active" : "",
-          onClick: () => onNavigate("completed")
+          onClick: () => navigate("completed")
         },
           e("span", { "aria-hidden": "true" }, "✓"),
           "Završeni sastanci"
@@ -148,7 +168,7 @@
         e("button", {
           type: "button",
           className: activeSection === "audits" ? "active" : "",
-          onClick: () => onNavigate("audits")
+          onClick: () => navigate("audits")
         },
           e("span", { "aria-hidden": "true" }, "◈"),
           "Audit"
