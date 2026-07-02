@@ -415,6 +415,7 @@ a { color: inherit; text-decoration: none; }
 .meeting-date { display: grid; gap: 4px; padding-right: 20px; border-right: 1px solid var(--line); }
 .meeting-date strong { text-transform: uppercase; }
 .meeting-date span { color: var(--blue-dark); font-size: 19px; font-weight: 800; }
+.meeting-date small { color: var(--muted); font-size: 11px; font-weight: 700; }
 .meeting-client h3 { margin: 0; font-size: 16px; }
 .meeting-client p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
 .meeting-client small { display: block; margin-top: 4px; color: #8792a1; }

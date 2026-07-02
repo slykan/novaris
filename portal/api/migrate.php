@@ -41,6 +41,7 @@ try {
     );
 
     $meetingColumns = [
+        'duration' => "VARCHAR(20) NOT NULL DEFAULT '30m' AFTER meeting_time",
         'reminder_enabled' => 'TINYINT(1) NOT NULL DEFAULT 0 AFTER meeting_time',
         'reminder_offset' => 'VARCHAR(10) NULL AFTER reminder_enabled',
         'notes' => 'TEXT NULL AFTER reminder_offset',

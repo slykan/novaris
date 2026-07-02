@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS meetings (
     client_id BIGINT UNSIGNED NOT NULL,
     meeting_date DATE NOT NULL,
     meeting_time TIME NOT NULL,
+    duration VARCHAR(20) NOT NULL DEFAULT '30m',
     reminder_enabled TINYINT(1) NOT NULL DEFAULT 0,
     reminder_offset VARCHAR(10) NULL,
     notes TEXT NULL,

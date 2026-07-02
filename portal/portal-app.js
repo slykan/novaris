@@ -193,6 +193,7 @@
     const [form, setForm] = React.useState({
       date: today,
       time: "",
+      duration: "30m",
       clientId: "",
       reminderEnabled: false,
       reminderOffset: "1h",
@@ -212,7 +213,7 @@
       setSaving(true);
       try {
         await onCreateMeeting(form);
-        setForm({ date: today, time: "", clientId: "", reminderEnabled: false, reminderOffset: "1h", notes: "" });
+        setForm({ date: today, time: "", duration: "30m", clientId: "", reminderEnabled: false, reminderOffset: "1h", notes: "" });
       } catch (saveError) {
         setError(saveError.message);
       } finally {
@@ -249,13 +250,26 @@
               })
             ),
             e("div", { className: "form-field" },
-              e("label", { htmlFor: "meetingTime" }, "Vrijeme"),
+              e("label", { htmlFor: "meetingTime" }, "Početak sastanka"),
               e("input", {
                 id: "meetingTime",
                 type: "time",
                 value: form.time,
                 onChange: (event) => setForm((current) => ({ ...current, time: event.target.value }))
               })
+            ),
+            e("div", { className: "form-field full" },
+              e("label", { htmlFor: "meetingDuration" }, "Trajanje"),
+              e("select", {
+                id: "meetingDuration",
+                value: form.duration,
+                onChange: (event) => setForm((current) => ({ ...current, duration: event.target.value }))
+              },
+                e("option", { value: "30m" }, "30 min"),
+                e("option", { value: "1h" }, "1 h"),
+                e("option", { value: "2h" }, "2 h"),
+                e("option", { value: "as_needed" }, "Po potrebi")
+              )
             ),
             e("div", { className: "form-field full" },
               e("label", { htmlFor: "meetingClient" }, "Tvrtka"),
@@ -348,7 +362,8 @@
                   e("article", { className: "meeting-card", key: meeting.id },
                     e("div", { className: "meeting-date" },
                       e("strong", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
-                      e("span", null, String(meeting.meeting_time).slice(0, 5))
+                      e("span", null, String(meeting.meeting_time).slice(0, 5)),
+                      e("small", null, ({ "30m": "30 min", "1h": "1 h", "2h": "2 h", "as_needed": "Po potrebi" }[meeting.duration] || meeting.duration))
                     ),
                     e("div", { className: "meeting-client" },
                       e("h3", null, meeting.company_name),
@@ -413,6 +428,7 @@
           clientId: Number(meeting.clientId),
           date: meeting.date,
           time: meeting.time,
+          duration: meeting.duration,
           reminderEnabled: meeting.reminderEnabled,
           reminderOffset: meeting.reminderOffset,
           notes: meeting.notes

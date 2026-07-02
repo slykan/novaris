@@ -101,6 +101,12 @@ function reminder_email(array $meeting): string
     $notes = nl2br($escape($meeting['meeting_notes'] ?: '—'));
     $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
     $time = substr((string) $meeting['meeting_time'], 0, 5);
+    $duration = $escape([
+        '30m' => '30 min',
+        '1h' => '1 h',
+        '2h' => '2 h',
+        'as_needed' => 'Po potrebi',
+    ][$meeting['duration']] ?? $meeting['duration']);
 
     return <<<HTML
 <!doctype html>
@@ -120,6 +126,7 @@ function reminder_email(array $meeting): string
             <tr><td style="color:#788596;border-bottom:1px solid #e7edf3">Kontakt osoba</td><td style="border-bottom:1px solid #e7edf3"><strong>{$contact}</strong></td></tr>
             <tr><td style="color:#788596;border-bottom:1px solid #e7edf3">Telefon</td><td style="border-bottom:1px solid #e7edf3">{$phone}</td></tr>
             <tr><td style="color:#788596;border-bottom:1px solid #e7edf3">Email</td><td style="border-bottom:1px solid #e7edf3">{$email}</td></tr>
+            <tr><td style="color:#788596;border-bottom:1px solid #e7edf3">Trajanje</td><td style="border-bottom:1px solid #e7edf3">{$duration}</td></tr>
             <tr><td style="color:#788596;vertical-align:top">Bilješke</td><td>{$notes}</td></tr>
           </table>
         </td></tr>
@@ -169,7 +176,7 @@ try {
     $pdo->exec("SET time_zone = '" . date('P') . "'");
 
     $meetings = $pdo->query(
-        "SELECT meetings.id, meetings.meeting_date, meetings.meeting_time,
+        "SELECT meetings.id, meetings.meeting_date, meetings.meeting_time, meetings.duration,
                 meetings.notes AS meeting_notes, clients.company_name,
                 clients.contact_name, clients.phone, clients.email
          FROM meetings
