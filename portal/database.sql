@@ -25,6 +25,22 @@ CREATE TABLE IF NOT EXISTS clients (
     INDEX clients_contact_name_index (contact_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS meetings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    client_id BIGINT UNSIGNED NOT NULL,
+    meeting_date DATE NOT NULL,
+    meeting_time TIME NOT NULL,
+    created_by BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT meetings_client_foreign
+        FOREIGN KEY (client_id) REFERENCES clients(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT meetings_created_by_foreign
+        FOREIGN KEY (created_by) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX meetings_schedule_index (meeting_date, meeting_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT INTO users (name, email, password_hash)
 VALUES (
     'Administrator',

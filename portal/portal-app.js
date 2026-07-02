@@ -39,13 +39,25 @@
     );
   }
 
-  function Sidebar({ onLogout, user }) {
+  function Sidebar({ onLogout, user, activeSection, onNavigate }) {
     return e("aside", { className: "portal-sidebar" },
       e(Brand),
       e("nav", { className: "portal-nav", "aria-label": "Glavna navigacija" },
-        e("a", { className: "active", href: "portal.html" },
+        e("button", {
+          type: "button",
+          className: activeSection === "clients" ? "active" : "",
+          onClick: () => onNavigate("clients")
+        },
           e("span", { "aria-hidden": "true" }, "◫"),
           "Klijenti"
+        ),
+        e("button", {
+          type: "button",
+          className: activeSection === "planning" ? "active" : "",
+          onClick: () => onNavigate("planning")
+        },
+          e("span", { "aria-hidden": "true" }, "◷"),
+          "Planiranje"
         )
       ),
       e("div", { className: "sidebar-bottom" },
@@ -176,12 +188,145 @@
     );
   }
 
+  function PlanningSection({ clients, meetings, onCreateMeeting }) {
+    const today = new Date().toISOString().slice(0, 10);
+    const [form, setForm] = React.useState({ date: today, time: "", clientId: "" });
+    const [error, setError] = React.useState("");
+    const [saving, setSaving] = React.useState(false);
+    const selectedClient = clients.find((client) => String(client.id) === form.clientId);
+
+    async function submit(event) {
+      event.preventDefault();
+      if (!form.clientId || !form.date || !form.time) {
+        setError("Odaberite datum, vrijeme i tvrtku.");
+        return;
+      }
+      setError("");
+      setSaving(true);
+      try {
+        await onCreateMeeting(form);
+        setForm({ date: today, time: "", clientId: "" });
+      } catch (saveError) {
+        setError(saveError.message);
+      } finally {
+        setSaving(false);
+      }
+    }
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Planiranje"),
+          e("p", null, "Planirajte sastanke s postojećim klijentima.")
+        )
+      ),
+      e("section", { className: "planning-layout" },
+        e("form", { className: "meeting-form-panel", onSubmit: submit },
+          e("div", { className: "panel-title" },
+            e("span", { className: "stat-icon" }, "◷"),
+            e("div", null,
+              e("h2", null, "Novi sastanak"),
+              e("p", null, "Odaberite termin i klijenta.")
+            )
+          ),
+          e("div", { className: "meeting-form-grid" },
+            e("div", { className: "form-field" },
+              e("label", { htmlFor: "meetingDate" }, "Datum"),
+              e("input", {
+                id: "meetingDate",
+                type: "date",
+                min: today,
+                value: form.date,
+                onChange: (event) => setForm((current) => ({ ...current, date: event.target.value }))
+              })
+            ),
+            e("div", { className: "form-field" },
+              e("label", { htmlFor: "meetingTime" }, "Vrijeme"),
+              e("input", {
+                id: "meetingTime",
+                type: "time",
+                value: form.time,
+                onChange: (event) => setForm((current) => ({ ...current, time: event.target.value }))
+              })
+            ),
+            e("div", { className: "form-field full" },
+              e("label", { htmlFor: "meetingClient" }, "Tvrtka"),
+              e("select", {
+                id: "meetingClient",
+                value: form.clientId,
+                onChange: (event) => setForm((current) => ({ ...current, clientId: event.target.value }))
+              },
+                e("option", { value: "" }, clients.length ? "Odaberite tvrtku" : "Prvo dodajte klijenta"),
+                clients.map((client) => e("option", { key: client.id, value: client.id }, client.company_name))
+              )
+            )
+          ),
+          selectedClient && e("div", { className: "selected-client-card" },
+            e("div", { className: "selected-client-heading" },
+              e("span", null, selectedClient.company_name.charAt(0).toUpperCase()),
+              e("div", null,
+                e("strong", null, selectedClient.company_name),
+                e("small", null, "OIB: " + selectedClient.oib)
+              )
+            ),
+            e("dl", null,
+              e("div", null, e("dt", null, "Kontakt osoba"), e("dd", null, selectedClient.contact_name)),
+              e("div", null, e("dt", null, "Telefon"), e("dd", null, selectedClient.phone || "—")),
+              e("div", null, e("dt", null, "Email"), e("dd", null, selectedClient.email)),
+              e("div", { className: "full" }, e("dt", null, "Bilješke"), e("dd", null, selectedClient.notes || "—"))
+            )
+          ),
+          error && e("p", { className: "form-error", role: "alert" }, error),
+          e("button", { type: "submit", className: "portal-primary", disabled: saving || !clients.length },
+            saving ? "Spremanje..." : "Spremi sastanak"
+          )
+        ),
+        e("section", { className: "meetings-panel" },
+          e("div", { className: "panel-title" },
+            e("div", null,
+              e("h2", null, "Planirani sastanci"),
+              e("p", null, meetings.length + (meetings.length === 1 ? " sastanak" : " sastanaka"))
+            )
+          ),
+          meetings.length === 0
+            ? e("div", { className: "meetings-empty" },
+                e("span", null, "◷"),
+                e("h3", null, "Nema planiranih sastanaka"),
+                e("p", null, "Novi sastanci pojavit će se ovdje.")
+              )
+            : e("div", { className: "meeting-list" },
+                meetings.map((meeting) =>
+                  e("article", { className: "meeting-card", key: meeting.id },
+                    e("div", { className: "meeting-date" },
+                      e("strong", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
+                      e("span", null, String(meeting.meeting_time).slice(0, 5))
+                    ),
+                    e("div", { className: "meeting-client" },
+                      e("h3", null, meeting.company_name),
+                      e("p", null, meeting.contact_name + " · " + meeting.email),
+                      meeting.phone && e("small", null, meeting.phone)
+                    ),
+                    e("div", { className: "meeting-actions" },
+                      e("button", { type: "button", className: "meeting-complete", disabled: true }, "Završen sastanak"),
+                      e("button", { type: "button", className: "meeting-delay", disabled: true }, "Odgodi sastanak")
+                    )
+                  )
+                )
+              )
+        )
+      )
+    );
+  }
+
   function PortalApp() {
     const [clients, setClients] = React.useState([]);
     const [user, setUser] = React.useState(null);
     const [loadError, setLoadError] = React.useState("");
     const [query, setQuery] = React.useState("");
     const [formOpen, setFormOpen] = React.useState(false);
+    const [activeSection, setActiveSection] = React.useState("clients");
+    const [meetings, setMeetings] = React.useState([]);
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
@@ -190,10 +335,11 @@
     );
 
     React.useEffect(() => {
-      Promise.all([api("session.php"), api("clients.php")])
-        .then(([sessionData, clientsData]) => {
+      Promise.all([api("session.php"), api("clients.php"), api("clients.php?resource=meetings")])
+        .then(([sessionData, clientsData, meetingsData]) => {
           setUser(sessionData.user);
           setClients(clientsData.clients || []);
+          setMeetings(meetingsData.meetings || []);
         })
         .catch((error) => setLoadError(error.message));
     }, []);
@@ -207,14 +353,34 @@
       setFormOpen(false);
     }
 
+    async function createMeeting(meeting) {
+      const data = await api("clients.php", {
+        method: "POST",
+        body: JSON.stringify({
+          resource: "meeting",
+          clientId: Number(meeting.clientId),
+          date: meeting.date,
+          time: meeting.time
+        })
+      });
+      setMeetings((current) =>
+        [...current, data.meeting].sort((first, second) =>
+          (first.meeting_date + first.meeting_time).localeCompare(second.meeting_date + second.meeting_time)
+        )
+      );
+    }
+
     async function logout() {
       await api("logout.php", { method: "POST", body: "{}" }).catch(() => {});
       window.location.replace("login.html");
     }
 
     return e("div", { className: "portal-shell" },
-      e(Sidebar, { onLogout: logout, user }),
+      e(Sidebar, { onLogout: logout, user, activeSection, onNavigate: setActiveSection }),
       e("main", { className: "portal-main" },
+        activeSection === "planning"
+          ? e(PlanningSection, { clients, meetings, onCreateMeeting: createMeeting })
+          : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,
             e("span", { className: "eyebrow" }, "Poslovni portal"),
@@ -250,7 +416,7 @@
           loadError
             ? e("div", { className: "clients-empty" }, e("h3", null, "Nije moguće učitati klijente"), e("p", null, loadError))
             : e(ClientsTable, { clients: visibleClients })
-        )
+        ))
       ),
       formOpen && e(ClientForm, { onClose: () => setFormOpen(false), onSave: addClient })
     );
