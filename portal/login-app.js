@@ -1,8 +1,5 @@
 (function () {
   const e = React.createElement;
-  const DEMO_EMAIL = "admin@novaris.hr";
-  const DEMO_PASSWORD = "novaris2026";
-
   function Brand() {
     return e("a", { className: "portal-brand", href: "index.html", "aria-label": "Novaris Tech početna" },
       e("img", { src: "logo3_small.png", alt: "", width: 66, height: 66 }),
@@ -88,11 +85,6 @@
             ),
             error && e("p", { className: "form-error", role: "alert" }, error),
             e("button", { type: "submit", className: "portal-primary" }, "Prijavi se")
-          ),
-          e("div", { className: "demo-access" },
-            e("strong", null, "Demo pristup"),
-            e("span", null, DEMO_EMAIL),
-            e("span", null, DEMO_PASSWORD)
           )
         )
       )

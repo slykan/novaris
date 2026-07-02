@@ -217,19 +217,6 @@ a { color: inherit; text-decoration: none; }
 .portal-secondary { color: #304158; background: #edf2f7; }
 .form-error { margin: 4px 0 0; color: var(--danger); font-size: 13px; font-weight: 700; }
 
-.demo-access {
-  display: grid;
-  gap: 3px;
-  margin-top: 28px;
-  padding: 14px 16px;
-  border-radius: 9px;
-  color: #546276;
-  background: #f2f6fa;
-  font-size: 12px;
-}
-
-.demo-access strong { color: #26364b; margin-bottom: 2px; }
-
 .portal-body { background: var(--page); }
 .portal-shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
 
