@@ -30,7 +30,7 @@
   }
 
   function Brand() {
-    return e("a", { className: "portal-brand compact", href: "index.html", "aria-label": "Novaris Tech početna" },
+    return e("a", { className: "portal-brand compact", href: "portal.html", "aria-label": "Početna stranica portala" },
       e("img", { src: "logo3_small.png", alt: "", width: 50, height: 50 }),
       e("span", null,
         e("strong", null, "NOVARIS"),
@@ -43,6 +43,14 @@
     return e("aside", { className: "portal-sidebar" },
       e(Brand),
       e("nav", { className: "portal-nav", "aria-label": "Glavna navigacija" },
+        e("button", {
+          type: "button",
+          className: activeSection === "dashboard" ? "active" : "",
+          onClick: () => onNavigate("dashboard")
+        },
+          e("span", { "aria-hidden": "true" }, "⌂"),
+          "Početna"
+        ),
         e("button", {
           type: "button",
           className: activeSection === "clients" ? "active" : "",
@@ -386,13 +394,153 @@
     );
   }
 
+  function DashboardSection({ clients, meetings }) {
+    const completedMeetings = 0;
+    const plannedMeetings = meetings.length;
+    const totalMeetings = plannedMeetings + completedMeetings;
+    const plannedPercentage = totalMeetings ? Math.round((plannedMeetings / totalMeetings) * 100) : 0;
+    const circleLength = 264;
+    const plannedStroke = circleLength * plannedPercentage / 100;
+
+    const monthLabels = [];
+    const monthlyCounts = [];
+    const currentMonth = new Date();
+    currentMonth.setDate(1);
+
+    for (let index = 0; index < 6; index++) {
+      const month = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + index, 1);
+      monthLabels.push(month.toLocaleDateString("hr-HR", { month: "short" }).replace(".", ""));
+      monthlyCounts.push(meetings.filter((meeting) => {
+        const meetingDate = new Date(meeting.meeting_date + "T00:00:00");
+        return meetingDate.getFullYear() === month.getFullYear() && meetingDate.getMonth() === month.getMonth();
+      }).length);
+    }
+
+    const maxMonthlyCount = Math.max(1, ...monthlyCounts);
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header dashboard-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Novaris poslovni portal"),
+          e("h1", null, "Pregled poslovanja"),
+          e("p", null, "Brzi pregled klijenata i planiranih sastanaka.")
+        ),
+        e("span", { className: "dashboard-date" },
+          new Date().toLocaleDateString("hr-HR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })
+        )
+      ),
+      e("section", { className: "dashboard-stats", "aria-label": "Poslovni sažetak" },
+        e("article", { className: "dashboard-stat clients" },
+          e("span", { className: "dashboard-stat-icon", "aria-hidden": "true" }, "◫"),
+          e("div", null,
+            e("small", null, "Broj klijenata"),
+            e("strong", null, clients.length),
+            e("p", null, "Ukupno aktivnih zapisa")
+          )
+        ),
+        e("article", { className: "dashboard-stat planned" },
+          e("span", { className: "dashboard-stat-icon", "aria-hidden": "true" }, "◷"),
+          e("div", null,
+            e("small", null, "Planirano"),
+            e("strong", null, plannedMeetings),
+            e("p", null, "Nadolazećih sastanaka")
+          )
+        ),
+        e("article", { className: "dashboard-stat completed" },
+          e("span", { className: "dashboard-stat-icon", "aria-hidden": "true" }, "✓"),
+          e("div", null,
+            e("small", null, "Završeno"),
+            e("strong", null, completedMeetings),
+            e("p", null, "Pripremljeno za praćenje")
+          )
+        )
+      ),
+      e("section", { className: "dashboard-charts" },
+        e("article", { className: "dashboard-panel meeting-overview" },
+          e("div", { className: "dashboard-panel-heading" },
+            e("div", null,
+              e("h2", null, "Status sastanaka"),
+              e("p", null, "Omjer planiranih i završenih")
+            )
+          ),
+          e("div", { className: "donut-layout" },
+            e("div", { className: "donut-chart" },
+              e("svg", { viewBox: "0 0 100 100", role: "img", "aria-label": plannedPercentage + "% sastanaka je planirano" },
+                e("circle", { cx: 50, cy: 50, r: 42, className: "donut-track" }),
+                e("circle", {
+                  cx: 50,
+                  cy: 50,
+                  r: 42,
+                  className: "donut-value",
+                  strokeDasharray: plannedStroke + " " + (circleLength - plannedStroke)
+                })
+              ),
+              e("div", null,
+                e("strong", null, totalMeetings),
+                e("small", null, "sastanaka")
+              )
+            ),
+            e("div", { className: "chart-legend" },
+              e("div", null,
+                e("span", { className: "legend-dot planned" }),
+                e("p", null, e("strong", null, plannedMeetings), e("small", null, "Planirano"))
+              ),
+              e("div", null,
+                e("span", { className: "legend-dot completed" }),
+                e("p", null, e("strong", null, completedMeetings), e("small", null, "Završeno"))
+              )
+            )
+          )
+        ),
+        e("article", { className: "dashboard-panel monthly-overview" },
+          e("div", { className: "dashboard-panel-heading" },
+            e("div", null,
+              e("h2", null, "Nadolazeći sastanci"),
+              e("p", null, "Planirano kroz sljedećih šest mjeseci")
+            )
+          ),
+          e("div", { className: "bar-chart", role: "img", "aria-label": "Broj sastanaka po mjesecima" },
+            monthlyCounts.map((count, index) =>
+              e("div", { className: "bar-column", key: monthLabels[index] + index },
+                e("span", { className: "bar-number" }, count),
+                e("div", { className: "bar-track" },
+                  e("span", { style: { height: Math.max(count ? 12 : 3, (count / maxMonthlyCount) * 100) + "%" } })
+                ),
+                e("small", null, monthLabels[index])
+              )
+            )
+          )
+        )
+      ),
+      e("section", { className: "dashboard-panel next-meetings" },
+        e("div", { className: "dashboard-panel-heading" },
+          e("div", null,
+            e("h2", null, "Sljedeći sastanci"),
+            e("p", null, "Najbliži termini u rasporedu")
+          )
+        ),
+        meetings.length === 0
+          ? e("div", { className: "dashboard-empty" }, "Još nema planiranih sastanaka.")
+          : e("div", { className: "dashboard-meeting-list" },
+              meetings.slice(0, 3).map((meeting) =>
+                e("div", { key: meeting.id },
+                  e("span", null, new Date(meeting.meeting_date + "T00:00:00").toLocaleDateString("hr-HR", { day: "2-digit", month: "short" })),
+                  e("strong", null, meeting.company_name),
+                  e("small", null, String(meeting.meeting_time).slice(0, 5) + " · " + meeting.contact_name)
+                )
+              )
+            )
+      )
+    );
+  }
+
   function PortalApp() {
     const [clients, setClients] = React.useState([]);
     const [user, setUser] = React.useState(null);
     const [loadError, setLoadError] = React.useState("");
     const [query, setQuery] = React.useState("");
     const [formOpen, setFormOpen] = React.useState(false);
-    const [activeSection, setActiveSection] = React.useState("clients");
+    const [activeSection, setActiveSection] = React.useState("dashboard");
     const [meetings, setMeetings] = React.useState([]);
 
     const normalizedQuery = query.trim().toLowerCase();
@@ -449,7 +597,9 @@
     return e("div", { className: "portal-shell" },
       e(Sidebar, { onLogout: logout, user, activeSection, onNavigate: setActiveSection }),
       e("main", { className: "portal-main" },
-        activeSection === "planning"
+        activeSection === "dashboard"
+          ? e(DashboardSection, { clients, meetings })
+          : activeSection === "planning"
           ? e(PlanningSection, { clients, meetings, onCreateMeeting: createMeeting })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
