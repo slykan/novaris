@@ -114,3 +114,56 @@ function meeting_client_reminder_email(array $meeting): string
 {
     return meeting_client_email($meeting, 'Podsjetnik za sastanak', 'podsjećamo vas na sastanak s Novaris Tech zakazan za');
 }
+
+function meeting_status_label(string $status): string
+{
+    return [
+        'agreed' => 'Dogovoreno',
+        'cancelled' => 'Odustajemo',
+        'follow_up' => 'Nastavak',
+    ][$status] ?? $status;
+}
+
+function meeting_admin_outcome_email(array $meeting): string
+{
+    $escape = static fn (?string $value): string =>
+        htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+
+    $statusColors = [
+        'agreed' => '#19704d',
+        'cancelled' => '#b42318',
+        'follow_up' => '#9a6214',
+    ];
+
+    $company = $escape($meeting['company_name']);
+    $contact = $escape($meeting['contact_name']);
+    $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
+    $time = substr((string) $meeting['meeting_time'], 0, 5);
+    $status = (string) $meeting['status'];
+    $statusLabel = $escape(meeting_status_label($status));
+    $statusColor = $statusColors[$status] ?? '#132238';
+    $outcomeNotes = nl2br($escape($meeting['outcome_notes'] ?: '—'));
+
+    return <<<HTML
+<!doctype html>
+<html lang="hr">
+<body style="margin:0;background:#eef3f8;font-family:Arial,sans-serif;color:#132238">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:36px 16px">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:12px;overflow:hidden">
+        <tr><td style="padding:28px 34px;background:#06172a;color:#fff">
+          <div style="color:#20aaff;font-size:12px;font-weight:bold;text-transform:uppercase">Novaris Tech</div>
+          <h1 style="margin:8px 0 0;font-size:24px">Ishod sastanka</h1>
+        </td></tr>
+        <tr><td style="padding:30px 34px">
+          <p style="margin:0 0 22px;color:#657386">Sastanak s <strong style="color:#132238">{$company}</strong> ({$date} u {$time}, kontakt: {$contact}) označen je kao <strong style="color:{$statusColor}">{$statusLabel}</strong>.</p>
+          <h2 style="margin:0 0 12px;font-size:16px;color:#788596;text-transform:uppercase;letter-spacing:.03em">Bilješka</h2>
+          <div style="color:#3c4b5f;line-height:1.6">{$outcomeNotes}</div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+HTML;
+}

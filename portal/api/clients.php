@@ -35,6 +35,25 @@ function notify_meeting_created(array $meeting): void
     }
 }
 
+function notify_meeting_outcome(array $meeting): void
+{
+    try {
+        $contactPath = getenv('NOVARIS_CONTACT') ?: __DIR__ . '/contact.php';
+        $smtp = smtp_credentials($contactPath);
+        $date = (new DateTimeImmutable($meeting['meeting_date']))->format('d.m.Y.');
+        $time = substr((string) $meeting['meeting_time'], 0, 5);
+
+        send_smtp(
+            $smtp,
+            'info@novaristech.hr',
+            sprintf('Ishod sastanka: %s, %s u %s (%s)', $meeting['company_name'], $date, $time, meeting_status_label((string) $meeting['status'])),
+            meeting_admin_outcome_email($meeting)
+        );
+    } catch (Throwable $error) {
+        error_log('Slanje obavijesti o ishodu sastanka nije uspjelo: ' . $error->getMessage());
+    }
+}
+
 function meeting_row(int $id): array|false
 {
     $statement = database()->prepare(
@@ -104,6 +123,7 @@ if (($data['resource'] ?? '') === 'meeting-status') {
         respond(['message' => 'Sastanak ne postoji.'], 404);
     }
 
+    notify_meeting_outcome($meeting);
     respond(['meeting' => $meeting]);
 }
 
