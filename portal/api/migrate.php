@@ -72,6 +72,26 @@ try {
         }
     }
 
+    $userColumns = [
+        'role' => "VARCHAR(20) NOT NULL DEFAULT 'standard' AFTER password_hash",
+    ];
+
+    foreach ($userColumns as $column => $definition) {
+        $columnStatement->execute([
+            'database' => $config['database'],
+            'table' => 'users',
+            'column' => $column,
+        ]);
+
+        if ((int) $columnStatement->fetchColumn() === 0) {
+            $pdo->exec(sprintf(
+                'ALTER TABLE users ADD COLUMN `%s` %s',
+                $column,
+                $definition
+            ));
+        }
+    }
+
     fwrite(STDOUT, "Baza je spremna.\n");
 } catch (Throwable $error) {
     fwrite(STDERR, "Migracija baze nije uspjela: {$error->getMessage()}\n");

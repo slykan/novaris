@@ -79,6 +79,19 @@
     return Object.values(checklist).filter((item) => item && item.status && item.status !== "pending").length;
   }
 
+  function generatePassword(length) {
+    const charset = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%&*";
+    const size = length || 14;
+    let values;
+    if (window.crypto && window.crypto.getRandomValues) {
+      values = new Uint32Array(size);
+      window.crypto.getRandomValues(values);
+    } else {
+      values = Array.from({ length: size }, () => Math.floor(Math.random() * 4294967296));
+    }
+    return Array.from(values, (value) => charset[value % charset.length]).join("");
+  }
+
   async function api(path, options) {
     const response = await fetch("api/" + path, {
       credentials: "same-origin",
@@ -172,6 +185,14 @@
         },
           e("span", { "aria-hidden": "true" }, "◈"),
           "Audit"
+        ),
+        e("button", {
+          type: "button",
+          className: activeSection === "users" ? "active" : "",
+          onClick: () => navigate("users")
+        },
+          e("span", { "aria-hidden": "true" }, "◉"),
+          "Korisnici"
         )
       ),
       e("div", { className: "sidebar-bottom" },
@@ -1051,6 +1072,253 @@
     );
   }
 
+  function UserForm({ user, onClose, onSave }) {
+    const isEditing = Boolean(user);
+    const [form, setForm] = React.useState(user
+      ? { id: user.id, name: user.name, email: user.email, password: "" }
+      : { name: "", email: "", password: "" }
+    );
+    const [error, setError] = React.useState("");
+    const [saving, setSaving] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [copied, setCopied] = React.useState(false);
+
+    function update(event) {
+      const { name, value } = event.target;
+      setForm((current) => ({ ...current, [name]: value }));
+    }
+
+    function fillGeneratedPassword() {
+      setForm((current) => ({ ...current, password: generatePassword(14) }));
+      setShowPassword(true);
+    }
+
+    async function copyPassword() {
+      if (!form.password) {
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(form.password);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      } catch (copyError) {
+        // clipboard nije dostupan u ovom pregledniku
+      }
+    }
+
+    async function submit(event) {
+      event.preventDefault();
+      if (!form.name.trim() || !form.email.trim()) {
+        setError("Unesite ime i email korisnika.");
+        return;
+      }
+      if (!isEditing && form.password.trim().length < 8) {
+        setError("Lozinka mora imati najmanje 8 znakova.");
+        return;
+      }
+      setError("");
+      setSaving(true);
+      try {
+        await onSave(form);
+      } catch (saveError) {
+        setError(saveError.message);
+      } finally {
+        setSaving(false);
+      }
+    }
+
+    return e("div", { className: "modal-backdrop", onMouseDown: (event) => event.target === event.currentTarget && onClose() },
+      e("section", { className: "client-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "user-form-title" },
+        e("div", { className: "modal-heading" },
+          e("div", null,
+            e("span", { className: "eyebrow" }, isEditing ? "Izmjena zapisa" : "Novi zapis"),
+            e("h2", { id: "user-form-title" }, isEditing ? "Uredi korisnika" : "Dodaj korisnika"),
+            e("p", null, isEditing ? "Promijenite ime ili email korisnika." : "Unesite podatke za novi korisnički račun.")
+          ),
+          e("button", { type: "button", className: "modal-close", onClick: onClose, "aria-label": "Zatvori" }, "×")
+        ),
+        e("form", { className: "client-form", onSubmit: submit },
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userName" }, "Ime i prezime *"),
+            e("input", { id: "userName", name: "name", value: form.name, onChange: update, placeholder: "Ime Prezime", autoFocus: true })
+          ),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userEmail" }, "Email *"),
+            e("input", { id: "userEmail", name: "email", type: "email", value: form.email, onChange: update, placeholder: "ime@novaristech.hr" })
+          ),
+          !isEditing && e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userPassword" }, "Lozinka *"),
+            e("div", { className: "password-field" },
+              e("input", {
+                id: "userPassword",
+                name: "password",
+                type: showPassword ? "text" : "password",
+                value: form.password,
+                onChange: update,
+                placeholder: "Najmanje 8 znakova",
+                autoComplete: "new-password"
+              }),
+              e("button", {
+                type: "button",
+                className: "password-toggle",
+                onClick: () => setShowPassword((current) => !current)
+              }, showPassword ? "Sakrij" : "Prikaži")
+            ),
+            e("div", { className: "password-actions" },
+              e("button", { type: "button", className: "password-link-btn", onClick: fillGeneratedPassword }, "Generiraj lozinku"),
+              form.password && e("button", { type: "button", className: "password-link-btn", onClick: copyPassword }, copied ? "Kopirano!" : "Kopiraj")
+            )
+          ),
+          error && e("p", { className: "form-error full", role: "alert" }, error),
+          e("div", { className: "modal-actions full" },
+            e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Odustani"),
+            e("button", { type: "submit", className: "portal-primary", disabled: saving },
+              saving ? "Spremanje..." : "Spremi korisnika"
+            )
+          )
+        )
+      )
+    );
+  }
+
+  function UsersSection({ users, currentUser, loadError, onSaveUser, onToggleActive, onToggleRole, onDeleteUser }) {
+    const [formUser, setFormUser] = React.useState(null);
+    const [actionError, setActionError] = React.useState("");
+
+    async function handleDelete(user) {
+      if (!window.confirm("Obrisati korisnika " + user.name + "? Ova radnja se ne može poništiti.")) {
+        return;
+      }
+      setActionError("");
+      try {
+        await onDeleteUser(user.id);
+      } catch (deleteError) {
+        setActionError(deleteError.message);
+      }
+    }
+
+    async function handleToggleActive(user) {
+      setActionError("");
+      try {
+        await onToggleActive(user.id, Number(user.active) !== 1);
+      } catch (toggleError) {
+        setActionError(toggleError.message);
+      }
+    }
+
+    async function handleToggleRole(user) {
+      setActionError("");
+      try {
+        await onToggleRole(user.id, user.role === "admin" ? "standard" : "admin");
+      } catch (toggleError) {
+        setActionError(toggleError.message);
+      }
+    }
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Korisnici"),
+          e("p", null, "Upravljajte korisničkim računima portala.")
+        ),
+        e("button", { type: "button", className: "portal-primary add-client", onClick: () => setFormUser(true) },
+          e("span", { "aria-hidden": "true" }, "+"),
+          "Dodaj korisnika"
+        )
+      ),
+      (actionError || loadError) && e("p", { className: "form-error", role: "alert" }, actionError || loadError),
+      e("section", { className: "clients-panel" },
+        e("div", { className: "clients-toolbar" },
+          e("div", null,
+            e("h2", null, "Popis korisnika"),
+            e("p", null, users.length + (users.length === 1 ? " korisnik" : " korisnika"))
+          )
+        ),
+        users.length === 0
+          ? e("div", { className: "clients-empty" },
+              e("span", { "aria-hidden": "true" }, "＋"),
+              e("h3", null, "Još nema korisnika"),
+              e("p", null, "Dodajte prvog korisnika portala.")
+            )
+          : e("div", { className: "clients-table-wrap" },
+              e("table", { className: "clients-table" },
+                e("thead", null,
+                  e("tr", null,
+                    e("th", null, "Ime"),
+                    e("th", null, "Email"),
+                    e("th", null, "Grupa"),
+                    e("th", null, "Status"),
+                    e("th", null, "Akcije")
+                  )
+                ),
+                e("tbody", null,
+                  users.map((user) => {
+                    const isSelf = currentUser && currentUser.id === user.id;
+                    const isActive = Number(user.active) === 1;
+                    const isAdmin = user.role === "admin";
+                    return e("tr", { key: user.id },
+                      e("td", null,
+                        e("div", { className: "company-cell" },
+                          e("span", null, user.name.charAt(0).toUpperCase()),
+                          e("strong", null, user.name),
+                          isSelf && e("small", null, "(vi)")
+                        )
+                      ),
+                      e("td", null, e("a", { href: "mailto:" + user.email }, user.email)),
+                      e("td", null,
+                        e("span", { className: "status-badge " + (isAdmin ? "status-follow-up" : "status-neutral") },
+                          isAdmin ? "Administrator" : "Standard"
+                        )
+                      ),
+                      e("td", null,
+                        e("span", { className: "status-badge " + (isActive ? "status-agreed" : "status-cancelled") },
+                          isActive ? "Aktivan" : "Onemogućen"
+                        )
+                      ),
+                      e("td", null,
+                        e("div", { className: "row-actions" },
+                          e("button", { type: "button", className: "meeting-delay", onClick: () => setFormUser(user) }, "Uredi"),
+                          e("button", {
+                            type: "button",
+                            className: "action-neutral",
+                            disabled: isSelf,
+                            title: isSelf ? "Ne možete promijeniti vlastitu grupu" : "",
+                            onClick: () => handleToggleRole(user)
+                          }, isAdmin ? "Ukloni admina" : "Postavi za admina"),
+                          e("button", {
+                            type: "button",
+                            className: "action-neutral",
+                            disabled: isSelf,
+                            title: isSelf ? "Ne možete onemogućiti vlastiti račun" : "",
+                            onClick: () => handleToggleActive(user)
+                          }, isActive ? "Onemogući" : "Omogući"),
+                          e("button", {
+                            type: "button",
+                            className: "action-danger",
+                            disabled: isSelf,
+                            title: isSelf ? "Ne možete obrisati vlastiti račun" : "",
+                            onClick: () => handleDelete(user)
+                          }, "Obriši")
+                        )
+                      )
+                    );
+                  })
+                )
+              )
+            )
+      ),
+      formUser && e(UserForm, {
+        user: formUser !== true ? formUser : null,
+        onClose: () => setFormUser(null),
+        onSave: async (form) => {
+          await onSaveUser(form);
+          setFormUser(null);
+        }
+      })
+    );
+  }
+
   function PortalApp() {
     const [clients, setClients] = React.useState([]);
     const [user, setUser] = React.useState(null);
@@ -1062,6 +1330,8 @@
     const [meetingModal, setMeetingModal] = React.useState(null);
     const [prefillClientId, setPrefillClientId] = React.useState(null);
     const [audits, setAudits] = React.useState([]);
+    const [users, setUsers] = React.useState([]);
+    const [usersError, setUsersError] = React.useState("");
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
@@ -1074,6 +1344,7 @@
       api("clients.php").then((data) => setClients(data.clients || [])).catch((error) => setLoadError(error.message));
       api("clients.php?resource=meetings").then((data) => setMeetings(data.meetings || [])).catch((error) => setLoadError(error.message));
       api("audits.php").then((data) => setAudits(data.audits || [])).catch((error) => console.error("Auditi se nisu učitali:", error.message));
+      api("users.php").then((data) => setUsers(data.users || [])).catch((error) => setUsersError(error.message));
     }, []);
 
     async function addClient(client) {
@@ -1143,6 +1414,44 @@
       });
     }
 
+    async function saveUser(form) {
+      const payload = form.id
+        ? { resource: "update", id: form.id, name: form.name, email: form.email }
+        : { name: form.name, email: form.email, password: form.password };
+      const data = await api("users.php", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      setUsers((current) => {
+        const withoutUser = current.filter((existing) => existing.id !== data.user.id);
+        return [...withoutUser, data.user].sort((first, second) => first.id - second.id);
+      });
+    }
+
+    async function toggleUserActive(id, active) {
+      const data = await api("users.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "active", id, active })
+      });
+      setUsers((current) => current.map((existing) => (existing.id === data.user.id ? data.user : existing)));
+    }
+
+    async function toggleUserRole(id, role) {
+      const data = await api("users.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "role", id, role })
+      });
+      setUsers((current) => current.map((existing) => (existing.id === data.user.id ? data.user : existing)));
+    }
+
+    async function deleteUser(id) {
+      await api("users.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "delete", id })
+      });
+      setUsers((current) => current.filter((existing) => existing.id !== id));
+    }
+
     async function logout() {
       await api("logout.php", { method: "POST", body: "{}" }).catch(() => {});
       window.location.replace("login.html");
@@ -1163,6 +1472,16 @@
           ? e(CompletedMeetingsSection, { meetings, onCreateFollowUp: (meeting) => openMeetingFormForClient(meeting.client_id) })
           : activeSection === "audits"
           ? e(AuditsSection, { clients, audits, onSaveAudit: saveAudit })
+          : activeSection === "users"
+          ? e(UsersSection, {
+              users,
+              currentUser: user,
+              loadError: usersError,
+              onSaveUser: saveUser,
+              onToggleActive: toggleUserActive,
+              onToggleRole: toggleUserRole,
+              onDeleteUser: deleteUser
+            })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },
           e("div", null,

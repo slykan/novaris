@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(120) NOT NULL,
     email VARCHAR(190) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'standard',
     active TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -77,10 +78,11 @@ UPDATE IGNORE users
 SET email = 'info@novaristech.hr'
 WHERE email = 'admin@novaris.hr';
 
-INSERT INTO users (name, email, password_hash)
+INSERT INTO users (name, email, password_hash, role)
 VALUES (
     'Administrator',
     'info@novaristech.hr',
-    '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6'
+    '$2y$12$6cptmlg20e3EHw48BeQMwOx7WxhN32bTjg3giZGHfjBVB/aStYDx6',
+    'standard'
 )
 ON DUPLICATE KEY UPDATE email = VALUES(email);
