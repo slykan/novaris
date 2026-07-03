@@ -69,6 +69,7 @@ function require_user(): array
         'id' => (int) $_SESSION['user_id'],
         'name' => (string) $_SESSION['user_name'],
         'email' => (string) $_SESSION['user_email'],
+        'role' => (string) ($_SESSION['user_role'] ?? 'standard'),
     ];
 }
 

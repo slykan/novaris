@@ -14,7 +14,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
 }
 
 $statement = database()->prepare(
-    'SELECT id, name, email, password_hash FROM users WHERE email = :email AND active = 1 LIMIT 1'
+    'SELECT id, name, email, password_hash, role FROM users WHERE email = :email AND active = 1 LIMIT 1'
 );
 $statement->execute(['email' => $email]);
 $user = $statement->fetch();
@@ -28,11 +28,13 @@ session_regenerate_id(true);
 $_SESSION['user_id'] = (int) $user['id'];
 $_SESSION['user_name'] = (string) $user['name'];
 $_SESSION['user_email'] = (string) $user['email'];
+$_SESSION['user_role'] = (string) $user['role'];
 
 respond([
     'user' => [
         'id' => (int) $user['id'],
         'name' => (string) $user['name'],
         'email' => (string) $user['email'],
+        'role' => (string) $user['role'],
     ],
 ]);
