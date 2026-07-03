@@ -42,3 +42,8 @@ next-env.d.ts
 
 # production portal secrets
 portal/api/config.php
+
+# ticket attachments (uploaded at runtime)
+portal/uploads/tickets/*
+!portal/uploads/tickets/.gitkeep
+!portal/uploads/tickets/.htaccess

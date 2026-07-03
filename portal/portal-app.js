@@ -16,6 +16,46 @@
   const DURATION_LABELS = { "30m": "30 min", "1h": "1 h", "2h": "2 h", "as_needed": "Po potrebi" };
   const REMINDER_OFFSET_LABELS = { "1h": "1 h ranije", "5h": "5 h ranije", "1d": "1 dan ranije" };
 
+  const TICKET_CATEGORIES = [
+    ["it", "IT / Infrastruktura"],
+    ["web", "Web"],
+    ["security", "Sigurnost"],
+    ["support", "Računalna podrška"],
+    ["other", "Ostalo"]
+  ];
+  const TICKET_CATEGORY_LABELS = Object.fromEntries(TICKET_CATEGORIES);
+
+  const TICKET_PRIORITIES = [
+    ["low", "Niska"],
+    ["medium", "Srednja"],
+    ["high", "Visoka"],
+    ["urgent", "Hitno"]
+  ];
+  const TICKET_PRIORITY_LABELS = Object.fromEntries(TICKET_PRIORITIES);
+
+  const TICKET_STATUS = {
+    open: { label: "Otvoren", className: "ticket-status-open" },
+    in_progress: { label: "U tijeku", className: "ticket-status-in-progress" },
+    resolved: { label: "Riješeno", className: "ticket-status-resolved" },
+    closed: { label: "Zatvoreno", className: "ticket-status-closed" }
+  };
+  const TICKET_STATUS_ORDER = ["open", "in_progress", "resolved", "closed"];
+  const TICKET_MAX_FILES = 5;
+  const TICKET_MAX_FILE_SIZE = 10 * 1024 * 1024;
+  const TICKET_ALLOWED_EXTENSIONS = ["pdf", "png", "jpg", "jpeg", "gif", "doc", "docx", "xls", "xlsx", "txt", "zip"];
+
+  function formatFileSize(bytes) {
+    const size = Number(bytes) || 0;
+    if (size < 1024) {
+      return size + " B";
+    }
+    const kb = size / 1024;
+    if (kb < 1024) {
+      return Math.max(1, Math.round(kb)) + " KB";
+    }
+    return (kb / 1024).toFixed(1) + " MB";
+  }
+
   const AUDIT_CHECKLIST = [
     {
       key: "it",
@@ -100,6 +140,23 @@
         "Content-Type": "application/json",
         ...(options && options.headers ? options.headers : {})
       }
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      window.location.replace("login.html");
+      throw new Error("Potrebna je prijava.");
+    }
+    if (!response.ok) {
+      throw new Error(data.message || "Zahtjev nije uspio.");
+    }
+    return data;
+  }
+
+  async function apiUpload(path, formData) {
+    const response = await fetch("api/" + path, {
+      method: "POST",
+      credentials: "same-origin",
+      body: formData
     });
     const data = await response.json().catch(() => ({}));
     if (response.status === 401) {
@@ -198,11 +255,19 @@
           e("span", { "aria-hidden": "true" }, "◉"),
           "Korisnici"
         ),
-        e("button", { type: "button", className: "nav-placeholder", disabled: true },
+        e("button", {
+          type: "button",
+          className: activeSection === "newTicket" ? "active" : "",
+          onClick: () => navigate("newTicket")
+        },
           e("span", { "aria-hidden": "true" }, "✎"),
           "Novi upit"
         ),
-        e("button", { type: "button", className: "nav-placeholder", disabled: true },
+        e("button", {
+          type: "button",
+          className: activeSection === "ticketsList" ? "active" : "",
+          onClick: () => navigate("ticketsList")
+        },
           e("span", { "aria-hidden": "true" }, "☰"),
           "Lista upita"
         )
@@ -1097,6 +1162,299 @@
     );
   }
 
+  function TicketForm({ profile, onClose, onSave }) {
+    const [form, setForm] = React.useState({ title: "", message: "", category: "", priority: "medium" });
+    const [files, setFiles] = React.useState([]);
+    const [error, setError] = React.useState("");
+    const [saving, setSaving] = React.useState(false);
+
+    function update(event) {
+      const { name, value } = event.target;
+      setForm((current) => ({ ...current, [name]: value }));
+    }
+
+    function addFiles(event) {
+      const selected = Array.from(event.target.files || []);
+      setError("");
+      setFiles((current) => {
+        const next = [...current];
+        for (const file of selected) {
+          if (next.length >= TICKET_MAX_FILES) {
+            setError("Najviše " + TICKET_MAX_FILES + " privitaka po upitu.");
+            break;
+          }
+          const extension = file.name.split(".").pop().toLowerCase();
+          if (!TICKET_ALLOWED_EXTENSIONS.includes(extension)) {
+            setError("Nedozvoljen tip datoteke: " + file.name);
+            continue;
+          }
+          if (file.size > TICKET_MAX_FILE_SIZE) {
+            setError("Datoteka \"" + file.name + "\" prelazi dozvoljenih 10 MB.");
+            continue;
+          }
+          next.push(file);
+        }
+        return next;
+      });
+      event.target.value = "";
+    }
+
+    function removeFile(index) {
+      setFiles((current) => current.filter((_, fileIndex) => fileIndex !== index));
+    }
+
+    async function submit(event) {
+      event.preventDefault();
+      if (!form.title.trim() || !form.message.trim() || !form.category) {
+        setError("Ispunite naslov, poruku i odaberite kategoriju.");
+        return;
+      }
+      setError("");
+      setSaving(true);
+      try {
+        await onSave(form, files);
+      } catch (saveError) {
+        setError(saveError.message);
+      } finally {
+        setSaving(false);
+      }
+    }
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Podrška"),
+          e("h1", null, "Novi upit"),
+          e("p", null, "Opišite problem ili zahtjev — javit ćemo vam se u najkraćem roku.")
+        ),
+        e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Natrag na popis")
+      ),
+      e("form", { className: "meeting-form-panel", onSubmit: submit, style: { marginTop: "28px" } },
+        profile && e("div", { className: "selected-client-card" },
+          e("div", { className: "selected-client-heading" },
+            e("span", null, (profile.name || "?").charAt(0).toUpperCase()),
+            e("div", null,
+              e("strong", null, profile.name),
+              e("small", null, profile.company_name || "—")
+            )
+          ),
+          e("dl", null,
+            e("div", null, e("dt", null, "Email"), e("dd", null, profile.email)),
+            e("div", null, e("dt", null, "Telefon"), e("dd", null, profile.phone || "—")),
+            e("div", null, e("dt", null, "OIB"), e("dd", null, profile.oib || "—"))
+          )
+        ),
+        e("div", { className: "meeting-form-grid" },
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "ticketCategory" }, "Kategorija *"),
+            e("select", { id: "ticketCategory", name: "category", value: form.category, onChange: update },
+              e("option", { value: "" }, "Odaberite kategoriju"),
+              TICKET_CATEGORIES.map(([value, label]) => e("option", { key: value, value }, label))
+            )
+          ),
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "ticketPriority" }, "Prioritet *"),
+            e("select", { id: "ticketPriority", name: "priority", value: form.priority, onChange: update },
+              TICKET_PRIORITIES.map(([value, label]) => e("option", { key: value, value }, label))
+            )
+          ),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "ticketTitle" }, "Naslov *"),
+            e("input", { id: "ticketTitle", name: "title", value: form.title, onChange: update, placeholder: "Kratak opis problema", autoFocus: true })
+          ),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "ticketMessage" }, "Poruka *"),
+            e("textarea", {
+              id: "ticketMessage",
+              name: "message",
+              value: form.message,
+              onChange: update,
+              placeholder: "Detaljno opišite problem ili zahtjev...",
+              style: { minHeight: "160px" }
+            })
+          ),
+          e("div", { className: "form-field full upload-field" },
+            e("label", null, "Privitci"),
+            e("label", { className: "upload-dropzone" },
+              e("input", { type: "file", multiple: true, onChange: addFiles }),
+              "Odaberite datoteke (PDF, slike, dokumenti — do 10 MB po datoteci, najviše " + TICKET_MAX_FILES + ")"
+            ),
+            files.length > 0 && e("ul", { className: "upload-list" },
+              files.map((file, index) =>
+                e("li", { key: file.name + index },
+                  e("span", null, file.name),
+                  e("span", { style: { display: "flex", alignItems: "center", gap: "10px" } },
+                    e("small", null, formatFileSize(file.size)),
+                    e("button", { type: "button", className: "upload-remove", onClick: () => removeFile(index), "aria-label": "Ukloni" }, "×")
+                  )
+                )
+              )
+            )
+          )
+        ),
+        error && e("p", { className: "form-error", role: "alert" }, error),
+        e("div", { className: "modal-actions" },
+          e("button", { type: "button", className: "portal-secondary", onClick: onClose }, "Odustani"),
+          e("button", { type: "submit", className: "portal-primary", disabled: saving }, saving ? "Slanje..." : "Pošalji upit")
+        )
+      )
+    );
+  }
+
+  function TicketDetailModal({ ticket, isAdmin, onClose, onChangeStatus }) {
+    const [savingStatus, setSavingStatus] = React.useState(false);
+    const [statusError, setStatusError] = React.useState("");
+    const statusMeta = TICKET_STATUS[ticket.status];
+
+    async function chooseStatus(status) {
+      if (status === ticket.status) {
+        return;
+      }
+      setStatusError("");
+      setSavingStatus(true);
+      try {
+        await onChangeStatus(ticket.id, status);
+      } catch (error) {
+        setStatusError(error.message);
+      } finally {
+        setSavingStatus(false);
+      }
+    }
+
+    return e("div", { className: "modal-backdrop", onMouseDown: (event) => event.target === event.currentTarget && onClose() },
+      e("section", { className: "client-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "ticket-detail-title" },
+        e("div", { className: "modal-heading" },
+          e("div", null,
+            e("span", { className: "eyebrow" }, TICKET_CATEGORY_LABELS[ticket.category] || ticket.category),
+            e("h2", { id: "ticket-detail-title" }, ticket.title),
+            e("p", null, new Date(ticket.created_at).toLocaleString("hr-HR"))
+          ),
+          e("button", { type: "button", className: "modal-close", onClick: onClose, "aria-label": "Zatvori" }, "×")
+        ),
+        e("div", { className: "ticket-detail-body" },
+          e("div", { className: "ticket-detail-badges" },
+            e("span", { className: "priority-badge priority-" + ticket.priority }, TICKET_PRIORITY_LABELS[ticket.priority] || ticket.priority),
+            statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)
+          ),
+          e("div", { className: "selected-client-card" },
+            e("div", { className: "selected-client-heading" },
+              e("span", null, (ticket.user_name || "?").charAt(0).toUpperCase()),
+              e("div", null,
+                e("strong", null, ticket.user_name),
+                e("small", null, ticket.user_company_name || "—")
+              )
+            ),
+            e("dl", null,
+              e("div", null, e("dt", null, "Email"), e("dd", null, ticket.user_email)),
+              e("div", null, e("dt", null, "Telefon"), e("dd", null, ticket.user_phone || "—")),
+              e("div", null, e("dt", null, "OIB"), e("dd", null, ticket.user_oib || "—"))
+            )
+          ),
+          e("div", { className: "ticket-message" }, ticket.message),
+          ticket.attachments && ticket.attachments.length > 0 && e("div", { className: "ticket-attachments" },
+            e("h3", null, "Privitci"),
+            e("ul", { className: "upload-list" },
+              ticket.attachments.map((attachment) =>
+                e("li", { key: attachment.id },
+                  e("a", { href: "api/ticket-attachment.php?id=" + attachment.id, target: "_blank", rel: "noreferrer" }, attachment.file_name),
+                  e("small", null, formatFileSize(attachment.file_size))
+                )
+              )
+            )
+          ),
+          isAdmin && e("div", { className: "ticket-status-panel" },
+            e("h3", null, "Promijeni status"),
+            statusError && e("p", { className: "form-error", role: "alert" }, statusError),
+            e("div", { className: "status-options" },
+              TICKET_STATUS_ORDER.map((statusKey) =>
+                e("button", {
+                  key: statusKey,
+                  type: "button",
+                  className: "status-choice " + TICKET_STATUS[statusKey].className,
+                  disabled: savingStatus || ticket.status === statusKey,
+                  onClick: () => chooseStatus(statusKey)
+                }, TICKET_STATUS[statusKey].label)
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+  function TicketsListSection({ tickets, isAdmin, loadError, onOpenForm, onChangeStatus }) {
+    const [activeTicket, setActiveTicket] = React.useState(null);
+
+    return e(React.Fragment, null,
+      e("header", { className: "portal-header" },
+        e("div", null,
+          e("span", { className: "eyebrow" }, "Poslovni portal"),
+          e("h1", null, "Lista upita"),
+          e("p", null, isAdmin ? "Pregled svih zaprimljenih upita za podršku." : "Pregled vaših upita za podršku.")
+        ),
+        e("button", { type: "button", className: "portal-primary add-client", onClick: onOpenForm },
+          e("span", { "aria-hidden": "true" }, "+"),
+          "Novi upit"
+        )
+      ),
+      loadError && e("p", { className: "form-error", role: "alert" }, loadError),
+      e("section", { className: "clients-panel" },
+        e("div", { className: "clients-toolbar" },
+          e("div", null,
+            e("h2", null, "Zaprimljeni upiti"),
+            e("p", null, tickets.length + (tickets.length === 1 ? " upit" : " upita"))
+          )
+        ),
+        tickets.length === 0
+          ? e("div", { className: "clients-empty" },
+              e("span", { "aria-hidden": "true" }, "✎"),
+              e("h3", null, "Još nema upita"),
+              e("p", null, "Novi upiti pojavit će se ovdje.")
+            )
+          : e("div", { className: "clients-table-wrap" },
+              e("table", { className: "clients-table" },
+                e("thead", null,
+                  e("tr", null,
+                    e("th", null, "Datum i sat"),
+                    e("th", null, "Naslov"),
+                    isAdmin && e("th", null, "Korisnik"),
+                    e("th", null, "Kategorija"),
+                    e("th", null, "Prioritet"),
+                    e("th", null, "Status"),
+                    e("th", null, "Akcije")
+                  )
+                ),
+                e("tbody", null,
+                  tickets.map((ticket) => {
+                    const statusMeta = TICKET_STATUS[ticket.status];
+                    return e("tr", { key: ticket.id },
+                      e("td", null, new Date(ticket.created_at).toLocaleString("hr-HR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })),
+                      e("td", null, ticket.title),
+                      isAdmin && e("td", null, ticket.user_name),
+                      e("td", null, TICKET_CATEGORY_LABELS[ticket.category] || ticket.category),
+                      e("td", null, e("span", { className: "priority-badge priority-" + ticket.priority }, TICKET_PRIORITY_LABELS[ticket.priority] || ticket.priority)),
+                      e("td", null, statusMeta && e("span", { className: "status-badge " + statusMeta.className }, statusMeta.label)),
+                      e("td", null,
+                        e("button", { type: "button", className: "meeting-delay", onClick: () => setActiveTicket(ticket) }, "Pregledaj")
+                      )
+                    );
+                  })
+                )
+              )
+            )
+      ),
+      activeTicket && e(TicketDetailModal, {
+        ticket: activeTicket,
+        isAdmin,
+        onClose: () => setActiveTicket(null),
+        onChangeStatus: async (id, status) => {
+          const updated = await onChangeStatus(id, status);
+          setActiveTicket(updated);
+        }
+      })
+    );
+  }
+
   function UserForm({ user, clients, onClose, onSave }) {
     const isEditing = Boolean(user);
     const [form, setForm] = React.useState(user
@@ -1412,12 +1770,15 @@
     const [audits, setAudits] = React.useState([]);
     const [users, setUsers] = React.useState([]);
     const [usersError, setUsersError] = React.useState("");
+    const [tickets, setTickets] = React.useState([]);
+    const [ticketsError, setTicketsError] = React.useState("");
 
     const normalizedQuery = query.trim().toLowerCase();
     const visibleClients = clients.filter((client) =>
       [client.company_name, client.oib, client.contact_name, client.email, client.phone]
         .some((value) => String(value || "").toLowerCase().includes(normalizedQuery))
     );
+    const currentUserProfile = users.find((existing) => user && existing.id === user.id) || user;
 
     React.useEffect(() => {
       api("session.php").then((data) => setUser(data.user)).catch((error) => setLoadError(error.message));
@@ -1425,6 +1786,7 @@
       api("clients.php?resource=meetings").then((data) => setMeetings(data.meetings || [])).catch((error) => setLoadError(error.message));
       api("audits.php").then((data) => setAudits(data.audits || [])).catch((error) => console.error("Auditi se nisu učitali:", error.message));
       api("users.php").then((data) => setUsers(data.users || [])).catch((error) => setUsersError(error.message));
+      api("tickets.php").then((data) => setTickets(data.tickets || [])).catch((error) => setTicketsError(error.message));
     }, []);
 
     async function saveClient(client) {
@@ -1535,6 +1897,27 @@
       setUsers((current) => current.filter((existing) => existing.id !== id));
     }
 
+    async function saveTicket(form, files) {
+      const formData = new FormData();
+      formData.append("title", form.title.trim());
+      formData.append("message", form.message.trim());
+      formData.append("category", form.category);
+      formData.append("priority", form.priority);
+      files.forEach((file) => formData.append("attachments[]", file));
+      const data = await apiUpload("tickets.php", formData);
+      setTickets((current) => [data.ticket, ...current]);
+      setActiveSection("ticketsList");
+    }
+
+    async function changeTicketStatus(id, status) {
+      const data = await api("tickets.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "status", id, status })
+      });
+      setTickets((current) => current.map((ticket) => (ticket.id === data.ticket.id ? data.ticket : ticket)));
+      return data.ticket;
+    }
+
     async function logout() {
       await api("logout.php", { method: "POST", body: "{}" }).catch(() => {});
       window.location.replace("login.html");
@@ -1565,6 +1948,20 @@
               onToggleActive: toggleUserActive,
               onToggleRole: toggleUserRole,
               onDeleteUser: deleteUser
+            })
+          : activeSection === "newTicket"
+          ? e(TicketForm, {
+              profile: currentUserProfile,
+              onClose: () => setActiveSection("ticketsList"),
+              onSave: saveTicket
+            })
+          : activeSection === "ticketsList"
+          ? e(TicketsListSection, {
+              tickets,
+              isAdmin: Boolean(user && user.role === "admin"),
+              loadError: ticketsError,
+              onOpenForm: () => setActiveSection("newTicket"),
+              onChangeStatus: changeTicketStatus
             })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },

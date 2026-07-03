@@ -77,6 +77,36 @@ CREATE TABLE IF NOT EXISTS audits (
     INDEX audits_client_index (client_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS tickets (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(190) NOT NULL,
+    message TEXT NOT NULL,
+    category VARCHAR(30) NOT NULL,
+    priority VARCHAR(20) NOT NULL DEFAULT 'medium',
+    status VARCHAR(20) NOT NULL DEFAULT 'open',
+    created_by BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT tickets_created_by_foreign
+        FOREIGN KEY (created_by) REFERENCES users(id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    INDEX tickets_status_index (status),
+    INDEX tickets_created_by_index (created_by)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS ticket_attachments (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ticket_id BIGINT UNSIGNED NOT NULL,
+    file_name VARCHAR(190) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    file_size INT UNSIGNED NOT NULL,
+    mime_type VARCHAR(120) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT ticket_attachments_ticket_foreign
+        FOREIGN KEY (ticket_id) REFERENCES tickets(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 UPDATE IGNORE users
 SET email = 'info@novaristech.hr'
 WHERE email = 'admin@novaris.hr';
