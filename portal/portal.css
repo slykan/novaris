@@ -617,7 +617,19 @@ a { color: inherit; text-decoration: none; }
 .ticket-detail-body { display: grid; gap: 22px; padding: 26px 30px 30px; }
 .ticket-detail-badges { display: flex; gap: 10px; }
 .ticket-message { padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; color: #3c4b5f; line-height: 1.6; white-space: pre-wrap; }
-.ticket-attachments h3, .ticket-status-panel h3 { margin: 0 0 12px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+.ticket-attachments h3, .ticket-status-panel h3, .ticket-thread-panel h3 { margin: 0 0 12px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+
+.ticket-thread-panel { display: grid; gap: 16px; padding-top: 20px; border-top: 1px solid var(--line); }
+.ticket-thread-empty { margin: 0; color: var(--muted); font-size: 13px; }
+.ticket-thread { display: grid; gap: 12px; }
+.ticket-reply { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: #fafcff; }
+.ticket-reply.from-admin { background: #ebf5ff; border-color: #d7ebfb; }
+.ticket-reply-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+.ticket-reply-message { color: #3c4b5f; line-height: 1.55; white-space: pre-wrap; font-size: 14px; }
+.ticket-reply-form { display: grid; gap: 10px; }
+.ticket-reply-form textarea { min-height: 90px; resize: vertical; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font: inherit; }
+.ticket-reply-form label { color: #26364b; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.ticket-reply-form .modal-actions { padding-top: 0; }
 
 @media (max-width: 1024px) {
   .portal-shell { grid-template-columns: 1fr; }
@@ -702,4 +714,5 @@ a { color: inherit; text-decoration: none; }
   .audit-row { grid-template-columns: 1fr; gap: 8px; }
   .audit-item { grid-template-columns: 1fr; }
   .audit-form-panel { padding: 22px; }
+  .ticket-reply-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
 }

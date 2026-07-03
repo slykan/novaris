@@ -44,6 +44,21 @@
   const TICKET_MAX_FILE_SIZE = 10 * 1024 * 1024;
   const TICKET_ALLOWED_EXTENSIONS = ["pdf", "png", "jpg", "jpeg", "gif", "doc", "docx", "xls", "xlsx", "txt", "zip"];
 
+  function formatElapsedMinutes(fromDate, toDate) {
+    const minutes = Math.max(0, Math.round((new Date(toDate) - new Date(fromDate)) / 60000));
+    if (minutes < 60) {
+      return minutes + " min";
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours < 24) {
+      return hours + " h" + (remainingMinutes ? " " + remainingMinutes + " min" : "");
+    }
+    const days = Math.floor(hours / 24);
+    const remainingHours = hours % 24;
+    return days + " d" + (remainingHours ? " " + remainingHours + " h" : "");
+  }
+
   function formatFileSize(bytes) {
     const size = Number(bytes) || 0;
     if (size < 1024) {
@@ -1301,9 +1316,12 @@
     );
   }
 
-  function TicketDetailModal({ ticket, isAdmin, onClose, onChangeStatus }) {
+  function TicketDetailModal({ ticket, isAdmin, onClose, onChangeStatus, onReply }) {
     const [savingStatus, setSavingStatus] = React.useState(false);
     const [statusError, setStatusError] = React.useState("");
+    const [replyMessage, setReplyMessage] = React.useState("");
+    const [replyError, setReplyError] = React.useState("");
+    const [sendingReply, setSendingReply] = React.useState(false);
     const statusMeta = TICKET_STATUS[ticket.status];
 
     async function chooseStatus(status) {
@@ -1318,6 +1336,24 @@
         setStatusError(error.message);
       } finally {
         setSavingStatus(false);
+      }
+    }
+
+    async function submitReply(event) {
+      event.preventDefault();
+      if (!replyMessage.trim()) {
+        setReplyError("Unesite poruku odgovora.");
+        return;
+      }
+      setReplyError("");
+      setSendingReply(true);
+      try {
+        await onReply(ticket.id, replyMessage.trim());
+        setReplyMessage("");
+      } catch (error) {
+        setReplyError(error.message);
+      } finally {
+        setSendingReply(false);
       }
     }
 
@@ -1376,13 +1412,45 @@
                 }, TICKET_STATUS[statusKey].label)
               )
             )
+          ),
+          e("div", { className: "ticket-thread-panel" },
+            e("h3", null, "Razgovor"),
+            (!ticket.replies || ticket.replies.length === 0)
+              ? e("p", { className: "ticket-thread-empty" }, "Još nema odgovora na ovaj upit.")
+              : e("div", { className: "ticket-thread" },
+                  ticket.replies.map((reply) => {
+                    const fromAdmin = reply.user_role === "admin";
+                    return e("div", { key: reply.id, className: "ticket-reply" + (fromAdmin ? " from-admin" : "") },
+                      e("div", { className: "ticket-reply-meta" },
+                        e("span", null, fromAdmin ? "Novaris Tech podrška" : reply.user_name),
+                        e("span", null, new Date(reply.created_at).toLocaleString("hr-HR") + " · odgovoreno nakon " + formatElapsedMinutes(ticket.created_at, reply.created_at))
+                      ),
+                      e("div", { className: "ticket-reply-message" }, reply.message)
+                    );
+                  })
+                ),
+            e("form", { className: "ticket-reply-form", onSubmit: submitReply },
+              e("label", { htmlFor: "ticketReplyMessage" }, "Vaš odgovor"),
+              e("textarea", {
+                id: "ticketReplyMessage",
+                value: replyMessage,
+                onChange: (event) => setReplyMessage(event.target.value),
+                placeholder: "Napišite odgovor..."
+              }),
+              replyError && e("p", { className: "form-error", role: "alert" }, replyError),
+              e("div", { className: "modal-actions" },
+                e("button", { type: "submit", className: "portal-primary", disabled: sendingReply },
+                  sendingReply ? "Slanje..." : "Pošalji odgovor"
+                )
+              )
+            )
           )
         )
       )
     );
   }
 
-  function TicketsListSection({ tickets, isAdmin, loadError, onOpenForm, onChangeStatus }) {
+  function TicketsListSection({ tickets, isAdmin, loadError, onOpenForm, onChangeStatus, onReply }) {
     const [activeTicket, setActiveTicket] = React.useState(null);
 
     return e(React.Fragment, null,
@@ -1449,6 +1517,10 @@
         onClose: () => setActiveTicket(null),
         onChangeStatus: async (id, status) => {
           const updated = await onChangeStatus(id, status);
+          setActiveTicket(updated);
+        },
+        onReply: async (id, message) => {
+          const updated = await onReply(id, message);
           setActiveTicket(updated);
         }
       })
@@ -1918,6 +1990,15 @@
       return data.ticket;
     }
 
+    async function replyToTicket(id, message) {
+      const data = await api("tickets.php", {
+        method: "POST",
+        body: JSON.stringify({ resource: "reply", id, message })
+      });
+      setTickets((current) => current.map((ticket) => (ticket.id === data.ticket.id ? data.ticket : ticket)));
+      return data.ticket;
+    }
+
     async function logout() {
       await api("logout.php", { method: "POST", body: "{}" }).catch(() => {});
       window.location.replace("login.html");
@@ -1961,7 +2042,8 @@
               isAdmin: Boolean(user && user.role === "admin"),
               loadError: ticketsError,
               onOpenForm: () => setActiveSection("newTicket"),
-              onChangeStatus: changeTicketStatus
+              onChangeStatus: changeTicketStatus,
+              onReply: replyToTicket
             })
           : e(React.Fragment, null,
         e("header", { className: "portal-header" },

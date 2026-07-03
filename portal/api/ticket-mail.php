@@ -91,3 +91,36 @@ function ticket_admin_created_email(array $ticket): string
 </html>
 HTML;
 }
+
+function ticket_reply_email(array $ticket, string $replyMessage, string $replierName, bool $isAdminReply): string
+{
+    $title = meeting_mail_escape($ticket['title']);
+    $body = meeting_mail_linkify(nl2br(meeting_mail_escape($replyMessage)));
+    $name = meeting_mail_escape($replierName);
+    $heading = $isAdminReply ? 'Odgovor na vaš upit' : 'Novi odgovor korisnika';
+    $intro = $isAdminReply
+        ? 'Novaris Tech je odgovorio na vaš upit'
+        : $name . ' je odgovorio/la na upit';
+    $header = meeting_mail_header('Novaris Tech', $heading);
+    $footer = meeting_mail_footer();
+
+    return <<<HTML
+<!doctype html>
+<html lang="hr">
+<body style="margin:0;background:#eef3f8;font-family:Arial,sans-serif;color:#132238">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:36px 16px">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:12px;overflow:hidden">
+{$header}
+        <tr><td style="padding:30px 34px">
+          <p style="margin:0 0 22px;color:#657386">{$intro} <strong style="color:#132238">{$title}</strong>.</p>
+          <div style="background:#ebf5ff;border-left:4px solid #1596ff;border-radius:0 8px 8px 0;padding:14px 18px;color:#3c4b5f;line-height:1.6">{$body}</div>
+        </td></tr>
+{$footer}
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+HTML;
+}

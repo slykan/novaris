@@ -34,6 +34,51 @@ function notify_ticket_created(array $ticket): void
     }
 }
 
+function notify_ticket_reply(array $ticket, string $replyMessage, array $replier): void
+{
+    $isAdminReply = $replier['role'] === 'admin';
+
+    try {
+        $contactPath = getenv('NOVARIS_CONTACT') ?: __DIR__ . '/contact.php';
+        $smtp = smtp_credentials($contactPath);
+
+        if ($isAdminReply) {
+            if (filter_var($ticket['user_email'], FILTER_VALIDATE_EMAIL)) {
+                send_smtp(
+                    $smtp,
+                    $ticket['user_email'],
+                    sprintf('Odgovor na upit: %s', $ticket['title']),
+                    ticket_reply_email($ticket, $replyMessage, $replier['name'], true),
+                    $ticket['user_name']
+                );
+            }
+        } else {
+            send_smtp(
+                $smtp,
+                'info@novaristech.hr',
+                sprintf('Novi odgovor na upit: %s (%s)', $ticket['title'], $replier['name']),
+                ticket_reply_email($ticket, $replyMessage, $replier['name'], false)
+            );
+        }
+    } catch (Throwable $error) {
+        error_log('Slanje obavijesti o odgovoru nije uspjelo: ' . $error->getMessage());
+    }
+}
+
+function ticket_replies(int $ticketId): array
+{
+    $statement = database()->prepare(
+        'SELECT ticket_replies.id, ticket_replies.message, ticket_replies.created_at,
+                users.id AS user_id, users.name AS user_name, users.role AS user_role
+         FROM ticket_replies
+         INNER JOIN users ON users.id = ticket_replies.user_id
+         WHERE ticket_replies.ticket_id = :id
+         ORDER BY ticket_replies.id ASC'
+    );
+    $statement->execute(['id' => $ticketId]);
+    return $statement->fetchAll();
+}
+
 function ticket_attachments(int $ticketId): array
 {
     $statement = database()->prepare(
@@ -58,6 +103,7 @@ function ticket_row(int $id): array|false
     $ticket = $statement->fetch();
     if ($ticket) {
         $ticket['attachments'] = ticket_attachments($id);
+        $ticket['replies'] = ticket_replies($id);
     }
     return $ticket;
 }
@@ -125,8 +171,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         foreach ($attachmentStatement->fetchAll() as $attachment) {
             $attachmentsByTicket[$attachment['ticket_id']][] = $attachment;
         }
+
+        $replyStatement = database()->prepare(
+            "SELECT ticket_replies.id, ticket_replies.ticket_id, ticket_replies.message, ticket_replies.created_at,
+                    users.id AS user_id, users.name AS user_name, users.role AS user_role
+             FROM ticket_replies
+             INNER JOIN users ON users.id = ticket_replies.user_id
+             WHERE ticket_replies.ticket_id IN ($placeholders) ORDER BY ticket_replies.id ASC"
+        );
+        $replyStatement->execute($ids);
+        $repliesByTicket = [];
+        foreach ($replyStatement->fetchAll() as $reply) {
+            $repliesByTicket[$reply['ticket_id']][] = $reply;
+        }
+
         foreach ($tickets as &$ticket) {
             $ticket['attachments'] = $attachmentsByTicket[$ticket['id']] ?? [];
+            $ticket['replies'] = $repliesByTicket[$ticket['id']] ?? [];
         }
         unset($ticket);
     }
@@ -143,6 +204,37 @@ $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 $isMultipart = stripos($contentType, 'multipart/form-data') === 0;
 $data = $isMultipart ? $_POST : request_data();
 $resource = (string) ($data['resource'] ?? 'create');
+
+if ($resource === 'reply') {
+    $id = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT);
+    $replyMessage = trim((string) ($data['message'] ?? ''));
+    if (!$id || $replyMessage === '') {
+        respond(['message' => 'Unesite poruku odgovora.'], 422);
+    }
+
+    $ownerStatement = database()->prepare('SELECT created_by FROM tickets WHERE id = :id');
+    $ownerStatement->execute(['id' => $id]);
+    $owner = $ownerStatement->fetch();
+    if (!$owner) {
+        respond(['message' => 'Upit ne postoji.'], 404);
+    }
+    if ($user['role'] !== 'admin' && (int) $owner['created_by'] !== $user['id']) {
+        respond(['message' => 'Nemate pristup ovom upitu.'], 403);
+    }
+
+    $statement = database()->prepare(
+        'INSERT INTO ticket_replies (ticket_id, user_id, message) VALUES (:ticket_id, :user_id, :message)'
+    );
+    $statement->execute(['ticket_id' => $id, 'user_id' => $user['id'], 'message' => $replyMessage]);
+    database()->prepare('UPDATE tickets SET updated_at = NOW() WHERE id = :id')->execute(['id' => $id]);
+
+    $updated = ticket_row($id);
+    if (!$updated) {
+        respond(['message' => 'Upit ne postoji.'], 404);
+    }
+    notify_ticket_reply($updated, $replyMessage, $user);
+    respond(['ticket' => $updated]);
+}
 
 if ($resource === 'status') {
     if ($user['role'] !== 'admin') {
