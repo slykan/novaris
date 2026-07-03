@@ -74,6 +74,9 @@ try {
 
     $userColumns = [
         'role' => "VARCHAR(20) NOT NULL DEFAULT 'standard' AFTER password_hash",
+        'company_name' => 'VARCHAR(190) NULL AFTER role',
+        'oib' => 'CHAR(11) NULL AFTER company_name',
+        'phone' => 'VARCHAR(60) NULL AFTER oib',
     ];
 
     foreach ($userColumns as $column => $definition) {

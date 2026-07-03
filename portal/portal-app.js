@@ -1088,8 +1088,8 @@
   function UserForm({ user, clients, onClose, onSave }) {
     const isEditing = Boolean(user);
     const [form, setForm] = React.useState(user
-      ? { id: user.id, name: user.name, email: user.email, password: "" }
-      : { name: "", email: "", password: "" }
+      ? { id: user.id, name: user.name, email: user.email, companyName: user.company_name || "", oib: user.oib || "", phone: user.phone || "", password: "" }
+      : { name: "", email: "", companyName: "", oib: "", phone: "", password: "" }
     );
     const [clientId, setClientId] = React.useState("");
     const [error, setError] = React.useState("");
@@ -1107,7 +1107,14 @@
       setClientId(id);
       const client = (clients || []).find((candidate) => String(candidate.id) === id);
       if (client) {
-        setForm((current) => ({ ...current, name: client.contact_name, email: client.email }));
+        setForm((current) => ({
+          ...current,
+          name: client.contact_name,
+          email: client.email,
+          companyName: client.company_name,
+          oib: client.oib,
+          phone: client.phone || ""
+        }));
       }
     }
 
@@ -1141,6 +1148,10 @@
       }
       if (isEditing && form.password && form.password.trim().length < 8) {
         setError("Nova lozinka mora imati najmanje 8 znakova.");
+        return;
+      }
+      if (form.oib.trim() && !/^\d{11}$/.test(form.oib.trim())) {
+        setError("OIB mora sadržavati točno 11 znamenki.");
         return;
       }
       setError("");
@@ -1183,6 +1194,18 @@
           e("div", { className: "form-field full" },
             e("label", { htmlFor: "userEmail" }, "Email *"),
             e("input", { id: "userEmail", name: "email", type: "email", value: form.email, onChange: update, placeholder: "ime@novaristech.hr" })
+          ),
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "userCompany" }, "Tvrtka"),
+            e("input", { id: "userCompany", name: "companyName", value: form.companyName, onChange: update, placeholder: "npr. Novaris d.o.o." })
+          ),
+          e("div", { className: "form-field" },
+            e("label", { htmlFor: "userOib" }, "OIB"),
+            e("input", { id: "userOib", name: "oib", value: form.oib, onChange: update, inputMode: "numeric", maxLength: 11, placeholder: "12345678901" })
+          ),
+          e("div", { className: "form-field full" },
+            e("label", { htmlFor: "userPhone" }, "Kontakt telefon"),
+            e("input", { id: "userPhone", name: "phone", type: "tel", value: form.phone, onChange: update, placeholder: "+385 91 234 5678" })
           ),
           e("div", { className: "form-field full" },
             e("label", { htmlFor: "userPassword" }, isEditing ? "Nova lozinka" : "Lozinka *"),
@@ -1285,6 +1308,9 @@
                   e("tr", null,
                     e("th", null, "Ime"),
                     e("th", null, "Email"),
+                    e("th", null, "Tvrtka"),
+                    e("th", null, "OIB"),
+                    e("th", null, "Kontakt telefon"),
                     e("th", null, "Grupa"),
                     e("th", null, "Status"),
                     e("th", null, "Akcije")
@@ -1304,6 +1330,9 @@
                         )
                       ),
                       e("td", null, e("a", { href: "mailto:" + user.email }, user.email)),
+                      e("td", null, user.company_name || "—"),
+                      e("td", { className: "mono" }, user.oib || "—"),
+                      e("td", null, user.phone || "—"),
                       e("td", null,
                         e("span", { className: "status-badge " + (isAdmin ? "status-follow-up" : "status-neutral") },
                           isAdmin ? "Administrator" : "Standard"
@@ -1458,8 +1487,8 @@
 
     async function saveUser(form) {
       const payload = form.id
-        ? { resource: "update", id: form.id, name: form.name, email: form.email, password: form.password || undefined }
-        : { name: form.name, email: form.email, password: form.password };
+        ? { resource: "update", id: form.id, name: form.name, email: form.email, companyName: form.companyName, oib: form.oib, phone: form.phone, password: form.password || undefined }
+        : { name: form.name, email: form.email, companyName: form.companyName, oib: form.oib, phone: form.phone, password: form.password };
       const data = await api("users.php", {
         method: "POST",
         body: JSON.stringify(payload)

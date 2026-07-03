@@ -8,15 +8,32 @@ $currentUser = require_user();
 function user_row(int $id): array|false
 {
     $statement = database()->prepare(
-        'SELECT id, name, email, role, active, created_at FROM users WHERE id = :id'
+        'SELECT id, name, email, role, company_name, oib, phone, active, created_at FROM users WHERE id = :id'
     );
     $statement->execute(['id' => $id]);
     return $statement->fetch();
 }
 
+function contact_fields(array $data): array
+{
+    $companyName = trim((string) ($data['companyName'] ?? ''));
+    $oib = trim((string) ($data['oib'] ?? ''));
+    $phone = trim((string) ($data['phone'] ?? ''));
+
+    if ($oib !== '' && !preg_match('/^\d{11}$/', $oib)) {
+        respond(['message' => 'OIB mora sadržavati točno 11 znamenki.'], 422);
+    }
+
+    return [
+        'company_name' => $companyName !== '' ? $companyName : null,
+        'oib' => $oib !== '' ? $oib : null,
+        'phone' => $phone !== '' ? $phone : null,
+    ];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $statement = database()->query(
-        'SELECT id, name, email, role, active, created_at FROM users ORDER BY created_at ASC, id ASC'
+        'SELECT id, name, email, role, company_name, oib, phone, active, created_at FROM users ORDER BY created_at ASC, id ASC'
     );
     respond(['users' => $statement->fetchAll()]);
 }
@@ -107,20 +124,28 @@ if ($resource === 'update') {
         respond(['message' => 'Nova lozinka mora imati najmanje 8 znakova.'], 422);
     }
 
+    $contact = contact_fields($data);
+
     try {
         if ($password !== '') {
             $statement = database()->prepare(
-                'UPDATE users SET name = :name, email = :email, password_hash = :password_hash WHERE id = :id'
+                'UPDATE users SET name = :name, email = :email, password_hash = :password_hash,
+                        company_name = :company_name, oib = :oib, phone = :phone
+                 WHERE id = :id'
             );
             $statement->execute([
                 'name' => $name,
                 'email' => $email,
                 'password_hash' => password_hash($password, PASSWORD_DEFAULT),
                 'id' => $id,
-            ]);
+            ] + $contact);
         } else {
-            $statement = database()->prepare('UPDATE users SET name = :name, email = :email WHERE id = :id');
-            $statement->execute(['name' => $name, 'email' => $email, 'id' => $id]);
+            $statement = database()->prepare(
+                'UPDATE users SET name = :name, email = :email,
+                        company_name = :company_name, oib = :oib, phone = :phone
+                 WHERE id = :id'
+            );
+            $statement->execute(['name' => $name, 'email' => $email, 'id' => $id] + $contact);
         }
     } catch (PDOException $error) {
         if ((int) $error->getCode() === 23000) {
@@ -147,16 +172,19 @@ if (strlen($password) < 8) {
     respond(['message' => 'Lozinka mora imati najmanje 8 znakova.'], 422);
 }
 
+$contact = contact_fields($data);
+
 try {
     $statement = database()->prepare(
-        'INSERT INTO users (name, email, password_hash, role) VALUES (:name, :email, :password_hash, :role)'
+        'INSERT INTO users (name, email, password_hash, role, company_name, oib, phone)
+         VALUES (:name, :email, :password_hash, :role, :company_name, :oib, :phone)'
     );
     $statement->execute([
         'name' => $name,
         'email' => $email,
         'password_hash' => password_hash($password, PASSWORD_DEFAULT),
         'role' => 'standard',
-    ]);
+    ] + $contact);
 } catch (PDOException $error) {
     if ((int) $error->getCode() === 23000) {
         respond(['message' => 'Korisnik s tom email adresom već postoji.'], 409);
