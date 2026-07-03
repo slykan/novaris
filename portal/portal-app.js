@@ -188,15 +188,23 @@
             e("span", { "aria-hidden": "true" }, "◈"),
             "Audit"
           ),
-          e("span", { className: "portal-nav-heading" }, "Podrška"),
-          e("button", {
-            type: "button",
-            className: activeSection === "users" ? "active" : "",
-            onClick: () => navigate("users")
-          },
-            e("span", { "aria-hidden": "true" }, "◉"),
-            "Korisnici"
-          )
+        ),
+        e("span", { className: "portal-nav-heading" }, "Podrška"),
+        user && user.role === "admin" && e("button", {
+          type: "button",
+          className: activeSection === "users" ? "active" : "",
+          onClick: () => navigate("users")
+        },
+          e("span", { "aria-hidden": "true" }, "◉"),
+          "Korisnici"
+        ),
+        e("button", { type: "button", className: "nav-placeholder", disabled: true },
+          e("span", { "aria-hidden": "true" }, "✎"),
+          "Dodaj novi upit"
+        ),
+        e("button", { type: "button", className: "nav-placeholder", disabled: true },
+          e("span", { "aria-hidden": "true" }, "☰"),
+          "Lista upita"
         )
       ),
       e("div", { className: "sidebar-bottom" },

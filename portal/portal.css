@@ -304,6 +304,7 @@ a { color: inherit; text-decoration: none; }
 
 .portal-nav button.active { color: #fff; background: rgba(11,138,244,.18); }
 .portal-nav button.active span { color: #54b4ff; font-size: 20px; }
+.portal-nav button.nav-placeholder { opacity: .4; cursor: default; }
 .sidebar-bottom { margin-top: auto; display: grid; gap: 14px; }
 
 .signed-in-user {
