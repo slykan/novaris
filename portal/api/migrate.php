@@ -95,6 +95,8 @@ try {
         }
     }
 
+    $pdo->exec("UPDATE users SET role = 'admin' WHERE email = 'info@novaristech.hr'");
+
     fwrite(STDOUT, "Baza je spremna.\n");
 } catch (Throwable $error) {
     fwrite(STDERR, "Migracija baze nije uspjela: {$error->getMessage()}\n");

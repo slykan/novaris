@@ -146,53 +146,57 @@
       ),
       e("div", { className: "nav-backdrop" + (navOpen ? " show" : ""), onClick: () => setNavOpen(false) }),
       e("nav", { id: "portal-nav", className: "portal-nav" + (navOpen ? " nav-open" : ""), "aria-label": "Glavna navigacija" },
-        e("button", {
-          type: "button",
-          className: activeSection === "dashboard" ? "active" : "",
-          onClick: () => navigate("dashboard")
-        },
-          e("span", { "aria-hidden": "true" }, "⌂"),
-          "Početna"
-        ),
-        e("button", {
-          type: "button",
-          className: activeSection === "clients" ? "active" : "",
-          onClick: () => navigate("clients")
-        },
-          e("span", { "aria-hidden": "true" }, "◫"),
-          "Klijenti"
-        ),
-        e("button", {
-          type: "button",
-          className: activeSection === "planning" ? "active" : "",
-          onClick: () => navigate("planning")
-        },
-          e("span", { "aria-hidden": "true" }, "◷"),
-          "Planiranje"
-        ),
-        e("button", {
-          type: "button",
-          className: activeSection === "completed" ? "active" : "",
-          onClick: () => navigate("completed")
-        },
-          e("span", { "aria-hidden": "true" }, "✓"),
-          "Završeni sastanci"
-        ),
-        e("button", {
-          type: "button",
-          className: activeSection === "audits" ? "active" : "",
-          onClick: () => navigate("audits")
-        },
-          e("span", { "aria-hidden": "true" }, "◈"),
-          "Audit"
-        ),
-        e("button", {
-          type: "button",
-          className: activeSection === "users" ? "active" : "",
-          onClick: () => navigate("users")
-        },
-          e("span", { "aria-hidden": "true" }, "◉"),
-          "Korisnici"
+        user && user.role === "admin" && e(React.Fragment, null,
+          e("span", { className: "portal-nav-heading" }, "Planiranje"),
+          e("button", {
+            type: "button",
+            className: activeSection === "dashboard" ? "active" : "",
+            onClick: () => navigate("dashboard")
+          },
+            e("span", { "aria-hidden": "true" }, "⌂"),
+            "Početna"
+          ),
+          e("button", {
+            type: "button",
+            className: activeSection === "clients" ? "active" : "",
+            onClick: () => navigate("clients")
+          },
+            e("span", { "aria-hidden": "true" }, "◫"),
+            "Klijenti"
+          ),
+          e("button", {
+            type: "button",
+            className: activeSection === "planning" ? "active" : "",
+            onClick: () => navigate("planning")
+          },
+            e("span", { "aria-hidden": "true" }, "◷"),
+            "Planiranje"
+          ),
+          e("button", {
+            type: "button",
+            className: activeSection === "completed" ? "active" : "",
+            onClick: () => navigate("completed")
+          },
+            e("span", { "aria-hidden": "true" }, "✓"),
+            "Završeni sastanci"
+          ),
+          e("button", {
+            type: "button",
+            className: activeSection === "audits" ? "active" : "",
+            onClick: () => navigate("audits")
+          },
+            e("span", { "aria-hidden": "true" }, "◈"),
+            "Audit"
+          ),
+          e("span", { className: "portal-nav-heading" }, "Podrška"),
+          e("button", {
+            type: "button",
+            className: activeSection === "users" ? "active" : "",
+            onClick: () => navigate("users")
+          },
+            e("span", { "aria-hidden": "true" }, "◉"),
+            "Korisnici"
+          )
         )
       ),
       e("div", { className: "sidebar-bottom" },
