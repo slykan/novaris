@@ -290,46 +290,52 @@ foreach ($files as $file) {
     }
 }
 
-$statement = database()->prepare(
-    'INSERT INTO tickets (title, message, category, priority, created_by) VALUES (:title, :message, :category, :priority, :created_by)'
-);
-$statement->execute([
-    'title' => $title,
-    'message' => $message,
-    'category' => $category,
-    'priority' => $priority,
-    'created_by' => $user['id'],
-]);
+try {
+    $statement = database()->prepare(
+        'INSERT INTO tickets (title, message, category, priority, created_by) VALUES (:title, :message, :category, :priority, :created_by)'
+    );
+    $statement->execute([
+        'title' => $title,
+        'message' => $message,
+        'category' => $category,
+        'priority' => $priority,
+        'created_by' => $user['id'],
+    ]);
 
-$id = (int) database()->lastInsertId();
+    $id = (int) database()->lastInsertId();
 
-if ($files) {
-    $uploadDir = ticket_upload_dir();
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0750, true);
-    }
-
-    foreach ($files as $file) {
-        $extension = strtolower((string) pathinfo($file['name'], PATHINFO_EXTENSION));
-        $storedName = bin2hex(random_bytes(20)) . ($extension !== '' ? '.' . $extension : '');
-        $destination = $uploadDir . '/' . $storedName;
-        if (!move_uploaded_file($file['tmp_name'], $destination)) {
-            continue;
+    if ($files) {
+        $uploadDir = ticket_upload_dir();
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0750, true);
         }
-        $attachmentStatement = database()->prepare(
-            'INSERT INTO ticket_attachments (ticket_id, file_name, file_path, file_size, mime_type)
-             VALUES (:ticket_id, :file_name, :file_path, :file_size, :mime_type)'
-        );
-        $attachmentStatement->execute([
-            'ticket_id' => $id,
-            'file_name' => $file['name'],
-            'file_path' => $storedName,
-            'file_size' => $file['size'],
-            'mime_type' => $file['type'] ?: null,
-        ]);
+
+        foreach ($files as $file) {
+            $extension = strtolower((string) pathinfo($file['name'], PATHINFO_EXTENSION));
+            $storedName = bin2hex(random_bytes(20)) . ($extension !== '' ? '.' . $extension : '');
+            $destination = $uploadDir . '/' . $storedName;
+            if (!move_uploaded_file($file['tmp_name'], $destination)) {
+                continue;
+            }
+            $attachmentStatement = database()->prepare(
+                'INSERT INTO ticket_attachments (ticket_id, file_name, file_path, file_size, mime_type)
+                 VALUES (:ticket_id, :file_name, :file_path, :file_size, :mime_type)'
+            );
+            $attachmentStatement->execute([
+                'ticket_id' => $id,
+                'file_name' => $file['name'],
+                'file_path' => $storedName,
+                'file_size' => $file['size'],
+                'mime_type' => $file['type'] ?: null,
+            ]);
+        }
     }
+
+    $createdTicket = ticket_row($id);
+} catch (PDOException $error) {
+    error_log('Spremanje upita nije uspjelo: ' . $error->getMessage());
+    respond(['message' => 'Upit trenutačno nije moguće spremiti.'], 500);
 }
 
-$createdTicket = ticket_row($id);
 notify_ticket_created($createdTicket);
 respond(['ticket' => $createdTicket], 201);
