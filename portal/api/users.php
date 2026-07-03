@@ -3,7 +3,25 @@
 declare(strict_types=1);
 
 require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/user-mail.php';
 $currentUser = require_user();
+
+function notify_user_created(array $user, string $password): void
+{
+    try {
+        $contactPath = getenv('NOVARIS_CONTACT') ?: __DIR__ . '/contact.php';
+        $smtp = smtp_credentials($contactPath);
+        send_smtp(
+            $smtp,
+            $user['email'],
+            'Dobrodošli u Novaris Tech portal',
+            user_welcome_email($user, $password),
+            $user['name']
+        );
+    } catch (Throwable $error) {
+        error_log('Slanje dobrodošlice korisniku nije uspjelo: ' . $error->getMessage());
+    }
+}
 
 function user_row(int $id): array|false
 {
@@ -193,4 +211,6 @@ try {
 }
 
 $id = (int) database()->lastInsertId();
-respond(['user' => user_row($id)], 201);
+$createdUser = user_row($id);
+notify_user_created($createdUser, $password);
+respond(['user' => $createdUser], 201);
