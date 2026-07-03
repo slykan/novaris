@@ -200,7 +200,7 @@
         ),
         e("button", { type: "button", className: "nav-placeholder", disabled: true },
           e("span", { "aria-hidden": "true" }, "✎"),
-          "Dodaj novi upit"
+          "Novi upit"
         ),
         e("button", { type: "button", className: "nav-placeholder", disabled: true },
           e("span", { "aria-hidden": "true" }, "☰"),
