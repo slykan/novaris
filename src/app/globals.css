@@ -295,6 +295,16 @@ h1 em { color: var(--blue); font-style: normal; }
   filter: drop-shadow(0 26px 42px rgba(0, 28, 80, .08));
 }
 
+.hero-slider-image {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+  filter: drop-shadow(0 26px 42px rgba(0, 28, 80, .12));
+}
+
 .slider {
   position: relative;
   width: 100%;
@@ -468,11 +478,21 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 8px 24px rgba(0, 28, 80, 0.12);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .industry-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 28, 80, 0.18);
+}
+
+.industry-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.85), rgba(15, 26, 53, 0.90));
+  z-index: 1;
 }
 
 .industry-card-inner {
@@ -483,6 +503,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   display: flex;
   flex-direction: column;
   gap: 12px;
+  background: transparent;
 }
 
 .industry-icon {
