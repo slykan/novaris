@@ -1850,7 +1850,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
     radial-gradient(circle at 82% 20%, rgba(0,105,232,.09), transparent 40%),
     radial-gradient(circle at 15% 80%, rgba(31,117,255,.07), transparent 42%),
     linear-gradient(160deg, #f4f9ff 0%, #ffffff 60%);
-  padding: 56px;
+  padding: 28px 56px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
@@ -1865,17 +1865,19 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   position: relative;
   width: 100%;
   min-width: 0;
-  max-width: 440px;
+  max-width: 520px;
   aspect-ratio: 1;
   margin-inline: auto;
 }
 
 .n360-ring {
   position: absolute;
-  inset: 24%;
+  inset: 27%;
   border-radius: 50%;
-  background: #ffffff;
-  border: 26px solid var(--blue);
+  border: 26px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, var(--blue-2), var(--blue)) border-box;
   box-shadow: 0 24px 60px rgba(0,105,232,.24);
   display: flex;
   flex-direction: column;
@@ -1892,8 +1894,8 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   position: absolute;
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 170px;
+  gap: 14px;
+  width: 210px;
   z-index: 3;
   transform: translate(-50%, -50%);
 }
@@ -1928,11 +1930,11 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .n360-node-text span { display: block; font-size: 12px; color: var(--muted); line-height: 1.45; }
 
-.n360-node.pos-tl { top: 29%; left: 27%; flex-direction: row-reverse; text-align: right; }
-.n360-node.pos-tr { top: 29%; left: 73%; flex-direction: row; text-align: left; }
-.n360-node.pos-r  { top: 58%; left: 80%; flex-direction: row; text-align: left; }
-.n360-node.pos-b  { top: 80%; left: 58%; flex-direction: column; text-align: center; width: 150px; gap: 6px; }
-.n360-node.pos-bl { top: 63%; left: 22%; flex-direction: row-reverse; text-align: right; }
+.n360-node.pos-tl { top: 22%; left: 22%; flex-direction: row-reverse; text-align: right; }
+.n360-node.pos-tr { top: 22%; left: 78%; flex-direction: row; text-align: left; }
+.n360-node.pos-r  { top: 61%; left: 86%; flex-direction: row; text-align: left; }
+.n360-node.pos-b  { top: 85%; left: 61%; flex-direction: column; text-align: center; width: 170px; gap: 8px; }
+.n360-node.pos-bl { top: 66%; left: 14%; flex-direction: row-reverse; text-align: right; }
 
 .n360-node.pos-b .n360-node-text { flex: none; }
 
@@ -1971,6 +1973,53 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .n360-panel-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 1.8; }
+
+/* Misija/Vizija panels – icon + connector + quote, beside the checklist */
+.n360-mv-row {
+  display: flex;
+  gap: 26px;
+  align-items: flex-start;
+}
+
+.n360-mv-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  width: 138px;
+}
+
+.n360-mv-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: rgba(0,145,255,.08);
+  border: 1px solid rgba(0,145,255,.22);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 30px rgba(0,145,255,.1);
+}
+
+.n360-mv-icon-wrap svg { width: 28px; height: 28px; stroke: var(--blue); fill: none; stroke-width: 1.6; }
+
+.n360-mv-visual .mv-connector-line { height: 22px; }
+
+.n360-mv-card-accent {
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(21,150,255,.18);
+  background: rgba(21,150,255,.05);
+  box-shadow: 0 8px 24px rgba(0,80,200,.06);
+}
+
+.n360-mv-card-accent .mv-card-tag { font-size: 9.5px; margin-bottom: 6px; padding: 2px 9px; }
+.n360-mv-card-accent .mv-card-quote { font-size: 12px; line-height: 1.5; }
+
+.n360-mv-content { flex: 1; min-width: 0; }
+.n360-mv-content .label { margin-bottom: 10px; }
+.n360-mv-content h2 { margin-bottom: 14px; font-size: clamp(20px, 2.2vw, 26px); }
 
 /* Što radimo – no card box, checkmarks, thin bottom rule */
 .n360-areas-grid {
@@ -2078,6 +2127,12 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   background: rgba(0,105,232,.35);
 }
 
+.n360-process-dots span.mid {
+  width: 8px;
+  height: 8px;
+  background: var(--blue);
+}
+
 @media (max-width: 1040px) {
   .about-areas-grid,
   .about-process-grid,
@@ -2105,6 +2160,8 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .n360-node-icon svg { width: 16px; height: 16px; }
   .n360-node-text span { display: none; }
   .n360-node-text strong { font-size: 9.5px; }
+  .n360-mv-row { flex-direction: column; align-items: center; text-align: center; }
+  .n360-mv-visual { width: 100%; max-width: 220px; }
 }
 
 @media (max-width: 760px) {

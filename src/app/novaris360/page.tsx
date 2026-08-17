@@ -121,58 +121,92 @@ export default function Novaris360() {
           <div className="section">
             <div className="dual-panel-grid">
               <div className="dual-panel">
-                <div className="n360-panel-icon">
-                  <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="9" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="12" cy="12" r="0.5" />
-                  </svg>
-                </div>
-                <p className="label">02 – Naša misija</p>
-                <h2>Tehnologiju pretvaramo u poslovne rezultate</h2>
-                <p className="svc-remote-desc">Pomažemo tvrtkama da:</p>
-                <div className="mv-pillars" style={{ marginTop: 18 }}>
-                  {[
-                    'Rade učinkovitije',
-                    'Smanje operativne troškove',
-                    'Povećaju sigurnost podataka',
-                    'Automatiziraju procese',
-                    'Ubrzaju rast poslovanja',
-                  ].map((item) => (
-                    <div key={item} className="mv-pillar">
-                      <span className="mv-check" aria-hidden="true">✓</span>
-                      {item}
+                <div className="n360-mv-row">
+                  <div className="n360-mv-visual">
+                    <div className="n360-mv-icon-wrap">
+                      <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="12" cy="12" r="0.5" />
+                      </svg>
                     </div>
-                  ))}
+                    <div className="mv-connector">
+                      <div className="mv-connector-dot" />
+                      <div className="mv-connector-line" />
+                      <div className="mv-connector-dot" />
+                    </div>
+                    <div className="n360-mv-card-accent">
+                      <span className="mv-card-tag">Naša misija</span>
+                      <p className="mv-card-quote">
+                        &ldquo;Tehnologiju pretvaramo u poslovne rezultate.&rdquo;
+                      </p>
+                    </div>
+                  </div>
+                  <div className="n360-mv-content">
+                    <p className="label">02 – Naša misija</p>
+                    <h2>Tehnologiju pretvaramo u poslovne rezultate</h2>
+                    <p className="svc-remote-desc">Pomažemo tvrtkama da:</p>
+                    <div className="mv-pillars" style={{ marginTop: 18 }}>
+                      {[
+                        'Rade učinkovitije',
+                        'Smanje operativne troškove',
+                        'Povećaju sigurnost podataka',
+                        'Automatiziraju procese',
+                        'Ubrzaju rast poslovanja',
+                      ].map((item) => (
+                        <div key={item} className="mv-pillar">
+                          <span className="mv-check" aria-hidden="true">✓</span>
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="dual-panel">
-                <div className="n360-panel-icon">
-                  <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                </div>
-                <p className="label">03 – Naša vizija</p>
-                <h2>Naša vizija</h2>
-                <p className="svc-remote-desc">
-                  Postati vodeći regionalni business-tech partner za digitalnu transformaciju
-                  organizacija u javnom i privatnom sektoru.
-                </p>
-                <div className="mv-pillars" style={{ marginTop: 18 }}>
-                  {[
-                    'Stručnosti',
-                    'Povjerenju',
-                    'Inovacijama',
-                    'Odgovornosti',
-                    'Mjerljivim rezultatima',
-                  ].map((item) => (
-                    <div key={item} className="mv-pillar">
-                      <span className="mv-check" aria-hidden="true">✓</span>
-                      {item}
+                <div className="n360-mv-row">
+                  <div className="n360-mv-visual">
+                    <div className="n360-mv-icon-wrap">
+                      <svg viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
                     </div>
-                  ))}
+                    <div className="mv-connector">
+                      <div className="mv-connector-dot" />
+                      <div className="mv-connector-line" />
+                      <div className="mv-connector-dot" />
+                    </div>
+                    <div className="n360-mv-card-accent">
+                      <span className="mv-card-tag">Naša vizija</span>
+                      <p className="mv-card-quote">
+                        &ldquo;Vodeći regionalni business-tech partner.&rdquo;
+                      </p>
+                    </div>
+                  </div>
+                  <div className="n360-mv-content">
+                    <p className="label">03 – Naša vizija</p>
+                    <h2>Naša vizija</h2>
+                    <p className="svc-remote-desc">
+                      Postati vodeći regionalni business-tech partner za digitalnu transformaciju
+                      organizacija u javnom i privatnom sektoru.
+                    </p>
+                    <div className="mv-pillars" style={{ marginTop: 18 }}>
+                      {[
+                        'Stručnosti',
+                        'Povjerenju',
+                        'Inovacijama',
+                        'Odgovornosti',
+                        'Mjerljivim rezultatima',
+                      ].map((item) => (
+                        <div key={item} className="mv-pillar">
+                          <span className="mv-check" aria-hidden="true">✓</span>
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -272,7 +306,7 @@ export default function Novaris360() {
                   </div>
                   {i < arr.length - 1 && (
                     <div className="n360-process-dots" aria-hidden="true">
-                      <span /><span /><span />
+                      <span /><span /><span className="mid" /><span /><span />
                     </div>
                   )}
                 </Fragment>
