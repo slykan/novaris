@@ -98,17 +98,20 @@ export default function Novaris360() {
               </div>
 
               <div className="n360-wheel" aria-hidden="true">
+                <div className="n360-ring-halo" />
                 <div className="n360-ring">
                   <img src={p('/logo_small1.png')} alt="" />
                   <strong>NOVARIS 360°</strong>
                 </div>
                 {wheelSteps.map((step) => (
-                  <div key={step.num} className={`n360-node ${step.pos}`}>
+                  <div key={step.num} className={`n360-icon-anchor ${step.pos}`}>
                     <div className="n360-node-icon">{step.icon}</div>
-                    <div className="n360-node-text">
-                      <strong>{step.num}. {step.title}</strong>
-                      <span>{step.desc}</span>
-                    </div>
+                  </div>
+                ))}
+                {wheelSteps.map((step) => (
+                  <div key={step.num} className={`n360-text-anchor ${step.pos}`}>
+                    <strong>{step.num}. {step.title}</strong>
+                    <span>{step.desc}</span>
                   </div>
                 ))}
               </div>
