@@ -79,7 +79,7 @@ export default function Novaris360() {
         <Nav />
       </header>
 
-      <main>
+      <main className="n360-body">
 
         {/* ── 01 TKO SMO MI / NOVARIS 360 ── */}
         <section className="light">

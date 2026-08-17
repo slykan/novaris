@@ -1843,6 +1843,14 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 /* ── NOVARIS 360 PAGE ── */
 .n360-topbar { min-height: auto; }
 
+.n360-body .label,
+.n360-body .mv-card-tag,
+.n360-body .svc-remote-tag,
+.n360-body .about-partners-note {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .n360-intro {
   border-radius: 16px;
   border: 1px solid rgba(0,105,232,.14);
@@ -1943,11 +1951,11 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .n360-icon-anchor.pos-b  { top: 77%; left: 57%; }
 .n360-icon-anchor.pos-bl { top: 62%; left: 25%; }
 
-.n360-text-anchor.pos-tl { top: 20%; left: 20%; text-align: right; }
-.n360-text-anchor.pos-tr { top: 20%; left: 80%; text-align: left; }
+.n360-text-anchor.pos-tl { top: 15%; left: 15%; text-align: right; }
+.n360-text-anchor.pos-tr { top: 15%; left: 85%; text-align: left; }
 .n360-text-anchor.pos-r  { top: 61%; left: 98%; text-align: left; width: 150px; }
 .n360-text-anchor.pos-b  { top: 91%; left: 61%; text-align: center; }
-.n360-text-anchor.pos-bl { top: 68%; left: 12%; text-align: right; }
+.n360-text-anchor.pos-bl { top: 72%; left: 2%; text-align: right; }
 
 /* Two panels side by side */
 .dual-panel-grid {
