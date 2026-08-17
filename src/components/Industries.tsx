@@ -92,8 +92,8 @@ export default function Industries() {
               }}
             >
               <div className="industry-card-overlay"></div>
+              <svg viewBox="0 0 48 48" aria-hidden="true" className="industry-icon">{ind.icon}</svg>
               <div className="industry-card-inner">
-                <svg viewBox="0 0 48 48" aria-hidden="true" className="industry-icon">{ind.icon}</svg>
                 <h3>{ind.title}</h3>
                 <p>{ind.desc}</p>
               </div>

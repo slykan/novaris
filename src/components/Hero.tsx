@@ -3,7 +3,9 @@ import HeroSlider from './HeroSlider'
 
 export default function Hero() {
   return (
-    <div className="hero-grid">
+    <>
+      <HeroSlider />
+      <div className="hero-grid">
       <section className="hero-copy">
         <p className="eyebrow"><span></span> Novaris Tech</p>
         <h1>Vaš pouzdan partner u <em>digitalnoj transformaciji</em></h1>
@@ -39,8 +41,7 @@ export default function Hero() {
           </article>
         </div>
       </section>
-
-      <HeroSlider />
-    </div>
+      </div>
+    </>
   )
 }

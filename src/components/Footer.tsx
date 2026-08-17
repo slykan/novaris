@@ -31,7 +31,7 @@ export default function Footer() {
           <div className="cta-cards">
             <Link href="/kontakt" className="cta-card">
               <div className="cta-card-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                   <line x1="16" y1="2" x2="16" y2="6" />
                   <line x1="8" y1="2" x2="8" y2="6" />
@@ -39,18 +39,22 @@ export default function Footer() {
                   <rect x="8" y="13" width="3" height="3" rx="0.5" />
                 </svg>
               </div>
-              <h3>Dogovorite sastanak</h3>
-              <p>Razgovarajmo o Vašim potrebama i ciljevima.</p>
+              <div className="cta-card-text">
+                <h3>Dogovorite sastanak</h3>
+                <p>Razgovarajmo o Vašim potrebama i ciljevima.</p>
+              </div>
             </Link>
             <Link href="/kontakt" className="cta-card">
               <div className="cta-card-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                   <path d="M9 11l3 3L22 4" />
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                 </svg>
               </div>
-              <h3>Besplatni IT audit</h3>
-              <p>Pregledavamo sigurnost i učinkovitost Vaše IT infrastrukture.</p>
+              <div className="cta-card-text">
+                <h3>Besplatni IT audit</h3>
+                <p>Pregledavamo sigurnost i učinkovitost Vaše IT infrastrukture.</p>
+              </div>
             </Link>
           </div>
         </div>

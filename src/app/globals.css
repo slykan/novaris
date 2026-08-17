@@ -181,12 +181,28 @@ a { color: inherit; text-decoration: none; }
 /* ── HERO GRID ── */
 .hero-grid {
   display: grid;
-  grid-template-columns: .9fr 1.1fr;
-  gap: 46px;
-  align-items: center;
+  grid-template-columns: 1fr;
   padding: 18px 0 72px;
   position: relative;
   z-index: 2;
+}
+
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  z-index: 0;
+}
+
+.hero-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,.94) 28%, rgba(255,255,255,.55) 46%, rgba(255,255,255,0) 62%);
 }
 
 .hero-copy {
@@ -266,11 +282,6 @@ h1 em { color: var(--blue); font-style: normal; }
 .trust-row span   { color: #526078; font-size: 13px; line-height: 1.55; }
 
 /* ── SLIDER ── */
-.hero-visual {
-  min-height: 520px;
-  position: relative;
-}
-
 .hero-slider {
   display: flex;
   align-items: center;
@@ -293,16 +304,6 @@ h1 em { color: var(--blue); font-style: normal; }
   object-fit: contain;
   transform: translateX(38px) scale(1.06);
   filter: drop-shadow(0 26px 42px rgba(0, 28, 80, .08));
-}
-
-.hero-slider-image {
-  width: 100%;
-  max-width: none;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 8px;
-  filter: drop-shadow(0 26px 42px rgba(0, 28, 80, .12));
 }
 
 .slider {
@@ -474,7 +475,8 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   position: relative;
   color: #ffffff;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 8px 24px rgba(0, 28, 80, 0.12);
@@ -491,30 +493,29 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .industry-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(30, 60, 114, 0.95) 0%, rgba(30, 60, 114, 0.60) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(8, 18, 40, 0.94) 0%, rgba(8, 18, 40, 0.82) 32%, rgba(8, 18, 40, 0) 62%);
   z-index: 1;
 }
 
 .industry-card-inner {
-  padding: 28px 20px;
+  padding: 0 20px 22px;
   width: 100%;
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
   background: transparent;
 }
 
 .industry-icon {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: rgba(0, 105, 232, 0.55);
   padding: 0;
+  margin: 20px 20px 0;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -522,6 +523,9 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   stroke-linejoin: round;
   color: #ffffff;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
 }
 
 .industry-card h3 {
@@ -720,8 +724,10 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .cta-card {
   display: flex;
-  flex-direction: column;
-  padding: 32px 24px;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
   background: var(--blue);
   color: #fff;
   border-radius: 14px;
@@ -743,25 +749,27 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .cta-card-icon {
-  width: 52px; height: 52px;
+  width: 44px; height: 44px;
   display: grid;
   place-items: center;
   border-radius: 12px;
   background: rgba(255,255,255,.18);
-  margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
+.cta-card-text { min-width: 0; }
+
 .cta-card h3 {
-  margin: 0 0 8px;
-  font-size: 17px;
+  margin: 0 0 4px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .cta-card p {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(255,255,255,.78);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 /* ── FOOTER BAR ── */
@@ -1463,7 +1471,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .split,
   .about-grid { grid-template-columns: 1fr; }
 
-  .hero-visual { min-height: 360px; order: -1; }
   .slider { height: 360px; }
 
   .service-grid { grid-template-columns: repeat(3,1fr); }
@@ -1533,7 +1540,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
   .hero { min-height: auto; }
   .hero-grid { padding-bottom: 54px; }
-  .hero-visual { min-height: 280px; }
   .slider { height: 280px; }
 
   .trust-row,
