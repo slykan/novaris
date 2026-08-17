@@ -4,48 +4,56 @@ const industries = [
     title: 'Energetika',
     desc: 'Digitaliziramo energetske procese, poboljšavamo pouzdanost i pračenje energetskih bukvešnosti.',
     image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1d?w=800&h=600&fit=crop',
+    iconColor: 'white',
   },
   {
     icon: <path d="M9 18h30M13 18V40M35 18V40M7 40h34M24 8l17 10H7L24 8ZM20 40V28h8v12" />,
     title: 'Javni sektor',
     desc: 'Digitaliziramo usluge i procese te poboljšavamo transparentnost i brzoprenost.',
     image: 'https://images.unsplash.com/photo-1521732761447-fad9c6c65e3a?w=800&h=600&fit=crop',
+    iconColor: 'blue',
   },
   {
     icon: <path d="M12 8c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4V12c0-2.2-1.8-4-4-4H12Zm0 6h24v20H12V14Zm6 4h4v2h-4v-2Zm6 0h4v2h-4v-2Zm6 0h4v2h-4v-2Zm-12 6h4v2h-4v-2Zm6 0h4v2h-4v-2Zm6 0h4v2h-4v-2Z" />,
     title: 'Zdravstvo',
     desc: 'Sigurnost podataka i učinkovitost zdravstvenih ustanova u prioritetu.',
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop',
+    iconColor: 'white',
   },
   {
     icon: <path d="M6 12h12v24H6V12Zm16-4h12v28H22V8Z" />,
     title: 'Financije',
     desc: 'Pravilno analitika i digitalni servisi za financijske institucije.',
     image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop',
+    iconColor: 'blue',
   },
   {
     icon: <path d="M24 5 11 25h10l-4 18 20-25H26l4-13Z" />,
     title: 'Telekomunikacije',
     desc: 'Omogućujemo pouzdan transformaciju infrastrukture i digitalnih servisa.',
     image: 'https://images.unsplash.com/photo-1516321318423-f06628ca504d?w=800&h=600&fit=crop',
+    iconColor: 'white',
   },
   {
     icon: <path d="M8 40V18l16-10 16 10v22M6 40h36M15 40V24M24 40V24M33 40V24" />,
     title: 'Bankarstvo',
     desc: 'Unapređujemo sigurnost i moderni standarde strukture.',
     image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop',
+    iconColor: 'blue',
   },
   {
     icon: <path d="M12 28v-5a12 12 0 0 1 24 0v5M18 20a2 2 0 0 1 4 0v8a2 2 0 0 1-4 0V20Zm6 2a2 2 0 0 1 4 0v6a2 2 0 0 1-4 0V22Z" />,
     title: 'Industrija i proizvodnja',
     desc: 'Pospješavamo proizvodnost, smanjujemo gubitke i optimiziramo procesne tok.',
     image: 'https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&h=600&fit=crop',
+    iconColor: 'white',
   },
   {
     icon: <path d="M8 16h28v16H8V16Zm28-8h4v28h-4V8Zm-36 8h4v20H0V16Zm8-8h8v36h-8V8Z" />,
     title: 'Logistika i transport',
     desc: 'Optimiziramo lance dostave i poboljšavamo praksoljevost i trasportnih procesa.',
     image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&h=600&fit=crop',
+    iconColor: 'blue',
   },
 ]
 
@@ -87,12 +95,11 @@ export default function Industries() {
               className="industry-card"
               style={{
                 backgroundImage: `url('${ind.image}')`,
-                backgroundColor: getIndustryColor(idx),
               }}
             >
               <div className="industry-card-overlay"></div>
               <div className="industry-card-inner">
-                <svg viewBox="0 0 48 48" aria-hidden="true" className="industry-icon">{ind.icon}</svg>
+                <svg viewBox="0 0 48 48" aria-hidden="true" className={`industry-icon ${ind.iconColor === 'blue' ? 'icon-blue' : 'icon-white'}`}>{ind.icon}</svg>
                 <h3>{ind.title}</h3>
                 <p>{ind.desc}</p>
               </div>
@@ -101,18 +108,4 @@ export default function Industries() {
         </div>
     </section>
   )
-}
-
-function getIndustryColor(index: number): string {
-  const colors = [
-    '#1e3c72',
-    '#1e3c72',
-    '#1e3c72',
-    '#1e3c72',
-    '#0f1a35',
-    '#0f1a35',
-    '#0f1a35',
-    '#0f1a35',
-  ]
-  return colors[index] || '#1e3c72'
 }

@@ -491,7 +491,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 .industry-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(30, 60, 114, 0.85), rgba(15, 26, 53, 0.90));
+  background: linear-gradient(to top, rgba(30, 60, 114, 0.95) 0%, rgba(30, 60, 114, 0.60) 50%, transparent 100%);
   z-index: 1;
 }
 
@@ -515,6 +515,14 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   stroke-linecap: round;
   stroke-linejoin: round;
   color: #ffffff;
+}
+
+.industry-icon.icon-white {
+  color: #ffffff;
+}
+
+.industry-icon.icon-blue {
+  color: var(--blue);
 }
 
 .industry-card h3 {
