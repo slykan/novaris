@@ -574,6 +574,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
     radial-gradient(circle at 50% 14%, rgba(0,105,232,.08), transparent 30%),
     linear-gradient(180deg, #f8fbff, #ffffff);
   overflow: hidden;
+  position: relative;
   border-block: 1px solid rgba(42,94,155,.08);
 }
 

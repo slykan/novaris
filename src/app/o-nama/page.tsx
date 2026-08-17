@@ -20,7 +20,8 @@ export default function ONama() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <div className="hero-grid page-hero-grid">
+        <img src={p('/kontakt_hero_5.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />01 – Tko smo mi</p>
             <h1>Novaris <em>Tech</em></h1>
@@ -36,11 +37,6 @@ export default function ONama() {
               {['Digitalna transformacija', 'IT infrastruktura', 'Cyber sigurnost', 'Automatizacija procesa', 'Poslovna podrška'].map((tag) => (
                 <span key={tag} className="svc-remote-tag">{tag}</span>
               ))}
-            </div>
-          </div>
-          <div className="page-hero-orb" aria-hidden="true">
-            <div className="orb-logo orb-static">
-              <img src={p('/logo_small1.png')} alt="" className="logo-mark" />
             </div>
           </div>
         </div>
