@@ -18,8 +18,8 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const isHome = pathname === '/'
-  const isONama = pathname === '/o-nama'
   const isUsluge = pathname === '/usluge'
+  const isNovaris360 = pathname === '/novaris360'
   const isKontakt = pathname === '/kontakt'
   const close = () => setOpen(false)
   const home = (hash: string) => isHome ? hash : `/${hash}`
@@ -34,8 +34,7 @@ export default function Nav() {
           <Link className={isHome ? 'active' : ''} href="/" onClick={close}>Početna</Link>
           <a href={home('#services')} onClick={close}>Portfolio</a>
           <Link className={isUsluge ? 'active' : ''} href="/usluge" onClick={close}>Usluge</Link>
-          <Link className={isONama ? 'active' : ''} href="/o-nama" onClick={close}>O nama</Link>
-          <a href={home('#why')} onClick={close}>Zašto mi</a>
+          <Link className={isNovaris360 ? 'active' : ''} href="/novaris360" onClick={close}>Novaris360</Link>
           <Link className={isKontakt ? 'active' : ''} href="/kontakt" onClick={close}>Kontakt</Link>
           <a className="nav-support-link" href="/portal.html" onClick={close}>
             <SupportIcon />

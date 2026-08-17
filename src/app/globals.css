@@ -19,6 +19,7 @@ body {
   color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
+  overflow-x: hidden;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -1839,11 +1840,147 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   color: var(--muted);
 }
 
+/* ── NOVARIS 360 PAGE ── */
+.n360-topbar { min-height: auto; }
+
+.n360-intro {
+  border-radius: 16px;
+  border: 1px solid rgba(0,105,232,.14);
+  background:
+    radial-gradient(circle at 82% 20%, rgba(0,105,232,.09), transparent 40%),
+    radial-gradient(circle at 15% 80%, rgba(31,117,255,.07), transparent 42%),
+    linear-gradient(160deg, #f4f9ff 0%, #ffffff 60%);
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  overflow: hidden;
+}
+
+.n360-intro-body { min-width: 0; }
+.n360-intro-body .button { margin-top: 28px; white-space: normal; text-align: center; height: auto; min-height: 56px; }
+
+.n360-wheel {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 440px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.n360-ring {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 14px solid var(--blue);
+  box-shadow: 0 24px 60px rgba(0,105,232,.24);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+.n360-ring img { width: 38px; height: 38px; object-fit: contain; }
+.n360-ring strong { font-size: 20px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
+
+.n360-node {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 190px;
+  z-index: 3;
+}
+
+.n360-node-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0,105,232,.18);
+  box-shadow: 0 10px 26px rgba(0,28,80,.12);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.n360-node-icon svg { width: 22px; height: 22px; stroke: var(--blue); fill: none; stroke-width: 2; }
+
+.n360-node-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.n360-node-text strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--ink);
+  margin-bottom: 4px;
+  overflow-wrap: break-word;
+}
+
+.n360-node-text span { display: block; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+.n360-node.pos-tl { top: 4%; left: -6%; }
+.n360-node.pos-tr { top: 0%; right: -10%; }
+.n360-node.pos-r  { top: 40%; right: -16%; }
+.n360-node.pos-b  { bottom: 2%; left: 34%; }
+.n360-node.pos-bl { bottom: 16%; left: -14%; }
+
+/* Two panels side by side */
+.dual-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.dual-panel {
+  padding: 40px 36px;
+  border-radius: 14px;
+  border: 1px solid rgba(42,94,155,.1);
+  background: var(--panel);
+  box-shadow: 0 8px 24px rgba(0,28,80,.06);
+}
+
+.dual-panel .label { margin-bottom: 10px; }
+.dual-panel h2 { margin-bottom: 14px; font-size: clamp(22px, 2.4vw, 28px); }
+.dual-panel .about-why-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.dual-panel .about-why-card { padding: 18px 16px; box-shadow: none; }
+.dual-panel .about-why-card p { font-size: 13.5px; line-height: 1.55; }
+.dual-panel .about-why-card h3 { font-size: 12.5px; margin-bottom: 6px; }
+
 @media (max-width: 1040px) {
   .about-areas-grid,
   .about-process-grid,
   .about-why-grid { grid-template-columns: repeat(2, 1fr); }
   .about-industries-grid { grid-template-columns: repeat(3, 1fr); }
+  .n360-intro { grid-template-columns: 1fr; padding: 40px 28px; text-align: center; }
+  .n360-wheel { margin-top: 32px; }
+  .dual-panel-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .n360-intro { overflow: hidden; padding: 32px 16px; }
+  .n360-wheel { max-width: 300px; }
+  .n360-node { width: 118px; }
+  .n360-node-icon { width: 42px; height: 42px; }
+  .n360-node-icon svg { width: 18px; height: 18px; }
+  .n360-node-text span { display: none; }
+  .n360-node-text strong { font-size: 10.5px; }
+  .n360-node.pos-tl { top: 6%; left: 2%; }
+  .n360-node.pos-tr { top: 2%; right: 2%; }
+  .n360-node.pos-r  { top: 40%; right: -2%; }
+  .n360-node.pos-b  { bottom: 4%; left: 32%; }
+  .n360-node.pos-bl { bottom: 18%; left: 0%; }
 }
 
 @media (max-width: 760px) {
