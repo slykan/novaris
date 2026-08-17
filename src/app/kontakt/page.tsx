@@ -21,7 +21,8 @@ export default function Kontakt() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <div className="hero-grid page-hero-grid">
+        <img src={p('/kontakt_hero.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />Kontakt</p>
             <h1>Pišite <em>nam</em></h1>
@@ -29,11 +30,6 @@ export default function Kontakt() {
               Imate projekt, pitanje ili ideju? Ispunite formu i naš tim
               će Vam se javiti u roku od sat vremena.
             </p>
-          </div>
-          <div className="page-hero-orb" aria-hidden="true">
-            <div className="orb-logo orb-static">
-              <img src={p('/logo_small1.png')} alt="" className="logo-mark" />
-            </div>
           </div>
         </div>
       </header>

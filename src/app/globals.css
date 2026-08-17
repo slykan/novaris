@@ -27,10 +27,7 @@ a { color: inherit; text-decoration: none; }
 .hero {
   min-height: 760px;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 80% 20%, rgba(0,105,232,.10), transparent 32%),
-    radial-gradient(circle at 25% 42%, rgba(31,117,255,.08), transparent 34%),
-    linear-gradient(180deg, #ffffff 0%, #fbfdff 54%, #f7faff 100%);
+  background: #ffffff;
   overflow: hidden;
   position: relative;
 }
@@ -189,11 +186,15 @@ a { color: inherit; text-decoration: none; }
 
 .hero-bg-image {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1160px, calc(100% - 48px));
   height: 100%;
   object-fit: cover;
   object-position: right center;
+  border-radius: 12px;
   z-index: 0;
 }
 
@@ -844,6 +845,10 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   padding: 32px 0 72px;
   grid-template-columns: 1fr .7fr;
   align-items: center;
+}
+
+.page-hero-grid-single {
+  grid-template-columns: 1fr;
 }
 
 .page-hero-orb {
