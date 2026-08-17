@@ -3,14 +3,14 @@ const industries = [
     icon: <path d="M24 5 11 25h10l-4 18 20-25H26l4-13Z" />,
     title: 'Energetika',
     desc: 'Digitaliziramo energetske procese, poboljšavamo pouzdanost i pračenje energetskih bukvešnosti.',
-    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1d?w=800&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1466611653154-e209868f541c?w=800&h=600&fit=crop',
     iconColor: 'white',
   },
   {
     icon: <path d="M9 18h30M13 18V40M35 18V40M7 40h34M24 8l17 10H7L24 8ZM20 40V28h8v12" />,
     title: 'Javni sektor',
     desc: 'Digitaliziramo usluge i procese te poboljšavamo transparentnost i brzoprenost.',
-    image: 'https://images.unsplash.com/photo-1521732761447-fad9c6c65e3a?w=800&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1554224311-beee415c201?w=800&h=600&fit=crop',
     iconColor: 'blue',
   },
   {
@@ -31,7 +31,7 @@ const industries = [
     icon: <path d="M24 5 11 25h10l-4 18 20-25H26l4-13Z" />,
     title: 'Telekomunikacije',
     desc: 'Omogućujemo pouzdan transformaciju infrastrukture i digitalnih servisa.',
-    image: 'https://images.unsplash.com/photo-1516321318423-f06628ca504d?w=800&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&h=600&fit=crop',
     iconColor: 'white',
   },
   {
