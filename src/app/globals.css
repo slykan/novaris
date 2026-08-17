@@ -439,25 +439,8 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   border-bottom: 1px solid rgba(42,94,155,.08);
 }
 
-.industries-wrapper {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 58px;
-  align-items: start;
-}
-
-.industries-main {
-  min-width: 0;
-}
-
-.industries-container {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
 .industries-header {
-  width: 100%;
+  margin-bottom: 48px;
 }
 
 .industries-header .label {
@@ -472,7 +455,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
-  margin-bottom: 0;
 }
 
 .industry-card {
@@ -569,46 +551,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   color: #526078;
   font-size: 12px;
   line-height: 1.35;
-}
-
-/* Why us grid (replaces results) */
-.why-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-.why-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.why-item svg {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  fill: none;
-  stroke: var(--blue);
-  stroke-width: 2.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.why-item strong {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-
-.why-item span {
-  color: #526078;
-  font-size: 13px;
-  line-height: 1.5;
 }
 
 /* ── DARK SECTION ── */
@@ -1488,7 +1430,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .slider { height: 360px; }
 
   .service-grid { grid-template-columns: repeat(3,1fr); }
-  .industries-wrapper { grid-template-columns: 1fr; gap: 36px; }
   .industries-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .results-card { padding: 28px; }
 
@@ -1560,8 +1501,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
   .trust-row,
   .service-grid,
-  .industries-grid,
-  .why-grid { grid-template-columns: 1fr; }
+  .industries-grid { grid-template-columns: 1fr; }
 
   .results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .service-card { min-height: auto; }

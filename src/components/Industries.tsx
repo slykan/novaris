@@ -67,41 +67,21 @@ const whyUs = [
 export default function Industries() {
   return (
     <section className="section light industries-section" id="industries">
-      <div className="industries-wrapper">
-        <div className="industries-main">
-          <div className="industries-header">
-            <p className="label">Industrije</p>
-            <h2>Rješenja prilagođena vašem sektoru</h2>
-          </div>
+      <div className="industries-header">
+        <p className="label">Industrije</p>
+        <h2>Rješenja prilagođena vašem sektoru</h2>
+      </div>
 
-          <div className="industries-grid" aria-label="Industrije">
-            {industries.map((ind, idx) => (
-              <article key={ind.title} className="industry-card" style={{ backgroundColor: getIndustryColor(idx) }}>
-                <div className="industry-card-inner">
-                  <svg viewBox="0 0 48 48" aria-hidden="true" className="industry-icon">{ind.icon}</svg>
-                  <h3>{ind.title}</h3>
-                  <p>{ind.desc}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <aside className="results-card">
-          <p className="label">Zašto Novaris Tech</p>
-          <h2>Pouzdan. Brz. Siguran.</h2>
-          <div className="why-grid">
-            {whyUs.map((item) => (
-              <article key={item.title} className="why-item">
-                <svg viewBox="0 0 48 48" aria-hidden="true">{item.icon}</svg>
-                <div>
-                  <strong>{item.title}</strong>
-                  <span>{item.desc}</span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </aside>
+      <div className="industries-grid" aria-label="Industrije">
+        {industries.map((ind, idx) => (
+          <article key={ind.title} className="industry-card" style={{ backgroundColor: getIndustryColor(idx) }}>
+            <div className="industry-card-inner">
+              <svg viewBox="0 0 48 48" aria-hidden="true" className="industry-icon">{ind.icon}</svg>
+              <h3>{ind.title}</h3>
+              <p>{ind.desc}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   )
