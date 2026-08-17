@@ -207,36 +207,38 @@ export default function Usluge() {
         {/* ── 01 DEVELOPMENT ── */}
         <section className="light">
           <div className="section">
-            <div className="svc-cat-header">
-              <p className="label">01 – Razvoj</p>
-              <h2>Development</h2>
-              <p className="svc-cat-lead">
-                Gradimo moderne digitalne proizvode – od ideje do finalnog rješenja prilagođenog
-                Vašem poslovanju. Koristimo provjerene tehnologije i agilne procese kako bismo
-                isporučili kvalitetan softver u dogovorenom roku.
-              </p>
-            </div>
-            <div className="svc-grid">
-              <SvcCard
-                icon={<IconGlobe />}
-                title="Web Development"
-                desc="Dizajniramo i razvijamo brze i vizualno dojmljive web stranice i aplikacije. Svaki projekt gradimo s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
-              />
-              <SvcCard
-                icon={<IconCode />}
-                title="Software Development"
-                desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju Vaše organizacije – od arhitekture do produkcijske isporuke."
-              />
-              <SvcCard
-                icon={<IconSmartphone />}
-                title="Mobile Development"
-                desc="Native mobilne aplikacije za iOS i Android korisnike. Intuitivno korisničko sučelje, visoke performanse i pouzdana sinkronizacija s Vašim backend sustavima."
-              />
-              <SvcCard
-                icon={<IconSettings />}
-                title="Custom Made"
-                desc="Svaki projekt tretiramo kao jedinstven izazov. Gradimo rješenja točno po Vašim zahtjevima, bez kompromisa, bez generičkih predložaka i bez tehničkih ograničenja."
-              />
+            <div className="svc-cat-layout">
+              <div className="svc-cat-header">
+                <p className="label">01 – Razvoj</p>
+                <h2>Development</h2>
+                <p className="svc-cat-lead">
+                  Gradimo moderne digitalne proizvode – od ideje do finalnog rješenja prilagođenog
+                  Vašem poslovanju. Koristimo provjerene tehnologije i agilne procese kako bismo
+                  isporučili kvalitetan softver u dogovorenom roku.
+                </p>
+              </div>
+              <div className="svc-grid">
+                <SvcCard
+                  icon={<IconGlobe />}
+                  title="Web Development"
+                  desc="Dizajniramo i razvijamo brze i vizualno dojmljive web stranice i aplikacije. Svaki projekt gradimo s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
+                />
+                <SvcCard
+                  icon={<IconCode />}
+                  title="Software Development"
+                  desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju Vaše organizacije – od arhitekture do produkcijske isporuke."
+                />
+                <SvcCard
+                  icon={<IconSmartphone />}
+                  title="Mobile Development"
+                  desc="Native mobilne aplikacije za iOS i Android korisnike. Intuitivno korisničko sučelje, visoke performanse i pouzdana sinkronizacija s Vašim backend sustavima."
+                />
+                <SvcCard
+                  icon={<IconSettings />}
+                  title="Custom Made"
+                  desc="Svaki projekt tretiramo kao jedinstven izazov. Gradimo rješenja točno po Vašim zahtjevima, bez kompromisa, bez generičkih predložaka i bez tehničkih ograničenja."
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -244,39 +246,41 @@ export default function Usluge() {
         {/* ── 02 SERVER ── */}
         <section className="dark">
           <div className="section">
-            <div className="svc-cat-header">
-              <p className="label">02 – Infrastruktura</p>
-              <h2>Server</h2>
-              <p className="svc-cat-lead svc-cat-lead-dark">
-                Pouzdana, sigurna i skalabilna serverska infrastruktura prilagođena potrebama
-                Vašeg poslovanja. Od postavljanja do dugoročnog upravljanja i optimizacije.
-              </p>
-            </div>
-            <div className="svc-grid">
-              <SvcCard
-                dark
-                icon={<IconServer />}
-                title="Web Server"
-                desc="Postavljanje, konfiguracija i optimizacija web servera visoke dostupnosti za Vaše web stranice i aplikacije. Brzo, sigurno i stabilno u svakom trenutku."
-              />
-              <SvcCard
-                dark
-                icon={<IconShield />}
-                title="VPS Managed"
-                desc="Prepustite nam upravljanje Vašim VPS-om. Brinemo se o ažuriranjima, sigurnosti i performansama dok ste Vi fokusirani na ono što je bitno za Vaše poslovanje."
-              />
-              <SvcCard
-                dark
-                icon={<IconSliders />}
-                title="VPS Fully Custom Managed"
-                desc="Potpuno prilagođeno i upravljano VPS okruženje. Od inicijalne arhitekture do svakodnevnog nadzora, optimizacije i intervencija u skladu s Vašim specifičnim zahtjevima."
-              />
-              <SvcCard
-                dark
-                icon={<IconMail />}
-                title="Mail Server"
-                desc="Sigurni, pouzdani i anti-spam zaštićeni mail serveri za Vaše poslovanje. Vlastiti domain sa potpunom kontrolom nad podacima, bez ovisnosti o trećim stranama."
-              />
+            <div className="svc-cat-layout">
+              <div className="svc-cat-header">
+                <p className="label">02 – Infrastruktura</p>
+                <h2>Server</h2>
+                <p className="svc-cat-lead svc-cat-lead-dark">
+                  Pouzdana, sigurna i skalabilna serverska infrastruktura prilagođena potrebama
+                  Vašeg poslovanja. Od postavljanja do dugoročnog upravljanja i optimizacije.
+                </p>
+              </div>
+              <div className="svc-grid">
+                <SvcCard
+                  dark
+                  icon={<IconServer />}
+                  title="Web Server"
+                  desc="Postavljanje, konfiguracija i optimizacija web servera visoke dostupnosti za Vaše web stranice i aplikacije. Brzo, sigurno i stabilno u svakom trenutku."
+                />
+                <SvcCard
+                  dark
+                  icon={<IconShield />}
+                  title="VPS Managed"
+                  desc="Prepustite nam upravljanje Vašim VPS-om. Brinemo se o ažuriranjima, sigurnosti i performansama dok ste Vi fokusirani na ono što je bitno za Vaše poslovanje."
+                />
+                <SvcCard
+                  dark
+                  icon={<IconSliders />}
+                  title="VPS Fully Custom Managed"
+                  desc="Potpuno prilagođeno i upravljano VPS okruženje. Od inicijalne arhitekture do svakodnevnog nadzora, optimizacije i intervencija u skladu s Vašim specifičnim zahtjevima."
+                />
+                <SvcCard
+                  dark
+                  icon={<IconMail />}
+                  title="Mail Server"
+                  desc="Sigurni, pouzdani i anti-spam zaštićeni mail serveri za Vaše poslovanje. Vlastiti domain sa potpunom kontrolom nad podacima, bez ovisnosti o trećim stranama."
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -284,30 +288,32 @@ export default function Usluge() {
         {/* ── 03 ZAŠTITA ── */}
         <section className="light">
           <div className="section">
-            <div className="svc-cat-header">
-              <p className="label">03 – Sigurnost</p>
-              <h2>Zaštita</h2>
-              <p className="svc-cat-lead">
-                Višeslojna sigurnosna rješenja koja štite Vaše podatke, sustave i poslovne procese
-                od modernih prijetnji. Prevencija uvijek košta manje od oporavka.
-              </p>
-            </div>
-            <div className="svc-grid svc-grid-3">
-              <SvcCard
-                icon={<IconFirewall />}
-                title="Firewall – interni i eksterni"
-                desc="Implementacija i upravljanje firewall rješenjima na više razina. Zaštita perimetra od vanjskih prijetnji i segmentacija interne mreže. Nadzor i kontrola prometa u realnom vremenu, 24/7."
-              />
-              <SvcCard
-                icon={<IconBug />}
-                title="Antivirus rješenja"
-                desc="Sveobuhvatna antivirusna zaštita za poslovne sustave i servere. Automatsko ažuriranje, centralno upravljanje politikama i detaljni sigurnosni izvještaji."
-              />
-              <SvcCard
-                icon={<IconDatabase />}
-                title="Backup – lokalni i cloud, 3 lokacije"
-                desc="Automatizirani backup podataka na tri geografski odvojena mjesta: lokalno + dvije cloud lokacije. Garantirani oporavak podataka u slučaju incidenta, ransomware napada ili kvara hardwarea."
-              />
+            <div className="svc-cat-layout">
+              <div className="svc-cat-header">
+                <p className="label">03 – Sigurnost</p>
+                <h2>Zaštita</h2>
+                <p className="svc-cat-lead">
+                  Višeslojna sigurnosna rješenja koja štite Vaše podatke, sustave i poslovne procese
+                  od modernih prijetnji. Prevencija uvijek košta manje od oporavka.
+                </p>
+              </div>
+              <div className="svc-grid svc-grid-3">
+                <SvcCard
+                  icon={<IconFirewall />}
+                  title="Firewall – interni i eksterni"
+                  desc="Implementacija i upravljanje firewall rješenjima na više razina. Zaštita perimetra od vanjskih prijetnji i segmentacija interne mreže. Nadzor i kontrola prometa u realnom vremenu, 24/7."
+                />
+                <SvcCard
+                  icon={<IconBug />}
+                  title="Antivirus rješenja"
+                  desc="Sveobuhvatna antivirusna zaštita za poslovne sustave i servere. Automatsko ažuriranje, centralno upravljanje politikama i detaljni sigurnosni izvještaji."
+                />
+                <SvcCard
+                  icon={<IconDatabase />}
+                  title="Backup – lokalni i cloud, 3 lokacije"
+                  desc="Automatizirani backup podataka na tri geografski odvojena mjesta: lokalno + dvije cloud lokacije. Garantirani oporavak podataka u slučaju incidenta, ransomware napada ili kvara hardwarea."
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -315,27 +321,29 @@ export default function Usluge() {
         {/* ── 04 DIZAJN ── */}
         <section className="dark">
           <div className="section">
-            <div className="svc-cat-header">
-              <p className="label">04 – Vizualni identitet</p>
-              <h2>Dizajn i brand</h2>
-              <p className="svc-cat-lead svc-cat-lead-dark">
-                Vizualni identitet koji komunicira vrijednosti Vaše tvrtke i ostavlja trajan dojam
-                na svakom koraku – od digital do tiska.
-              </p>
-            </div>
-            <div className="svc-grid svc-grid-2">
-              <SvcCard
-                dark
-                icon={<IconPenTool />}
-                title="Grafički dizajn"
-                desc="Dizajn logotipa, UI/UX rješenja, marketinških materijala, prezentacija, bannera i svega što Vaš brand treba da bi izgledao profesionalno i prepoznatljivo na svakom kanalu komunikacije."
-              />
-              <SvcCard
-                dark
-                icon={<IconBook />}
-                title="Knjiga standarda"
-                desc="Kompletan brand katalog koji precizno definira Vaš vizualni identitet – boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s Vama."
-              />
+            <div className="svc-cat-layout">
+              <div className="svc-cat-header">
+                <p className="label">04 – Vizualni identitet</p>
+                <h2>Dizajn i brand</h2>
+                <p className="svc-cat-lead svc-cat-lead-dark">
+                  Vizualni identitet koji komunicira vrijednosti Vaše tvrtke i ostavlja trajan dojam
+                  na svakom koraku – od digital do tiska.
+                </p>
+              </div>
+              <div className="svc-grid svc-grid-2">
+                <SvcCard
+                  dark
+                  icon={<IconPenTool />}
+                  title="Grafički dizajn"
+                  desc="Dizajn logotipa, UI/UX rješenja, marketinških materijala, prezentacija, bannera i svega što Vaš brand treba da bi izgledao profesionalno i prepoznatljivo na svakom kanalu komunikacije."
+                />
+                <SvcCard
+                  dark
+                  icon={<IconBook />}
+                  title="Knjiga standarda"
+                  desc="Kompletan brand katalog koji precizno definira Vaš vizualni identitet – boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s Vama."
+                />
+              </div>
             </div>
           </div>
         </section>

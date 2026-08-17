@@ -1294,13 +1294,20 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 /* ── USLUGE PAGE ── */
-.svc-cat-header { margin-bottom: 48px; }
+.svc-cat-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.svc-cat-header { margin-bottom: 0; }
 .svc-cat-header h2 { margin-bottom: 14px; }
 
 .svc-cat-lead {
   color: var(--muted);
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.7;
   max-width: 580px;
   margin: 0;
 }
@@ -1309,7 +1316,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .svc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 22px;
 }
 
@@ -1436,6 +1443,9 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1040px) {
+  .svc-cat-layout { grid-template-columns: 1fr; gap: 24px; }
+  .svc-cat-header { margin-bottom: 8px; }
+  .svc-grid,
   .svc-grid-2,
   .svc-grid-3 { grid-template-columns: repeat(2, 1fr); }
   .svc-remote { grid-template-columns: 1fr; padding: 40px 36px; }
