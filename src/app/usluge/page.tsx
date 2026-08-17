@@ -189,7 +189,8 @@ export default function Usluge() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <div className="hero-grid page-hero-grid">
+        <img src={p('/kontakt_hero_new.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />Usluge</p>
             <h1>Što sve <em>Novaris Tech</em> nudi</h1>
@@ -197,11 +198,6 @@ export default function Usluge() {
               Od razvoja softvera i serverske infrastrukture do zaštite podataka, grafičkog dizajna
               i brze remote podrške – pokrivamo sve što Vaše poslovanje treba u digitalnom svijetu.
             </p>
-          </div>
-          <div className="page-hero-orb" aria-hidden="true">
-            <div className="orb-logo orb-static">
-              <img src={p('/logo_small1.png')} alt="" className="logo-mark" />
-            </div>
           </div>
         </div>
       </header>
