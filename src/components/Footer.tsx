@@ -72,11 +72,6 @@ export default function Footer() {
             <Link href="/#services">IT sustavi</Link>
             <Link href="/#services">IT struktura</Link>
           </nav>
-          <div className="socials" aria-label="Društvene mreže">
-            <a href="#" aria-label="LinkedIn">in</a>
-            <a href="#" aria-label="Facebook">f</a>
-            <a href="#" aria-label="Instagram">ig</a>
-          </div>
           <nav className="footer-legal">
             <a href="#">Politika privatnosti</a>
             <a href="#">Uvjeti korištenja</a>

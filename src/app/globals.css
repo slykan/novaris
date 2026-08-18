@@ -870,19 +870,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 .footer-links a:hover { color: var(--blue); }
 
-.socials { display: flex; gap: 10px; }
-
-.socials a {
-  width: 36px; height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(0,105,232,.07);
-  color: var(--blue);
-  font-weight: 800;
-  font-size: 13px;
-}
-
 .footer-legal {
   display: flex;
   gap: 20px;
