@@ -11,6 +11,7 @@ export function RotatingMesh({
   speed = 0.2,
   reverse = false,
   showPoints = true,
+  swing,
   className = "",
 }: {
   points: readonly Vec3[];
@@ -19,6 +20,8 @@ export function RotatingMesh({
   speed?: number;
   reverse?: boolean;
   showPoints?: boolean;
+  /** Max angle (radians) to sway back and forth instead of spinning a full circle. */
+  swing?: number;
   className?: string;
 }) {
   const lineRefs = useRef<(SVGLineElement | null)[]>([]);
@@ -30,7 +33,7 @@ export function RotatingMesh({
     ).matches;
 
     let raf: number;
-    let angle = 0;
+    let t = 0;
     const dir = reverse ? -1 : 1;
     let last = performance.now();
     const half = size / 2;
@@ -83,14 +86,14 @@ export function RotatingMesh({
     function frame(now: number) {
       const dt = (now - last) / 1000;
       last = now;
-      angle += speed * dir * dt;
-      render(angle);
+      t += speed * dir * dt;
+      render(swing ? swing * Math.sin(t) : t);
       raf = requestAnimationFrame(frame);
     }
 
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [points, edges, speed, reverse, size]);
+  }, [points, edges, speed, reverse, size, swing]);
 
   return (
     <svg

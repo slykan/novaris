@@ -35,6 +35,8 @@ export const meshEdges = [
 
 // Novaris "N" mark — a folded ribbon (left stroke, diagonal, right stroke),
 // each segment extruded front/back for depth. Mirrors the logo's diagonal N.
+// The diagonal's corners deliberately reuse the bars' own corner coordinates
+// so the three segments meet flush at the joints instead of floating apart.
 export const nPoints = [
   // left stroke — box (front 0-3, back 4-7)
   [-53, -30, -14], [-31, -30, -14], [-31, 58, -14], [-53, 58, -14],
@@ -42,9 +44,10 @@ export const nPoints = [
   // right stroke — box (front 8-11, back 12-15)
   [31, -58, -14], [53, -58, -14], [53, 30, -14], [31, 30, -14],
   [31, -58, 14], [53, -58, 14], [53, 30, 14], [31, 30, 14],
-  // diagonal stroke — box (front 16-19, back 20-23)
-  [-48.4, -21.05, -14], [-35.6, -38.95, -14], [48.4, 21.05, -14], [35.6, 38.95, -14],
-  [-48.4, -21.05, 14], [-35.6, -38.95, 14], [48.4, 21.05, 14], [35.6, 38.95, 14],
+  // diagonal stroke — box (front 16-19, back 20-23), corners = left bar's
+  // top edge (16-17) joined to right bar's bottom edge (18-19)
+  [-53, -30, -14], [-31, -30, -14], [31, 30, -14], [53, 30, -14],
+  [-53, -30, 14], [-31, -30, 14], [31, 30, 14], [53, 30, 14],
 ] as const;
 
 export const nEdges = [
