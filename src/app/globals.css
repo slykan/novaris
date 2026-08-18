@@ -84,7 +84,6 @@ a { color: inherit; text-decoration: none; }
   margin-left: auto;
   font-size: 13px;
   font-weight: 700;
-  text-transform: uppercase;
 }
 
 .nav-links a { color: rgba(6,17,39,.78); padding-block: 10px; position: relative; }
