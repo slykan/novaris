@@ -1468,6 +1468,8 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .split,
   .about-grid { grid-template-columns: 1fr; }
 
+  .split { gap: 5px; }
+
   .slider { height: 360px; }
 
   .service-grid { grid-template-columns: repeat(3,1fr); }
