@@ -16,7 +16,7 @@ const industries = [
   {
     icon: <path d="M12 8c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4V12c0-2.2-1.8-4-4-4H12Zm0 6h24v20H12V14Zm6 4h4v2h-4v-2Zm6 0h4v2h-4v-2Zm6 0h4v2h-4v-2Zm-12 6h4v2h-4v-2Zm6 0h4v2h-4v-2Zm6 0h4v2h-4v-2Z" />,
     title: 'Zdravstvo',
-    desc: 'Poboljšavamo kvalitetu skrbi, sigurnost podataka i učinkovitost zdravstvenih ustanova.',
+    desc: 'Osiguravamo kvalitetu skrbi, sigurnost podataka i učinkovitost zdravstvenih ustanova.',
     image: '/industries/zdravstvo.jpg',
   },
   {
@@ -28,7 +28,7 @@ const industries = [
   {
     icon: <path d="M24 5 11 25h10l-4 18 20-25H26l4-13Z" />,
     title: 'Telekomunikacije',
-    desc: 'Omogućujemo pouzdane mreže i digitalno iskustvo koje prate rast korisnika i tehnologije.',
+    desc: 'Omogućujemo pouzdanost mreža i digitalna iskustva koja prate rast korisnika i tehnologije.',
     image: '/industries/telekomunikacije.jpg',
   },
   {

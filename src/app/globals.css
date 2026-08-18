@@ -898,6 +898,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
 /* ── O NAMA PAGE ── */
 .on-page-hero { min-height: 560px; }
+.on-page-hero .orb-logo.hero-orb { top: 48%; }
 
 .page-hero-grid {
   padding: 32px 0 72px;

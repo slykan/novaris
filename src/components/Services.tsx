@@ -72,7 +72,7 @@ export default function Services() {
       <div className="section-heading split">
         <div>
           <p className="label">Što radimo</p>
-          <h2>Portfolio rješenja koja pokreću vaše poslovanje</h2>
+          <h2>Portfolio rješenja koja pokreću Vaše poslovanje</h2>
         </div>
         <p>Od integracije sustava do napredne analitike i AI rješenja. Pretvaramo tehnologiju u stvarnu poslovnu vrijednost.</p>
       </div>

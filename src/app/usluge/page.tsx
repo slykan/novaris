@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
-import { p } from '@/lib/path'
+import { HeroBackground } from '@/components/HeroBackground'
 
 export const metadata: Metadata = {
   title: 'Usluge',
@@ -189,7 +189,7 @@ export default function Usluge() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <img src={p('/kontakt_hero_6.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <HeroBackground />
         <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />Usluge</p>
@@ -212,7 +212,7 @@ export default function Usluge() {
                 <p className="label">01 – Razvoj</p>
                 <h2>Development</h2>
                 <p className="svc-cat-lead">
-                  Gradimo moderne digitalne proizvode – od ideje do finalnog rješenja prilagođenog
+                  Gradimo moderne digitalne proizvode od ideje do finalnog rješenja prilagođenog
                   Vašem poslovanju. Koristimo provjerene tehnologije i agilne procese kako bismo
                   isporučili kvalitetan softver u dogovorenom roku.
                 </p>
@@ -221,12 +221,12 @@ export default function Usluge() {
                 <SvcCard
                   icon={<IconGlobe />}
                   title="Web Development"
-                  desc="Dizajniramo i razvijamo brze i vizualno dojmljive web stranice i aplikacije. Svaki projekt gradimo s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
+                  desc="Dizajniramo i razvijamo brze i vizualno dojmljive web stranice, web shopove i aplikacije. Svaki projekt gradimo s fokusom na performanse, korisničko iskustvo i dugoročno održavanje."
                 />
                 <SvcCard
                   icon={<IconCode />}
                   title="Software Development"
-                  desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju Vaše organizacije – od arhitekture do produkcijske isporuke."
+                  desc="Prilagođeni softverski sustavi za automatizaciju poslovnih procesa, integraciju sustava i digitalnu transformaciju Vaše organizacije. Od arhitekture do produkcijske isporuke."
                 />
                 <SvcCard
                   icon={<IconSmartphone />}
@@ -341,7 +341,7 @@ export default function Usluge() {
                   dark
                   icon={<IconBook />}
                   title="Knjiga standarda"
-                  desc="Kompletan brand katalog koji precizno definira Vaš vizualni identitet – boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s Vama."
+                  desc="Kompletan brand katalog koji precizno definira Vaš vizualni identitet. Boje, tipografija, logotip, primjene i pravila upotrebe. Čvrsti temelj konzistentnog i snažnog branda koji raste s Vama."
                 />
               </div>
             </div>
@@ -356,7 +356,7 @@ export default function Usluge() {
                 <p className="label" style={{ marginBottom: 18 }}>05 – Podrška</p>
                 <h2>Remote Support</h2>
                 <p className="svc-remote-desc">
-                  Brza i profesionalna tehnička podrška na daljinu za svu IT problematiku –
+                  Brza i profesionalna tehnička podrška na daljinu za svu IT problematiku,
                   od softverskih poteškoća i konfiguracije sustava do mrežnih problema,
                   optimizacije radnih okruženja i hitnih intervencija.
                 </p>

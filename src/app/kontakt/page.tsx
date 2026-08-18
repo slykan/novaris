@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ContactForm from '@/components/ContactForm'
-import { p } from '@/lib/path'
+import { HeroBackground } from '@/components/HeroBackground'
 
 export const metadata: Metadata = {
   title: 'Kontakt',
@@ -21,7 +21,7 @@ export default function Kontakt() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <img src={p('/kontakt_hero_6.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <HeroBackground />
         <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />Kontakt</p>
