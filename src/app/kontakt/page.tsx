@@ -21,7 +21,7 @@ export default function Kontakt() {
     <>
       <header className="hero on-page-hero" id="home">
         <Nav />
-        <img src={p('/kontakt_hero_5.png')} alt="" aria-hidden="true" className="hero-bg-image" />
+        <img src={p('/kontakt_hero_6.png')} alt="" aria-hidden="true" className="hero-bg-image" />
         <div className="hero-grid page-hero-grid page-hero-grid-single">
           <div>
             <p className="eyebrow"><span />Kontakt</p>
