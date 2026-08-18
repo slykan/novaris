@@ -1469,6 +1469,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .about-grid { grid-template-columns: 1fr; }
 
   .split { gap: 5px; }
+  .mv-pillars { text-align: left; }
 
   .slider { height: 360px; }
 
