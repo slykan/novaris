@@ -398,8 +398,8 @@ export default function Usluge() {
                 <a className="button primary" href="/#contact">
                   Zatražite ponudu <span aria-hidden="true">→</span>
                 </a>
-                <a className="button secondary" href="/o-nama">
-                  Saznajte više o nama <span aria-hidden="true">→</span>
+                <a className="button secondary" href="/novaris360">
+                  Saznajte više <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>
