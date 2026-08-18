@@ -1538,6 +1538,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 
   .hero { min-height: auto; }
   .hero-grid { padding-bottom: 54px; }
+  .hero-bg-image { display: none; }
   .slider { height: 280px; }
 
   .trust-row,
@@ -1548,7 +1549,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .service-card { min-height: auto; }
 
   .cta-inner { grid-template-columns: 1fr; padding: 48px 0; }
-  .cta-cards { grid-template-columns: 1fr 1fr; }
+  .cta-cards { grid-template-columns: 1fr; }
   .cta-left h2 { font-size: 24px; }
 
   .footer-bar-inner { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 0; }
@@ -1841,7 +1842,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 /* ── NOVARIS 360 PAGE ── */
-.n360-topbar { min-height: auto; }
+.n360-topbar { min-height: auto; overflow: visible; }
 
 .n360-body .label,
 .n360-body .mv-card-tag,
@@ -1885,6 +1886,12 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   border: 13px solid rgba(31,117,255,.28);
   z-index: 1;
   pointer-events: none;
+  animation: n360-pulse 3s ease-in-out infinite;
+}
+
+@keyframes n360-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: .55; }
 }
 
 .n360-ring {
