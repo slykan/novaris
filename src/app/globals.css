@@ -200,11 +200,27 @@ a { color: inherit; text-decoration: none; }
   top: 0;
   bottom: 0;
   width: 58%;
+  mask-image: linear-gradient(to right, transparent 0%, #000 45%);
+}
+
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
   background-image:
     linear-gradient(rgba(0, 105, 232, .16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 105, 232, .16) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: linear-gradient(to right, transparent 0%, #000 45%);
+}
+
+.orb-logo.hero-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  margin-inline: 0;
+  transform: translate(-50%, -50%);
+  animation: orb-spin 40s linear infinite;
+  opacity: .55;
 }
 
 .grid-nodes { position: absolute; inset: 0; }

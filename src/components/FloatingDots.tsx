@@ -19,6 +19,11 @@ const dots = [
   { col: 5, size: 3, duration: 16, delay: 7.4 },
   { col: 8, size: 3, duration: 14, delay: 5.6 },
   { col: 10, size: 4, duration: 17, delay: 8 },
+  { col: 12, size: 4, duration: 12, delay: 2 },
+  { col: 13, size: 3, duration: 10, delay: 5 },
+  { col: 12, size: 3, duration: 15, delay: 8.6 },
+  { col: 13, size: 5, duration: 9, delay: 1.2 },
+  { col: 11, size: 3, duration: 13, delay: 4.4 },
 ] as const;
 
 export function FloatingDots() {
