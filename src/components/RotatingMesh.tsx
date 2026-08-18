@@ -10,6 +10,7 @@ export function RotatingMesh({
   size = 140,
   speed = 0.2,
   reverse = false,
+  showPoints = true,
   className = "",
 }: {
   points: readonly Vec3[];
@@ -17,6 +18,7 @@ export function RotatingMesh({
   size?: number;
   speed?: number;
   reverse?: boolean;
+  showPoints?: boolean;
   className?: string;
 }) {
   const lineRefs = useRef<(SVGLineElement | null)[]>([]);
@@ -108,16 +110,18 @@ export function RotatingMesh({
           />
         ))}
       </g>
-      <g fill="var(--blue)">
-        {points.map((_, i) => (
-          <circle
-            key={i}
-            ref={(el) => {
-              circleRefs.current[i] = el;
-            }}
-          />
-        ))}
-      </g>
+      {showPoints && (
+        <g fill="var(--blue)">
+          {points.map((_, i) => (
+            <circle
+              key={i}
+              ref={(el) => {
+                circleRefs.current[i] = el;
+              }}
+            />
+          ))}
+        </g>
+      )}
     </svg>
   );
 }

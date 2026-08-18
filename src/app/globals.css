@@ -196,9 +196,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero-mesh { position: absolute; overflow: visible; }
-.hero-mesh-1 { right: 24%; top: 8%; opacity: .55; }
-.hero-mesh-2 { right: 6%; top: 16%; opacity: .5; }
-.hero-mesh-3 { right: 10%; top: 54%; opacity: .45; }
+.hero-mesh-n { right: 8%; top: 20%; opacity: .55; stroke-linecap: round; }
 
 .floating-dots { position: absolute; inset: 0; }
 
