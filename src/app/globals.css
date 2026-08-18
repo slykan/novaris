@@ -1603,7 +1603,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
     color: var(--blue);
   }
 
-  .hero { min-height: auto; }
+  .hero { min-height: auto; overflow: visible; }
   .hero-grid { padding-bottom: 10px; }
   .section { padding: 30px 0 0; }
   .hero-bg-image { display: none; }
