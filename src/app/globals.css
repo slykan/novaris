@@ -185,25 +185,25 @@ a { color: inherit; text-decoration: none; }
   z-index: 0;
 }
 
-/* ── HERO BACKGROUND FX (rotating 3D meshes + floating dots) ── */
+/* ── HERO BACKGROUND FX (square grid + floating dots) ── */
 .hero-bg-fx {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  mask-image: radial-gradient(ellipse at 72% 40%, #000 55%, transparent 100%);
 }
 
-.hero-mesh { position: absolute; overflow: visible; }
-.hero-mesh-n { right: 8%; top: 20%; opacity: .55; stroke-linecap: round; }
-
-.hero-network {
+.hero-grid-fx {
   position: absolute;
   right: 0;
-  top: 4%;
-  bottom: 4%;
+  top: 0;
+  bottom: 0;
   width: 58%;
+  background-image:
+    linear-gradient(rgba(0, 105, 232, .16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 105, 232, .16) 1px, transparent 1px);
+  background-size: 56px 56px;
   mask-image: linear-gradient(to right, transparent 0%, #000 45%);
 }
 
@@ -1585,7 +1585,7 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   .hero-grid { padding-bottom: 10px; }
   .section { padding: 30px 0 0; }
   .hero-bg-image { display: none; }
-  .hero-mesh { display: none; }
+  .hero-bg-fx { display: none; }
   h1 { font-size: clamp(30px, 5vw, 64px); }
   .slider { height: 280px; }
 
