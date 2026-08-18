@@ -1920,9 +1920,24 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .about-cta-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 18px;
   color: var(--muted);
 }
+
+.cta-info-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+.cta-info-icon svg { width: 15px; height: 15px; }
 
 /* ── NOVARIS 360 PAGE ── */
 .n360-topbar { min-height: auto; overflow: visible; }
