@@ -1862,7 +1862,10 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   background:
     radial-gradient(circle at 82% 20%, rgba(0,105,232,.09), transparent 40%),
     radial-gradient(circle at 15% 80%, rgba(31,117,255,.07), transparent 42%),
+    linear-gradient(rgba(0,105,232,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,105,232,.05) 1px, transparent 1px),
     linear-gradient(160deg, #f4f9ff 0%, #ffffff 60%);
+  background-size: auto, auto, 44px 44px, 44px 44px, auto;
   padding: 28px 56px;
   display: grid;
   grid-template-columns: 1fr 1fr;
