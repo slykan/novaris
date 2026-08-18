@@ -18,10 +18,10 @@ const nodes = Array.from({ length: COLS * ROWS }, (_, i) => {
 })
   .filter((n) => n.pick > 0.68)
   .map((n) => {
-    const dim = 0.15 + hash(n.col * 3.7 + n.row * 5.3) * 0.35;
-    const bright = 0.55 + hash(n.col * 9.1 + n.row * 2.3) * 0.45;
-    const duration = 2.5 + hash(n.col * 5.9 + n.row * 11.7) * 4.5;
-    const delay = hash(n.col * 17.3 + n.row * 4.1) * 6;
+    const dim = hash(n.col * 3.7 + n.row * 5.3) * 0.08;
+    const bright = 0.75 + hash(n.col * 9.1 + n.row * 2.3) * 0.25;
+    const duration = 0.5 + hash(n.col * 5.9 + n.row * 11.7) * 0.9;
+    const delay = hash(n.col * 17.3 + n.row * 4.1) * 5;
     return { ...n, dim, bright, duration, delay };
   });
 

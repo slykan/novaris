@@ -237,8 +237,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 @keyframes node-twinkle {
-  0%, 100% { opacity: var(--node-dim); }
-  50% { opacity: var(--node-bright); }
+  0%, 75%, 100% { opacity: var(--node-dim); }
+  88% { opacity: var(--node-bright); }
 }
 
 .floating-dots { position: absolute; inset: 0; }
