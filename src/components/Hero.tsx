@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import HeroSlider from './HeroSlider'
+import { HeroBackground } from './HeroBackground'
 
 export default function Hero() {
   return (
     <>
-      <HeroSlider />
+      <HeroBackground />
       <div className="hero-grid">
       <section className="hero-copy">
         <p className="eyebrow"><span></span> Novaris Tech</p>
