@@ -365,7 +365,7 @@ h1 em { color: var(--blue); font-style: normal; }
 
 /* ── SECTIONS ── */
 .section {
-  padding: 64px 0;
+  padding: 25px 0;
   position: relative;
 }
 
