@@ -69,7 +69,7 @@ const wheelSteps = [
   { num: '2', title: 'Strategija', desc: 'Definiramo smjer i plan za ostvarenje ciljeva.', pos: 'pos-tr', icon: <IconTarget /> },
   { num: '3', title: 'Implementacija', desc: 'Pružamo tehnološka rješenja i upravljamo projektom.', pos: 'pos-r', icon: <IconShare /> },
   { num: '4', title: 'Podrška', desc: 'Osiguravamo stabilnost, pouzdanost i edukaciju.', pos: 'pos-b', icon: <IconPerson /> },
-  { num: '5', title: 'Unaprjeđenje', desc: 'Kontinuirano optimiziramo procese i tehnologije.', pos: 'pos-bl', icon: <IconChartUp /> },
+  { num: '5', title: 'Unapređenje', desc: 'Kontinuirano savjetujemo o novim procesima i tehnologijama.', pos: 'pos-bl', icon: <IconChartUp /> },
 ]
 
 export default function Novaris360() {
