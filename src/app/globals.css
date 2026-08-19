@@ -311,21 +311,6 @@ h1 em { color: var(--blue); font-style: normal; }
   margin: 36px 0 48px;
 }
 
-.trust-row {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 24px;
-  max-width: 720px;
-}
-
-.trust-row article {
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 14px;
-  align-items: start;
-}
-
-.trust-row svg,
 .service-card svg {
   width: 44px;
   fill: none;
@@ -334,10 +319,6 @@ h1 em { color: var(--blue); font-style: normal; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-.trust-row svg { fill: none; }
-.trust-row strong { display: block; margin-bottom: 5px; font-size: 13px; text-transform: uppercase; }
-.trust-row span   { color: #526078; font-size: 13px; line-height: 1.55; }
 
 /* ── SLIDER ── */
 .hero-slider {
@@ -1611,7 +1592,6 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
   h1 { font-size: clamp(30px, 5vw, 64px); }
   .slider { height: 280px; }
 
-  .trust-row,
   .service-grid,
   .industries-grid { grid-template-columns: 1fr; }
 
