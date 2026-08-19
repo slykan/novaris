@@ -1915,16 +1915,13 @@ h2 { font-size: clamp(31px,3.4vw,45px); line-height: 1.18; }
 }
 
 .cta-info-icon {
-  display: inline-grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
-.cta-info-icon svg { width: 15px; height: 15px; }
+.cta-info-icon svg { width: 22px; height: 22px; stroke: var(--blue); }
 
 /* ── NOVARIS 360 PAGE ── */
 .n360-topbar { min-height: auto; overflow: visible; }
